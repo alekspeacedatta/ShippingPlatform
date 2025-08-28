@@ -15,7 +15,7 @@ const RegisterCompany = () => {
 
   return (
     <div className='flex h-[100vh] items-stretch'>
-      <div className="basis-full md:basis-[560px] shrink-0 flex items-center justify-center px-6 py-8">
+      <div className="basis-full md:basis-[760px] shrink-0 flex items-center justify-center px-6 py-8">
         <section className="w-full max-w-lg bg-white rounded-3xl shadow-2xl ring-1 ring-black/5 p-10">
           <form className="flex flex-col gap-4">
             <h1 className="mb-1 text-2xl font-semibold">Register</h1>

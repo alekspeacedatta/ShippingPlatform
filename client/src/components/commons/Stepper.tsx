@@ -3,6 +3,8 @@
 //   current: number;
 // };
 
+import { useAuthStore } from "../../store/useAuthStore"
+
 // export default function Stepper({ steps, current }: Props) {
 //   const pct = steps.length > 1 ? (current / (steps.length - 1)) * 100 : 0;
 
@@ -53,11 +55,12 @@
 //   );
 // }
 const Stepper = () => {
+    const user = useAuthStore(state => state.user);
     return (
         <ol className="c-stepper">
             <li className="c-stepper_item">
                 <h3 className="c-stepper_title">1</h3>
-                <p className="c-stepper_desc">step 1</p>
+                <p className="c-stepper_desc">step { user?.fullName } 1</p>
             </li>
             <li className="c-stepper_item">
                 <h3 className="c-stepper_title">2</h3>

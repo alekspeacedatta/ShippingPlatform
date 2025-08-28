@@ -1,33 +1,58 @@
+import { useState } from "react";
 import { Button } from "../../components/commons/Button";
 import { Input } from "../../components/commons/Input";
 import { Link } from "react-router-dom";
+import type { User } from "../../types/Types";
+import { useRegister } from "../../api/useAuth";
 
 export default function RegisterUser() {
+  const [ registeredInfo, setRegisteredInfo ] = useState<User>({
+    fullName: '',
+    password: '',
+    email: '',
+    phone: '',
+    addresses: [{ country: "", city: "", line1: "", postalCode: "" }],
+    role: 'USER'
+  })
+  const { mutate, isError, error } = useRegister()
+  const handleRegister = (e: React.FormEvent) => {
+    e.preventDefault();
+    mutate(registeredInfo);
+  }
   return (
     <div className="min-h-screen flex bg-gray-50">
-      <div className="basis-full md:basis-[560px] shrink-0 flex items-center justify-center px-6">
-        <section className="w-full max-w-lg bg-white rounded-3xl shadow-2xl ring-1 ring-black/5 p-10">
-          <form className="flex flex-col gap-4">
+      <div className="w-[760px] flex items-center justify-center px-6">
+        <div className="w-full max-w-lg bg-white rounded-3xl shadow-2xl ring-1 ring-black/5 p-10">
+          <form className="flex flex-col gap-4" onSubmit={handleRegister}>
             <h1 className="text-2xl font-semibold">Register</h1>
+            { isError ? ( <p>registered failed {error.message}</p> ) : ( <p></p> ) }
             <section className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <section className="flex flex-col gap-2">
                 <span>Full name</span>
-                <Input type="text" placeholder="Aleksandre Kobulashvili" required />
+                <Input type="text" placeholder="Aleksandre Kobulashvili" onChange={(e) =>
+                setRegisteredInfo({ ...registeredInfo, fullName: e.target.value })
+              } required />
               </section>
 
               <section className="flex flex-col gap-2">
                 <span>Email</span>
-                <Input type="email" placeholder="luka@example.com" required />
+                <Input type="email" placeholder="luka@example.com" onChange={(e) =>
+                setRegisteredInfo({ ...registeredInfo, email: e.target.value })
+              } required />
               </section>
 
               <section className="flex flex-col gap-2">
                 <span>Password</span>
-                <Input type="password" placeholder="••••••••" required/>
+                <Input type="password" placeholder="••••••••" onChange={(e) =>
+                setRegisteredInfo({ ...registeredInfo, password: e.target.value })
+              } required/>
               </section>
 
               <section className="flex flex-col gap-2">
                 <span>Phone</span>
-                <Input type="tel" placeholder="+(ur country) xxx xx xx xx" />
+                <Input type="tel"  onChange={(e) =>
+                setRegisteredInfo({ ...registeredInfo, phone: e.target.value })
+              } placeholder="+(ur country) xxx xx xx xx" />
               </section>
             </section>
 
@@ -35,22 +60,46 @@ export default function RegisterUser() {
             <section className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <section className="flex flex-col gap-2">
                 <span>Country</span>
-                <Input type="text" placeholder="Georgia" />
+                <Input type="text" value={registeredInfo.addresses[0].country}
+                  onChange={(e) =>
+                    setRegisteredInfo({
+                      ...registeredInfo,
+                      addresses: [{ ...registeredInfo.addresses[0], country: e.target.value }],
+                    })
+                  } placeholder="Georgia" />
               </section>
 
               <section className="flex flex-col gap-2" >
                 <span>City</span>
-                <Input type="text" placeholder="Tbilisi" />
+                <Input type="text" value={registeredInfo.addresses[0].city}
+                  onChange={(e) =>
+                    setRegisteredInfo({
+                      ...registeredInfo,
+                      addresses: [{ ...registeredInfo.addresses[0], city: e.target.value }],
+                    })
+                  } placeholder="Tbilisi" />
               </section>
 
               <section className="flex flex-col gap-2">
                 <span>Line 1</span>
-                <Input type="text" placeholder="Street, building, apt" />
+                <Input type="text" value={registeredInfo.addresses[0].line1}
+                  onChange={(e) =>
+                    setRegisteredInfo({
+                      ...registeredInfo,
+                      addresses: [{ ...registeredInfo.addresses[0], line1: e.target.value }],
+                    })
+                  } placeholder="Street, building, apt" />
               </section>
 
               <section className="flex flex-col gap-2">
                 <span>Postal code</span>
-                <Input type="text" placeholder="0105" />
+                <Input type="text" value={registeredInfo.addresses[0].postalCode}
+                  onChange={(e) =>
+                    setRegisteredInfo({
+                      ...registeredInfo,
+                      addresses: [{ ...registeredInfo.addresses[0], postalCode: e.target.value }],
+                    })
+                  } placeholder="0105" />
               </section>
             </section>
 
@@ -70,7 +119,7 @@ export default function RegisterUser() {
               </div>
             </div>
           </form>
-        </section>
+        </div>
       </div>
 
       <aside className="hidden md:flex flex-1 items-center justify-start bg-blue-600 text-white">

@@ -2,22 +2,33 @@ import { Button } from "../../components/commons/Button";
 import { Card } from "../../components/commons/Card";
 import { Input } from "../../components/commons/Input";
 import { Link } from "react-router-dom";
-
+import { useLogin } from "../../api/useAuth";
+import { useState } from "react";
 export default function Login() {
+  const [ loginInfo, setLoginInfo] = useState<{email: string, password: string}>({
+    email: '',
+    password: ''
+  });
+  const { mutate, isError } = useLogin();
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    mutate(loginInfo);
+  }
   return (
     <div className="min-h-screen flex bg-gray-50">
-      <div className="basis-full md:basis-[560px] shrink-0 flex items-center justify-center px-6">
+      <div className="basis-full md:basis-[760px] shrink-0 flex items-center justify-center px-6">
         <Card>
-          <form className="flex flex-col gap-4">
+          <form className="flex flex-col gap-4" onSubmit={handleLogin}>
             <h1 className="text-2xl font-semibold">Login</h1>
+            { isError ?   ( <p className="text-red-800">login failed</p> ) : ( <p className="text-green-700"></p> )}
             <section className="flex flex-col gap-2">
               <span>Email</span>
-              <Input type="email" placeholder="luka@example.com"  required />
+              <Input type="email" placeholder="luka@example.com" onChange={e => setLoginInfo({...loginInfo, email: e.target.value })} required />
             </section>
 
             <section className="flex flex-col gap-2">
               <span>Password</span>
-              <Input type="password" placeholder="••••••••" required />
+              <Input type="password" placeholder="••••••••" onChange={e => setLoginInfo({...loginInfo, password: e.target.value })} required />
             </section>
 
             <section className="mt-2 flex items-center gap-4">
