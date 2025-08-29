@@ -11,7 +11,7 @@ export const router = createBrowserRouter([
     { path: '/register/company', element: <RegisterCompany/>},
 
 
-    { path: '/client/dashboard', element: <><h1><Stepper/></h1></>},
+    { path: '/client/dashboard', element: <><Stepper/></>},
     { path: '/client/create-request', element: <><h1>client create request</h1></>},
     { path: '/client/requests/:id', element: <><h1>client requests ID</h1></>},
     { path: '/client/track', element: <><h1>client requests ID</h1></>},

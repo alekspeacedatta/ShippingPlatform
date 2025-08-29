@@ -24,9 +24,9 @@ export interface User {
     role: 'USER';
 }
 export interface Company {
-    id: string;
     name: string;
     contactEmail: string;
+    password: string;
     phone?: string;
     hqAddress: Address;
     regions: string[]; // ISO2 codes

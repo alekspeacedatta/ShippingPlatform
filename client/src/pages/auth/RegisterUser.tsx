@@ -22,7 +22,7 @@ export default function RegisterUser() {
   return (
     <div className="min-h-screen flex bg-gray-50">
       <div className="w-[760px] flex items-center justify-center px-6">
-        <div className="w-full max-w-lg bg-white rounded-3xl shadow-2xl ring-1 ring-black/5 p-10">
+        <div className="w-full max-w-lg bg-white rounded-3xl shadow-2xl ring-1 ring-black/5 p-7">
           <form className="flex flex-col gap-4" onSubmit={handleRegister}>
             <h1 className="text-2xl font-semibold">Register</h1>
             { isError ? ( <p>registered failed {error.message}</p> ) : ( <p></p> ) }
