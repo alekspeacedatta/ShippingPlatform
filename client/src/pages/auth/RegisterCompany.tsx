@@ -9,18 +9,6 @@ const RegisterCompany = () => {
   const { mutate } = useRegisterCompany();
   const [shippingType, setShippingTypes] = useState<ShippingType[]>([]);
   const [ regions, setRegions ] = useState<string[]>([]);
-  const [ companyInfo, setCompanyInfo ] = useState<Company>({
-    name: '',
-    contactEmail: '',
-    password: '',
-    phone: '',
-    hqAddress: { country: '', city: '', line1: '', postalCode: '' },
-    regions: regions,
-    supportedTypes: shippingType,
-    pricing: { basePrice: 0, pricePerKg: 0, fuelPct: 0, insurancePct: 0, typeMultipliers: { SEA: 0, RAILWAY: 0, ROAD: 0, AIR: 0 }, remoteAreaPct: 0},
-    role: 'COMPANY_ADMIN',
-    logoUrl: '',
-  })
   const toggleShippingType = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { checked, value } = e.target;
     const typedValue = value as ShippingType;
@@ -34,9 +22,21 @@ const RegisterCompany = () => {
       checked ? [...prev, value] : prev.filter(v => v !== value)
     )
   }
+  const [ companyInfo, setCompanyInfo ] = useState<Company>({
+    name: '',
+    contactEmail: '',
+    password: '',
+    phone: '',
+    hqAddress: { country: '', city: '', line1: '', postalCode: '' },
+    regions: regions,
+    supportedTypes: shippingType,
+    pricing: { basePrice: 0, pricePerKg: 0, fuelPct: 0, insurancePct: 0, typeMultipliers: { SEA: 0, RAILWAY: 0, ROAD: 0, AIR: 0 }, remoteAreaPct: 0},
+    role: 'COMPANY_ADMIN',
+    logoUrl: '',
+  })
   const handelCompanyRegister = (e: React.FormEvent) => {
     e.preventDefault();
-    mutate(companyInfo);
+    mutate({...companyInfo, regions, supportedTypes: shippingType});
   }
   return (
     <div className='flex h-[100vh] items-stretch'>
