@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom"
+import { createBrowserRouter, Outlet } from "react-router-dom"
 import Login from "../../pages/auth/Login"
 import RegisterUser from "../../pages/auth/RegisterUser"
 import RegisterCompany from "../../pages/auth/RegisterCompany"
@@ -10,18 +10,18 @@ export const router = createBrowserRouter([
     { path: '/register/user', element: <RegisterUser/>},
     { path: '/register/company', element: <RegisterCompany/>},
 
-
-    { path: '/client/dashboard', element: <><Stepper/></>},
-    { path: '/client/create-request', element: <><h1>client create request</h1></>},
-    { path: '/client/requests/:id', element: <><h1>client requests ID</h1></>},
-    { path: '/client/track', element: <><h1>client requests ID</h1></>},
-
-
-    { path: '/company/dashboard', element: <><h1>company dashboard</h1></>},
-    { path: '/company/requests', element: <><h1>company request</h1></>},
-    { path: '/company/requests/:id', element: <><h1>company request ID</h1></>},
-    { path: '/company/pricing', element: <><h1>company pricing</h1></>},
-    { path: '/company/settings', element: <><h1>company settings</h1></>},
-
-
-])
+    {path: '/client', element: ( <ProtectedRoute allowed={['USER']}><Outlet/></ProtectedRoute> ), children: [
+        { path: 'dashboard', element: <><Stepper/></>},
+        { path: 'create-request', element: <><h1>client create request</h1></>},
+        { path: 'requests/:id', element: <><h1>client requests ID</h1></>},
+        { path: 'track', element: <><h1>client requests ID</h1></>},
+    ]},
+    
+    {path: '/company', element: ( <ProtectedRoute allowed={['COMPANY_ADMIN']}><Outlet/></ProtectedRoute> ), children: [
+        { path: 'dashboard', element: <><h1>company dashboard</h1></>},
+        { path: 'requests', element: <><h1>company request</h1></>},
+        { path: 'requests/:id', element: <><h1>company request ID</h1></>},
+        { path: 'pricing', element: <><h1>company pricing</h1></>},
+        { path: 'settings', element: <><h1>company settings</h1></>},
+    ]},
+]);
