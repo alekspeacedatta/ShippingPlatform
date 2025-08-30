@@ -12,10 +12,10 @@ export const registerCompany = async (companyInfo: Company) => {
             body: JSON.stringify(companyInfo)
         })
         if(!res.ok) throw new Error("Error: registered company res is not ok");
-        const data = await res.json();
-        return data.company;
+        return await res.json();
     } catch (error) {
         console.error(error);
+        throw error;
     }
 }
 export const register = async (registerInfo: User) => {
@@ -71,7 +71,6 @@ export const useRegister = () => {
     return useMutation({
         mutationFn: register,
         onSuccess: (_data, variables) => {
-            
             mutate({ email: variables.email, password: variables.password });
         },
     })
@@ -82,6 +81,9 @@ export const useRegisterCompany = () => {
         mutationFn: registerCompany,
         onSuccess: (_data, variables) => {
             mutate({ email: variables.contactEmail, password: variables.password });
+        },
+        onError: (e) => {
+            console.error('Company registering failed', e.message);            
         }
     })
 }

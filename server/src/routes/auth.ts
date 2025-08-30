@@ -14,7 +14,7 @@ router.post('/client/register', async (req: Request, res: Response) => {
         if(exsistingUser) return res.status(400).json({ message: "This Email is already taken" });
 
         const hashedPassword = await bcrypt.hash(password, 10);
-
+        
         const newUser = new UserModel({ fullName, email, password: hashedPassword, phone, addresses, role});
         await newUser.save();
 
@@ -32,9 +32,21 @@ router.post('/client/register', async (req: Request, res: Response) => {
 router.post('/company/register', async ( req: Request, res: Response ) => {
     try {
         const companyInfo  = req.body;
-        const exsistingCompany = await ComapnyModel.findOne({ contactEmail: companyInfo.contactEmail });
-        if(exsistingCompany) return res.status(400).json({ message: 'This Company is already exsist' })
-        const newCompany = new ComapnyModel(companyInfo);
+
+        const exsistingCompany = await ComapnyModel.findOne({ contactEmail: companyInfo.contactEmail, password: companyInfo.password});
+        const exsistingCompanyName = await ComapnyModel.findOne({ name: companyInfo.name });
+        const hashedPassword = await bcrypt.hash(companyInfo.password, 10);
+        const exsistingUser = await UserModel.findOne({ email: companyInfo.contactEmail });
+
+        if(!exsistingUser) return res.status(400).json({ message: " User does not exsist or user email is incorect" });
+        const isMatch = await bcrypt.compare(companyInfo.password, exsistingUser.password);
+        if(!isMatch) return res.status(400).json({ message: " User password is not correct " });
+        if(exsistingCompany) return res.status(400).json({ message: 'This Company is already exsist' });
+        if(exsistingCompanyName) return res.status(400).json({ message: 'This Company Name is already taken' });
+        
+        await UserModel.updateOne({email: companyInfo.contactEmail }, {$set: { role: companyInfo.role }});
+
+        const newCompany = new ComapnyModel({...companyInfo, password: hashedPassword});
         await newCompany.save();
         const token = jwt.sign(
             { id: newCompany._id, email: newCompany.contactEmail, role: newCompany.role },
@@ -62,7 +74,7 @@ router.post('/client/login', async (req: Request, res: Response) => {
         { id: checkUser._id, email: checkUser.email, role: checkUser.role },
         process.env.JWT_SECRET!,
         { expiresIn: '7d' })
-        res.status(200).json({ message: 'Login succesful', token, checkUser, })
+        res.status(200).json({ message: 'Login succesful', checkUser, token })
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Login Failed', error });

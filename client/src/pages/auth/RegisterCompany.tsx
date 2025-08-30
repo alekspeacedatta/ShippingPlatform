@@ -6,7 +6,7 @@ import type { Company, ShippingType } from "../../types/Types"
 import { useRegisterCompany } from "../../api/useAuth"
 
 const RegisterCompany = () => {
-  const { mutate } = useRegisterCompany();
+  const { mutate: regC } = useRegisterCompany();
   const [shippingType, setShippingTypes] = useState<ShippingType[]>([]);
   const [ regions, setRegions ] = useState<string[]>([]);
   const toggleShippingType = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,7 +36,7 @@ const RegisterCompany = () => {
   })
   const handelCompanyRegister = (e: React.FormEvent) => {
     e.preventDefault();
-    mutate({...companyInfo, regions, supportedTypes: shippingType});
+    regC({...companyInfo, regions, supportedTypes: shippingType});
   }
   return (
     <div className='flex h-[100vh] items-stretch'>
@@ -51,7 +51,7 @@ const RegisterCompany = () => {
                 <section className="grid grid-cols-2  gap-4">
                     <section className="flex col-span-2 flex-col gap-[10px]">
                       <label>Contact Email: </label>
-                      <Input onChange={e => setCompanyInfo({...companyInfo, contactEmail: e.target.value})} type='mail' placeholder='enter your email' />
+                      <Input onChange={e => setCompanyInfo({...companyInfo, contactEmail: e.target.value})} type='email' placeholder='enter your email' />
                     </section>
                     <section className='flex flex-col gap-[10px]'>
                       <label>password</label>
@@ -153,23 +153,23 @@ const RegisterCompany = () => {
                 <section className="grid grid-cols-2 grid-row-2 gap-4"> 
                     <section className=' col-span-2 flex flex-col gap-[10px]'>
                       <label>BasePrice: </label>
-                      <Input onChange={e => setCompanyInfo({ ...companyInfo, pricing: { ...companyInfo.pricing, basePrice: Number(e.target.value) } })} type='number' placeholder='enter your baseprice' />
+                      <Input onChange={e => setCompanyInfo({ ...companyInfo, pricing: { ...companyInfo.pricing, basePrice: Number(e.target.value) } })} type='float' placeholder='enter your baseprice' />
                     </section>
                     <section className='flex flex-col gap-[10px]'>
                       <label>PricePerKg: </label>
-                        <Input onChange={e => setCompanyInfo({ ...companyInfo, pricing: { ...companyInfo.pricing, pricePerKg: Number(e.target.value) } })} type='number' placeholder='enter your perkg price' />
+                        <Input onChange={e => setCompanyInfo({ ...companyInfo, pricing: { ...companyInfo.pricing, pricePerKg: Number(e.target.value) } })} type='float' placeholder='enter your perkg price' />
                     </section>  
                     <section className='flex flex-col gap-[10px]'>
                       <label>FuelPtc: </label>
-                      <Input onChange={e => setCompanyInfo({ ...companyInfo, pricing: { ...companyInfo.pricing, fuelPct: Number(e.target.value) } })} type='number' placeholder='enter your fuelPtc' />
+                      <Input onChange={e => setCompanyInfo({ ...companyInfo, pricing: { ...companyInfo.pricing, fuelPct: Number(e.target.value) } })} type='float' placeholder='enter your fuelPtc' />
                     </section>
                     <section className='flex flex-col gap-[10px]'>
                       <label>insurancePct: </label>
-                      <Input onChange={e => setCompanyInfo({ ...companyInfo, pricing: { ...companyInfo.pricing, insurancePct: Number(e.target.value) } })} type='number' placeholder='enter your insurancePct' />
+                      <Input onChange={e => setCompanyInfo({ ...companyInfo, pricing: { ...companyInfo.pricing, insurancePct: Number(e.target.value) } })} type='float' placeholder='enter your insurancePct' />
                     </section>
                     <section className='flex flex-col gap-[10px]'>
                       <label>RemoteAreaPct: </label>
-                      <Input onChange={e => setCompanyInfo({ ...companyInfo, pricing: { ...companyInfo.pricing, remoteAreaPct: Number(e.target.value) } })} type='number' placeholder='enter your remoteAreaPct' />
+                      <Input onChange={e => setCompanyInfo({ ...companyInfo, pricing: { ...companyInfo.pricing, remoteAreaPct: Number(e.target.value) } })} type='float' placeholder='enter your remoteAreaPct' />
                     </section>
                 </section>
                 <section className="flex flex-col gap-3">
@@ -177,19 +177,19 @@ const RegisterCompany = () => {
                   <section className="flex">
                     <section className="flex flex-col gap-[3px]">
                       <label>Sea:</label>
-                      <Input onChange={e => setCompanyInfo({ ...companyInfo, pricing: { ...companyInfo.pricing, typeMultipliers: { ...companyInfo.pricing.typeMultipliers, SEA: Number(e.target.value) } } })} className="w-[86%]" type='number'placeholder="1.2"/>
+                      <Input onChange={e => setCompanyInfo({ ...companyInfo, pricing: { ...companyInfo.pricing, typeMultipliers: { ...companyInfo.pricing.typeMultipliers, SEA: Number(e.target.value) } } })} className="w-[86%]" type='float'placeholder="1.2"/>
                     </section>
                     <section className="flex flex-col gap-[3px]">
                       <label>Road:</label>
-                      <Input onChange={e => setCompanyInfo({ ...companyInfo, pricing: { ...companyInfo.pricing, typeMultipliers: { ...companyInfo.pricing.typeMultipliers, ROAD: Number(e.target.value) } } })} className="w-[86%]" type='number'placeholder="1.3"/>
+                      <Input onChange={e => setCompanyInfo({ ...companyInfo, pricing: { ...companyInfo.pricing, typeMultipliers: { ...companyInfo.pricing.typeMultipliers, ROAD: Number(e.target.value) } } })} className="w-[86%]" type='float'placeholder="1.3"/>
                     </section>
                     <section className="flex flex-col gap-[3px]">
                       <label>Railway:</label>
-                      <Input onChange={e => setCompanyInfo({ ...companyInfo, pricing: { ...companyInfo.pricing, typeMultipliers: { ...companyInfo.pricing.typeMultipliers, RAILWAY: Number(e.target.value) } } })} className="w-[86%]" type='number'placeholder="1.1"/>
+                      <Input onChange={e => setCompanyInfo({ ...companyInfo, pricing: { ...companyInfo.pricing, typeMultipliers: { ...companyInfo.pricing.typeMultipliers, RAILWAY: Number(e.target.value) } } })} className="w-[86%]" type='float'placeholder="1.1"/>
                     </section>
                     <section className="flex flex-col gap-[3px]">
                       <label>Air:</label>
-                      <Input onChange={e => setCompanyInfo({ ...companyInfo, pricing: { ...companyInfo.pricing, typeMultipliers: { ...companyInfo.pricing.typeMultipliers, AIR: Number(e.target.value) } } })} className="w-[86%]" type='number' placeholder="1.5"/>
+                      <Input onChange={e => setCompanyInfo({ ...companyInfo, pricing: { ...companyInfo.pricing, typeMultipliers: { ...companyInfo.pricing.typeMultipliers, AIR: Number(e.target.value) } } })} className="w-[86%]" type='float' placeholder="1.5"/>
                     </section>
                   </section>
                 </section>
