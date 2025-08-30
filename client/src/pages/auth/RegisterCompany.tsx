@@ -76,17 +76,26 @@ const RegisterCompany = () => {
                           <input onChange={toggleRegions} type="checkbox" value='AR' className="sr-only peer" />
                           <span className="px-3 py-2 text-[14px] text-[#aaaaaa] rounded-[28px] border-[2px] border-[#aab0ff] peer-checked:(bg-[#aab0ff] text-white)">AR</span>
                         </label>
-
+                        <label className="flex items-center cursor-pointer select-none">
+                          <input onChange={toggleRegions} type="checkbox" value='DE' className="sr-only peer" />
+                          <span className="px-3 py-2 text-[14px] text-[#aaaaaa] rounded-[28px] border-[2px] border-[#aab0ff] peer-checked:(bg-[#aab0ff] text-white)">DE</span>
+                        </label>
+                        <label className="flex items-center cursor-pointer select-none">
+                          <input onChange={toggleRegions} type="checkbox" value='FR' className="sr-only peer" />
+                          <span className="px-3 py-2 text-[14px] text-[#aaaaaa] rounded-[28px] border-[2px] border-[#aab0ff] peer-checked:(bg-[#aab0ff] text-white)">FR</span>
+                        </label>
+                        <label className="flex items-center cursor-pointer select-none">
+                          <input onChange={toggleRegions} type="checkbox" value='IT' className="sr-only peer" />
+                          <span className="px-3 py-2 text-[14px] text-[#aaaaaa] rounded-[28px] border-[2px] border-[#aab0ff] peer-checked:(bg-[#aab0ff] text-white)">IT</span>
+                        </label>
                         <label className="flex items-center cursor-pointer select-none">
                           <input onChange={toggleRegions} type="checkbox" value='US'  className="sr-only peer" />
                           <span className="px-3 py-2 text-[14px] text-[#aaaaaa] rounded-[28px] border-[2px] border-[#aab0ff] peer-checked:(bg-[#aab0ff] text-white)">US</span>
                         </label>
-
                         <label className="flex items-center cursor-pointer select-none">
                           <input onChange={toggleRegions} type="checkbox" value='UK'  className="sr-only peer" />
                           <span className="px-3 py-2 text-[14px] text-[#aaaaaa] rounded-[28px] border-[2px] border-[#aab0ff] peer-checked:(bg-[#aab0ff] text-white)">UK</span>
                         </label>
-
                         <label className="flex items-center cursor-pointer select-none">
                           <input onChange={toggleRegions} type="checkbox" value='GE'  className="sr-only peer" />
                           <span className="px-3 py-2 text-[14px] text-[#aaaaaa] rounded-[28px] border-[2px] border-[#aab0ff] peer-checked:(bg-[#aab0ff] text-white)">GE</span>
