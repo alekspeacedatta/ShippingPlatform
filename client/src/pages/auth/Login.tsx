@@ -9,7 +9,7 @@ export default function Login() {
     email: '',
     password: ''
   });
-  const { mutate, isError } = useLogin();
+  const { mutate, isError, error } = useLogin();
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     mutate(loginInfo);
@@ -20,7 +20,7 @@ export default function Login() {
         <Card>
           <form className="flex flex-col gap-4" onSubmit={handleLogin}>
             <h1 className="text-2xl font-semibold">Login</h1>
-            { isError ?   ( <p className="text-red-800">login failed</p> ) : ( <p className="text-green-700"></p> )}
+            { isError && ( <p className="text-red-800">{error.message}</p> )}
             <section className="flex flex-col gap-2">
               <span>Email</span>
               <Input type="email" placeholder="luka@example.com" onChange={e => setLoginInfo({...loginInfo, email: e.target.value })} required />

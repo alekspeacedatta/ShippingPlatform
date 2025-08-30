@@ -14,7 +14,7 @@ export default function RegisterUser() {
     addresses: [{ country: "", city: "", line1: "", postalCode: "" }],
     role: 'USER'
   })
-  const { mutate, isError, error } = useRegister()
+  const { mutate, isError, error } = useRegister();
   const handleRegister = (e: React.FormEvent) => {
     e.preventDefault();
     mutate(registeredInfo);
@@ -25,7 +25,7 @@ export default function RegisterUser() {
         <div className="w-full max-w-lg bg-white rounded-3xl shadow-2xl ring-1 ring-black/5 p-7">
           <form className="flex flex-col gap-4" onSubmit={handleRegister}>
             <h1 className="text-2xl font-semibold">Register</h1>
-            { isError ? ( <p>registered failed {error.message}</p> ) : ( <p></p> ) }
+            { isError && ( <p className="text-red-800">{error.message}</p> ) }
             <section className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <section className="flex flex-col gap-2">
                 <span>Full name</span>

@@ -3,53 +3,40 @@ import { BASE_URL, type Company, type User } from "../types/Types";
 import { useAuthStore } from "../store/useAuthStore";
 import { useNavigate } from "react-router-dom";
 export const registerCompany = async (companyInfo: Company) => {
-    try {
-        const res = await fetch(`${BASE_URL}/api/auth/company/register`, {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(companyInfo)
-        })
-        if(!res.ok) throw new Error("Error: registered company res is not ok");
-        return await res.json();
-    } catch (error) {
-        console.error(error);
-        throw error;
-    }
+    const res = await fetch(`${BASE_URL}/api/auth/company/register`, {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(companyInfo)
+    })
+    if(!res.ok) throw new Error("Register failed, make sure that all fields are filled correctly");
+    return await res.json();
 }
 export const register = async (registerInfo: User) => {
-    try {
-        const res = await fetch(`${BASE_URL}/api/auth/client/register`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(registerInfo)
-        })
-        if(!res.ok) throw new Error("Error: registered Res Is Not Ok");
-        const data = await res.json();
-        return data.newUser; 
-    } catch (error) {
-        console.error(error);        
-    }
+    const res = await fetch(`${BASE_URL}/api/auth/client/register`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(registerInfo)
+    })
+    const data = await res.json();
+    if(!res.ok) throw new Error("Register failed. make sure that all fields are filled correctly");
+    return data.newUser; 
 }
 const login = async (user: { email: string, password: string }) => {
-    try {
-        const res = await fetch(`${BASE_URL}/api/auth/client/login`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(user)
-        })
-        if(!res.ok) throw new Error("Error: Login Res Is Not Ok");
-        const data = await res.json();
-        localStorage.setItem('token', data.token);
-        return data.checkUser;
-    } catch (error) {
-        console.error(error);
-    }
+    const res = await fetch(`${BASE_URL}/api/auth/client/login`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(user)
+    })
+    if(!res.ok) throw new Error("incorrect email or password");
+    const data = await res.json();
+    localStorage.setItem('token', data.token);
+    return data.checkUser;
 }
 
 export const useLogin = () => {
@@ -73,6 +60,9 @@ export const useRegister = () => {
         onSuccess: (_data, variables) => {
             mutate({ email: variables.email, password: variables.password });
         },
+        onError: (e) => {
+            console.error(e.message);            
+        }
     })
 }
 export const useRegisterCompany = () => {

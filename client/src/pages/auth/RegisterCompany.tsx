@@ -6,7 +6,7 @@ import type { Company, ShippingType } from "../../types/Types"
 import { useRegisterCompany } from "../../api/useAuth"
 
 const RegisterCompany = () => {
-  const { mutate: regC } = useRegisterCompany();
+  const { mutate, isError, error } = useRegisterCompany();
   const [shippingType, setShippingTypes] = useState<ShippingType[]>([]);
   const [ regions, setRegions ] = useState<string[]>([]);
   const toggleShippingType = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,17 +36,17 @@ const RegisterCompany = () => {
   })
   const handelCompanyRegister = (e: React.FormEvent) => {
     e.preventDefault();
-    regC({...companyInfo, regions, supportedTypes: shippingType});
+    mutate({...companyInfo, regions, supportedTypes: shippingType});
   }
   return (
     <div className='flex h-[100vh] items-stretch'>
       <div className="basis-full md:basis-[760px] shrink-0 flex items-center justify-center px-6 py-8">
         <section className="w-full max-w-lg bg-white rounded-3xl shadow-2xl ring-1 ring-black/5 p-7">
-          <form className="flex flex-col gap-4" onSubmit={handelCompanyRegister}>
-            <h1 className="mb-1 text-2xl font-semibold">Register</h1>
-
+          <form className="flex  flex-col gap-4" onSubmit={handelCompanyRegister}>
+            <h1 className="mb-1 text-2xl font-semibold">Company Registration</h1>
+            { isError && ( <p className="text-red-800">{error.message}</p>)}
             <section className="flex flex-col gap-5 max-h-[60vh] overflow-y-auto pr-2">
-              <section className="flex flex-col gap-3  rounded-[8px] p-[10px]">
+              <section className="flex flex-col gap-3 rounded-[8px]">
                 <h2 className="text-xl">main info</h2>
                 <section className="grid grid-cols-2  gap-4">
                     <section className="flex col-span-2 flex-col gap-[10px]">
@@ -120,7 +120,7 @@ const RegisterCompany = () => {
                 </section>                  
               </section>
 
-              <section className="flex flex-col gap-3 rounded-[8px] p-[10px]">
+              <section className="flex flex-col gap-3 rounded-[8px]">
                 <h2>Headquorter address</h2>
                 <section className="flex justify-between gap-4">
                   <section className="flex flex-col gap-3 w-[48%]">
@@ -146,9 +146,8 @@ const RegisterCompany = () => {
                   </section>
                 </section>
               </section>
-
               
-              <section className="flex flex-col gap-3 rounded-[8px] p-[10px]">
+              <section className="flex flex-col gap-3 rounded-[8px]">
                 <h2>pricing</h2>
                 <section className="grid grid-cols-2 grid-row-2 gap-4"> 
                     <section className=' col-span-2 flex flex-col gap-[10px]'>
