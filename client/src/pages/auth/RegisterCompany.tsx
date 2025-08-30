@@ -1,11 +1,18 @@
 import { Button } from "../../components/commons/Button"
 import { Input } from "../../components/commons/Input"
 import { Link } from "react-router-dom"
-import { useState } from "react"
 import type { Company, ShippingType } from "../../types/Types"
 import { useRegisterCompany } from "../../api/useAuth"
+import { useState, useRef } from "react";
+import { useGSAP } from "@gsap/react";
+import gsap from 'gsap';
 
 const RegisterCompany = () => {
+  const formRef = useRef(null);
+  gsap.registerPlugin(useGSAP);
+  useGSAP(() => {
+    gsap.from(formRef.current, { opacity: 0, scale: 0.95, duration: 0.1})  
+  })
   const { mutate, isError, error } = useRegisterCompany();
   const [shippingType, setShippingTypes] = useState<ShippingType[]>([]);
   const [ regions, setRegions ] = useState<string[]>([]);
@@ -41,7 +48,7 @@ const RegisterCompany = () => {
   return (
     <div className='flex h-[100vh] items-stretch'>
       <div className="basis-full md:basis-[760px] shrink-0 flex items-center justify-center px-6 py-8">
-        <section className="w-full max-w-lg bg-white rounded-3xl shadow-2xl ring-1 ring-black/5 p-7">
+        <section ref={formRef} className="w-full max-w-lg bg-white rounded-3xl shadow-2xl ring-1 ring-black/5 p-7">
           <form className="flex  flex-col gap-4" onSubmit={handelCompanyRegister}>
             <h1 className="mb-1 text-2xl font-semibold">Company Registration</h1>
             { isError && ( <p className="text-red-800">{error.message}</p>)}

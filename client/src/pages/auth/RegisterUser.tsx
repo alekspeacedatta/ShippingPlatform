@@ -1,11 +1,17 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Button } from "../../components/commons/Button";
 import { Input } from "../../components/commons/Input";
 import { Link } from "react-router-dom";
 import type { User } from "../../types/Types";
 import { useRegister } from "../../api/useAuth";
-
+import { useGSAP } from "@gsap/react";
+import gsap from 'gsap'
 export default function RegisterUser() {
+  const formRef = useRef(null);
+  gsap.registerPlugin(useGSAP);
+  useGSAP(() => {
+    gsap.from(formRef.current, { opacity: 0, scale: 0.95, duration: 0.2})    
+  })
   const [ registeredInfo, setRegisteredInfo ] = useState<User>({
     fullName: '',
     password: '',
@@ -22,9 +28,9 @@ export default function RegisterUser() {
   return (
     <div className="min-h-screen flex bg-gray-50">
       <div className="w-[760px] flex items-center justify-center px-6">
-        <div className="w-full max-w-lg bg-white rounded-3xl shadow-2xl ring-1 ring-black/5 p-7">
+        <div ref={formRef} className="w-full max-w-lg bg-white rounded-3xl shadow-2xl ring-1 ring-black/5 p-7">
           <form className="flex flex-col gap-4" onSubmit={handleRegister}>
-            <h1 className="text-2xl font-semibold">Register</h1>
+            <h2 className="text-2xl font-semibold">Register</h2>
             { isError && ( <p className="text-red-800">{error.message}</p> ) }
             <section className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <section className="flex flex-col gap-2">

@@ -3,8 +3,16 @@ import { Card } from "../../components/commons/Card";
 import { Input } from "../../components/commons/Input";
 import { Link } from "react-router-dom";
 import { useLogin } from "../../api/useAuth";
-import { useState } from "react";
+import { useState, useRef } from "react";
+import { useGSAP } from "@gsap/react";
+import gsap from 'gsap';
 export default function Login() {
+  const formRef = useRef(null);
+  gsap.registerPlugin(useGSAP);
+  useGSAP(() => {
+    gsap.from(formRef.current, { opacity: 0, scale: 0.95, duration: 0.2})
+    
+  })
   const [ loginInfo, setLoginInfo] = useState<{email: string, password: string}>({
     email: '',
     password: ''
@@ -17,7 +25,7 @@ export default function Login() {
   return (
     <div className="min-h-screen flex bg-gray-50">
       <div className="basis-full md:basis-[760px] shrink-0 flex items-center justify-center px-6">
-        <Card>
+        <Card className="form" ref={formRef}>
           <form className="flex flex-col gap-4" onSubmit={handleLogin}>
             <h1 className="text-2xl font-semibold">Login</h1>
             { isError && ( <p className="text-red-800">{error.message}</p> )}
