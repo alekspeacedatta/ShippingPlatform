@@ -4,8 +4,8 @@ export const Button = styled.button`
     color: white;
     background-color: #7c86ff;
     border: 2px solid #7c86ff;
-    padding:    8px 20px;  
-    border-radius: 8px;
+    padding: 8px 20px;  
+    border-radius: 50px;
     cursor: pointer;
     outline: none;
     transition: all .2s;

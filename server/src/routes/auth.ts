@@ -18,12 +18,7 @@ router.post('/client/register', async (req: Request, res: Response) => {
         const newUser = new UserModel({ fullName, email, password: hashedPassword, phone, addresses, role});
         await newUser.save();
 
-        const token = jwt.sign(
-            {id: newUser._id, email: newUser.email, role: newUser.role},
-            process.env.JWT_SECRET!,
-            { expiresIn: '7d' }
-        )
-        res.status(201).json({ message: 'User Created Successfully', newUser, token });
+        res.status(201).json({ message: 'User Created Successfully', newUser});
     } catch (error) {
         console.error(error)
         res.status(500).json({ message: 'Error Registering User', error })   

@@ -176,11 +176,11 @@ const RegisterCompany = () => {
                     </section>  
                     <section className='flex flex-col gap-[10px]'>
                       <label>FuelPtc: </label>
-                      <Input onChange={e => setCompanyInfo({ ...companyInfo, pricing: { ...companyInfo.pricing, fuelPct: Number(e.target.value) } })} type='float' placeholder='enter your fuelPtc' />
+                      <Input onChange={e => setCompanyInfo({ ...companyInfo, pricing: { ...companyInfo.pricing, fuelPct: Number(e.target.value) } })} type='float' placeholder='0.10 = 10%' />
                     </section>
                     <section className='flex flex-col gap-[10px]'>
                       <label>insurancePct: </label>
-                      <Input onChange={e => setCompanyInfo({ ...companyInfo, pricing: { ...companyInfo.pricing, insurancePct: Number(e.target.value) } })} type='float' placeholder='enter your insurancePct' />
+                      <Input onChange={e => setCompanyInfo({ ...companyInfo, pricing: { ...companyInfo.pricing, insurancePct: Number(e.target.value) } })} type='float' placeholder='0.01 = 1%' />
                     </section>
                     <section className='flex flex-col gap-[10px]'>
                       <label>RemoteAreaPct: </label>
@@ -192,19 +192,19 @@ const RegisterCompany = () => {
                   <section className="flex">
                     <section className="flex flex-col gap-[3px]">
                       <label>Sea:</label>
-                      <Input onChange={e => setCompanyInfo({ ...companyInfo, pricing: { ...companyInfo.pricing, typeMultipliers: { ...companyInfo.pricing.typeMultipliers, SEA: Number(e.target.value) } } })} className="w-[86%]" type='float'placeholder="1.2"/>
+                      <Input onChange={e => setCompanyInfo({ ...companyInfo, pricing: { ...companyInfo.pricing, typeMultipliers: { ...companyInfo.pricing.typeMultipliers, SEA: Number(e.target.value) } } })} className="w-[86%]" type='float'placeholder="1.2x"/>
                     </section>
                     <section className="flex flex-col gap-[3px]">
                       <label>Road:</label>
-                      <Input onChange={e => setCompanyInfo({ ...companyInfo, pricing: { ...companyInfo.pricing, typeMultipliers: { ...companyInfo.pricing.typeMultipliers, ROAD: Number(e.target.value) } } })} className="w-[86%]" type='float'placeholder="1.3"/>
+                      <Input onChange={e => setCompanyInfo({ ...companyInfo, pricing: { ...companyInfo.pricing, typeMultipliers: { ...companyInfo.pricing.typeMultipliers, ROAD: Number(e.target.value) } } })} className="w-[86%]" type='float'placeholder="1.3x"/>
                     </section>
                     <section className="flex flex-col gap-[3px]">
                       <label>Railway:</label>
-                      <Input onChange={e => setCompanyInfo({ ...companyInfo, pricing: { ...companyInfo.pricing, typeMultipliers: { ...companyInfo.pricing.typeMultipliers, RAILWAY: Number(e.target.value) } } })} className="w-[86%]" type='float'placeholder="1.1"/>
+                      <Input onChange={e => setCompanyInfo({ ...companyInfo, pricing: { ...companyInfo.pricing, typeMultipliers: { ...companyInfo.pricing.typeMultipliers, RAILWAY: Number(e.target.value) } } })} className="w-[86%]" type='float'placeholder="1.1x"/>
                     </section>
                     <section className="flex flex-col gap-[3px]">
                       <label>Air:</label>
-                      <Input onChange={e => setCompanyInfo({ ...companyInfo, pricing: { ...companyInfo.pricing, typeMultipliers: { ...companyInfo.pricing.typeMultipliers, AIR: Number(e.target.value) } } })} className="w-[86%]" type='float' placeholder="1.5"/>
+                      <Input onChange={e => setCompanyInfo({ ...companyInfo, pricing: { ...companyInfo.pricing, typeMultipliers: { ...companyInfo.pricing.typeMultipliers, AIR: Number(e.target.value) } } })} className="w-[86%]" type='float' placeholder="1.5x"/>
                     </section>
                   </section>
                 </section>

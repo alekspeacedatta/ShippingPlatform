@@ -6,6 +6,7 @@ import { useLogin } from "../../api/useAuth";
 import { useState, useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from 'gsap';
+
 export default function Login() {
   const formRef = useRef(null);
   gsap.registerPlugin(useGSAP);
