@@ -4,7 +4,6 @@ import { RouterProvider } from 'react-router-dom';
 
 import 'virtual:windi.css'
 import { router } from './app/routes/router.tsx';
-import './App.css';
 import './styles/base.css';
 import AppProvider from './app/providers/provider.tsx';
 

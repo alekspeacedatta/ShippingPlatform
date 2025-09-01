@@ -16,7 +16,7 @@ export const useLogin = () => {
             if(data.user.role === "USER"){
                 navigate('/client/dashboard')
             } else {
-                setCompany(data.company)
+                setCompany(data.company ?? null)
                 navigate('/company/dashboard')
             }
         },

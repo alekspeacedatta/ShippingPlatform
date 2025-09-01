@@ -44,7 +44,6 @@ export interface CompanyPricing {
     remoteAreaPct: number;
 }
 export interface ParcelRequest {
-    id: string;
     userId: string;
     companyId?: string; // set after acceptance
     shippingType: ShippingType;
