@@ -10,7 +10,7 @@ export const useAuthStore = create<AuthStore>()(
     persist((set) => ({
         user: null,
         setUser: (user) => set({user}),
-        logout: () => { set({ user: null }); localStorage.removeItem('token') }
+        logout: () => { set({ user: null }); localStorage.removeItem('token')}
         }),
         {
             name: 'auth-storage',

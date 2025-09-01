@@ -2,7 +2,7 @@ import type { Company, User } from "../types/Types";
 import { BASE_URL } from "../types/Types";
 
 type LoginPayload = {email: string, password: string};
-type LoginResponse = { user: User, token: string, message?: string };
+type LoginResponse = { user: User, token: string, message?: string , company?: Company};
 type RegisterClientResponse = { user: User, message: string };
 type RegisterCompanyResponse = { company: Company, message: string };
 
@@ -17,7 +17,7 @@ export class Authentication {
         })
         if(!res.ok) throw new Error("incorrect email or password");
         const data = await res.json();
-        return { user: data.checkUser, token: data.token, message: data.message };
+        return { message: data.message, user: data.user, token: data.token, company: data.company };
     };
     static async register(registerInfo: User) : Promise<RegisterClientResponse> {
         const res = await fetch(`${BASE_URL}/api/auth/client/register`, {
@@ -29,7 +29,7 @@ export class Authentication {
         })
         const data = await res.json();
         if(!res.ok) throw new Error("Register failed. make sure that all fields are filled correctly");
-        return { user: data.newUse, message: data.message };
+        return { user: data.newUser, message: data.message };
     };
     static async registerCompany(companyInfo: Company) : Promise<RegisterCompanyResponse>{
         const res = await fetch(`${BASE_URL}/api/auth/company/register`, {
@@ -41,6 +41,6 @@ export class Authentication {
         })
         if(!res.ok) throw new Error("Register failed, make sure that all fields are filled correctly");
         const data = await res.json();
-        return { company: data.newCompany, message: data.message };
+        return { message: data.message, company: data.company};
     }
 }

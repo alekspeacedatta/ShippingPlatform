@@ -31,24 +31,21 @@ router.post('/company/register', async ( req: Request, res: Response ) => {
         const exsistingCompany = await ComapnyModel.findOne({ contactEmail: companyInfo.contactEmail, password: companyInfo.password});
         const exsistingCompanyName = await ComapnyModel.findOne({ name: companyInfo.name });
         const hashedPassword = await bcrypt.hash(companyInfo.password, 10);
-        const exsistingUser = await UserModel.findOne({ email: companyInfo.contactEmail });
 
-        if(!exsistingUser) return res.status(400).json({ message: " User does not exsist or user email is incorect" });
-        const isMatch = await bcrypt.compare(companyInfo.password, exsistingUser.password);
-        if(!isMatch) return res.status(400).json({ message: " User password is not correct " });
         if(exsistingCompany) return res.status(400).json({ message: 'This Company is already exsist' });
         if(exsistingCompanyName) return res.status(400).json({ message: 'This Company Name is already taken' });
         
-        await UserModel.updateOne({email: companyInfo.contactEmail }, {$set: { role: companyInfo.role }});
-
+        const admin = new UserModel({ email: companyInfo.contactEmail, password: hashedPassword, fullName: 'aleksandre', addresses: [{country: 'ds', city:  'ds', line1: 'ds', postalCode: 'ds'},], phone: '', role: 'COMPANY_ADMIN' });
         const newCompany = new ComapnyModel({...companyInfo, password: hashedPassword});
+        await admin.save();
         await newCompany.save();
+
         const token = jwt.sign(
             { id: newCompany._id, email: newCompany.contactEmail, role: newCompany.role },
             process.env.JWT_SECRET!,
             { expiresIn: '7d' }
         );
-        res.status(201).json({ message: 'Company is registered Successuflly', company: newCompany, token });
+        res.status(201).json({ message: 'Company is registered Successuflly', company: newCompany});
     } catch (error) {
         console.error(error)
         res.status(500).json({ message: 'Error Registering Company', error }) 
@@ -68,8 +65,12 @@ router.post('/client/login', async (req: Request, res: Response) => {
         const token = jwt.sign(
         { id: checkUser._id, email: checkUser.email, role: checkUser.role },
         process.env.JWT_SECRET!,
-        { expiresIn: '7d' })
-        res.status(200).json({ message: 'Login succesful', checkUser, token })
+        { expiresIn: '7d' });
+        const exsitedCompany = await ComapnyModel.findOne({ contactEmail: email });
+        if(exsitedCompany){
+            res.status(200).json({ message: 'Login succesful', user: checkUser, token: token, company: exsitedCompany })
+        }
+        res.status(200).json({ message: 'Login succesful', user: checkUser, token: token})
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Login Failed', error });
