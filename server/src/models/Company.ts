@@ -17,4 +17,4 @@ const CompanySchema = new mongoose.Schema({
 
 export interface CompanyDocument extends Company, Document {};
 
-export const ComapnyModel = mongoose.model<CompanyDocument>('Company', CompanySchema)
+export const CompanyModel = mongoose.model<CompanyDocument>('Company', CompanySchema)

@@ -6,7 +6,28 @@ type LoginResponse = { user: User, token: string, message?: string , company?: C
 type RegisterClientResponse = { user: User, message: string };
 type RegisterCompanyResponse = { company: Company, message: string };
 
-export class Authentication {    
+export class AuthenticationService {    
+    static async getUser(token: string): Promise<User> {
+    if (!token) throw new Error("No token");
+
+    const res = await fetch(`${BASE_URL}/api/auth/client/me`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,      // <-- FIXED header
+      },
+    });
+
+    if (!res.ok) {
+      const text = await res.text().catch(() => "");
+      const err = new Error(text || res.statusText) as Error & { status?: number };
+      (err as any).status = res.status;
+      throw err;
+    }
+
+    const { user } = (await res.json()) as { user: User };
+    return user;
+    }
     static async login(user: LoginPayload) : Promise<LoginResponse> {
         const res = await fetch(`${BASE_URL}/api/auth/client/login`, {
             method: 'POST',

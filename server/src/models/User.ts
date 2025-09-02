@@ -1,4 +1,4 @@
-import mongoose, { Document } from "mongoose";
+import mongoose, { Document, Schema } from "mongoose";
 import { AddressSchema } from "./defaults";
 import { User } from "../types/types";
 
@@ -9,7 +9,8 @@ const UserSchema = new mongoose.Schema({
     fullName: { type: String, required: true },
     phone: { type: String, required: false },
     addresses: { type: [AddressSchema], required: true },
-    role: { type: String, required: true }
+    role: { type: String, required: true },
+    companyId: { type: Schema.Types.ObjectId, ref: "Company", default: null },
 });
 
 export interface UserDocument extends User, Document {}

@@ -1,20 +1,23 @@
+// store/useCompanyStore.ts
 import { create } from "zustand";
 import type { Company } from "../types/Types";
-import { createJSONStorage, persist } from "zustand/middleware";
 
 interface CompanyStore {
-    company: Company | null;
-    setCompany: (company: Company | undefined) => void
+  companies: Company[];                     // for USER flows (all)
+  currentCompany: Company | null;           // for ADMIN flow (one)
+  companyHydrated: boolean;                 // <- add (admin’s company)
+  setCompanies: (companies: Company[]) => void;
+  setCurrentCompany: (company: Company | null) => void;
+  setCompanyHydrated: (v: boolean) => void; // <- add
+  clear: () => void;
 }
-export const useCompanyStore = create<CompanyStore>()(
-    persist((set) => ({
-        company: null,
-        setCompany: (company) => set({company})
-        }),
-        {
-            name: 'company-storage',
-            storage: createJSONStorage(() => localStorage),
-            partialize: (state) => ({ company: state.company })
-        }
-    )
-)
+
+export const useCompanyStore = create<CompanyStore>((set) => ({
+  companies: [],
+  currentCompany: null,
+  companyHydrated: false,
+  setCompanies: (companies) => set({ companies }),
+  setCurrentCompany: (company) => set({ currentCompany: company }),
+  setCompanyHydrated: (v) => set({ companyHydrated: v }),
+  clear: () => set({ companies: [], currentCompany: null, companyHydrated: false }),
+}));

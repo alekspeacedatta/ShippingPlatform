@@ -1,21 +1,26 @@
 import { create } from "zustand";
-import { type User } from "../types/Types";
 import { createJSONStorage, persist } from "zustand/middleware";
+interface AuthInfo {
+    token: string | null,
+    userID: string | null,
+    role: 'USER' | "COMPANY_ADMIN"
+}
 interface AuthStore {
-    user: User | null;
-    setUser: (user: User) => void;
+    authInfo : AuthInfo | null
+    setAuthInfo: ( authInfo: AuthInfo  ) => void;
     logout: () => void
 }
 export const useAuthStore = create<AuthStore>()(
     persist((set) => ({
         user: null,
-        setUser: (user) => set({user}),
-        logout: () => { set({ user: null }); localStorage.removeItem('token')}
+        authInfo: null,
+        setAuthInfo: (authInfo) => set({authInfo}),
+        logout: () => { set({ authInfo: null })}
         }),
         {
             name: 'auth-storage',
             storage: createJSONStorage(() => localStorage),
-            partialize: (state) => ({ user: state.user })
+            partialize: (state) => ({ authInfo: state.authInfo })
         }
     )
 )

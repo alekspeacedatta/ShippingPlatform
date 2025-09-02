@@ -16,14 +16,17 @@ export interface Address {
     postalCode: string;
 }
 export interface User {
+    _id: string;
     email: string;
     fullName: string;
     password: string;
     phone?: string;
+    companyId?: string | null;
     addresses: Address[];
-    role: 'USER';
+    role: Role;
 }
 export interface Company {
+    _id: string;
     name: string;
     contactEmail: string;
     password: string;
