@@ -1,7 +1,7 @@
 import { Button } from "../../components/commons/Button"
 import { Input } from "../../components/commons/Input"
-import { Link, useNavigate } from "react-router-dom"
-import type { Company, CompanyCreate, ShippingType } from "../../types/Types"
+import { Link } from "react-router-dom"
+import type {  CompanyCreate, ShippingType } from "../../types/Types"
 import { useRegisterCompany } from "../../api/useAuth"
 import { useState, useRef } from "react";
 import { useGSAP } from "@gsap/react";

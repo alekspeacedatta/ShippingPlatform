@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { Company } from "../types/Types";
+
 import { createJSONStorage, persist } from "zustand/middleware";
 interface CompanyInfo {
     companyId: string,
