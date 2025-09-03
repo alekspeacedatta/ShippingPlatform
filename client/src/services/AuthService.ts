@@ -1,4 +1,4 @@
-import type { Company, User } from "../types/Types";
+import type { Company, CompanyCreate, User } from "../types/Types";
 import { BASE_URL } from "../types/Types";
 
 type LoginPayload = {email: string, password: string};
@@ -6,7 +6,7 @@ type LoginResponse = { user: User, token: string, message?: string , company?: C
 type RegisterClientResponse = { user: User, message: string };
 type RegisterCompanyResponse = { company: Company, message: string };
 
-export class Authentication {    
+export class AuthenticationService {    
     static async getUser (token: string) {
 
         const res = await fetch(`${BASE_URL}/api/auth/client/get`, {
@@ -43,7 +43,7 @@ export class Authentication {
         if(!res.ok) throw new Error("Register failed. make sure that all fields are filled correctly");
         return { user: data.newUser, message: data.message };
     };
-    static async registerCompany(companyInfo: Company) : Promise<RegisterCompanyResponse>{
+    static async registerCompany(companyInfo: CompanyCreate) : Promise<RegisterCompanyResponse>{
         const res = await fetch(`${BASE_URL}/api/auth/company/register`, {
         method: "POST",
         headers: {

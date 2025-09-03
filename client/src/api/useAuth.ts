@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useAuthStore } from "../store/useAuthStore";
 import { useNavigate } from "react-router-dom";
-import { Authentication } from "../services/AuthService";
+import { AuthenticationService } from "../services/AuthService";
 import { useCompanyStore } from "../store/useCompanyStore";
 
 export const useGetUser = () => {
@@ -9,7 +9,7 @@ export const useGetUser = () => {
     return useQuery({
         queryKey: ['user', token],
         enabled: !!token,
-        queryFn: () =>  Authentication.getUser(token!),
+        queryFn: () =>  AuthenticationService.getUser(token!),
         staleTime: 5 * 60 * 1000,
         refetchOnWindowFocus: true
     })
@@ -18,13 +18,17 @@ export const useGetUser = () => {
 export const useLogin = () => {
     const navigate = useNavigate();
     const setAuthInfo = useAuthStore(state => state.setAuthInfo);
+    const setCompanyInfo = useCompanyStore(state => state.setCompanyInfo);
+
     return useMutation({
-        mutationFn: Authentication.login,
+        mutationFn: AuthenticationService.login,
         onSuccess: (data) => {
             setAuthInfo({ token: data.token, userId: data.user._id, role: data.user.role })
             if(data.user.role === "USER"){
                 navigate('/client/dashboard', { replace: true })
             } else {
+                // @ts-ignore
+                setCompanyInfo({ companyId: data.company?._id, email: data.company?.contactEmail })
                 navigate('/company/dashboard', { replace: true })
             }
         },
@@ -36,7 +40,7 @@ export const useLogin = () => {
 export const useRegister = () => {
     const { mutate } = useLogin();
     return useMutation({
-        mutationFn: Authentication.register,
+        mutationFn: AuthenticationService.register,
         onSuccess: (_data, variables) => {
             mutate({ email: variables.email, password: variables.password });
         },
@@ -47,11 +51,11 @@ export const useRegister = () => {
 }
 export const useRegisterCompany = () => {
     const { mutate } = useLogin();
-    const setCompany = useCompanyStore(state => state.setCompany);
+    const setCompanyInfo = useCompanyStore(state => state.setCompanyInfo);
     return useMutation({
-        mutationFn: Authentication.registerCompany,
+        mutationFn: AuthenticationService.registerCompany,
         onSuccess: (data, variables) => {
-            setCompany(data.company);
+            setCompanyInfo({ companyId: data.company._id, email: data.company.contactEmail })
             mutate({ email: variables.contactEmail, password: variables.password });
         },
         onError: (e) => {

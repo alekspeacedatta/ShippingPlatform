@@ -13,6 +13,7 @@ export default function RegisterUser() {
     gsap.from(formRef.current, { opacity: 0, scale: 0.95, duration: 0.2})    
   })
   const [ registeredInfo, setRegisteredInfo ] = useState<User>({
+    _id: '',
     fullName: '',
     password: '',
     email: '',

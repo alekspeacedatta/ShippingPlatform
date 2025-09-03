@@ -1,7 +1,7 @@
 import { Button } from "../../components/commons/Button"
 import { Input } from "../../components/commons/Input"
-import { Link } from "react-router-dom"
-import type { Company, ShippingType } from "../../types/Types"
+import { Link, useNavigate } from "react-router-dom"
+import type { Company, CompanyCreate, ShippingType } from "../../types/Types"
 import { useRegisterCompany } from "../../api/useAuth"
 import { useState, useRef } from "react";
 import { useGSAP } from "@gsap/react";
@@ -29,7 +29,7 @@ const RegisterCompany = () => {
       checked ? [...prev, value] : prev.filter(v => v !== value)
     )
   }
-  const [ companyInfo, setCompanyInfo ] = useState<Company>({
+  const [ companyInfo, setCompanyInfo ] = useState<CompanyCreate>({
     name: '',
     contactEmail: '',
     password: '',
@@ -38,11 +38,11 @@ const RegisterCompany = () => {
     regions: regions,
     supportedTypes: shippingType,
     pricing: { basePrice: 0, pricePerKg: 0, fuelPct: 0, insurancePct: 0, typeMultipliers: { SEA: 0, RAILWAY: 0, ROAD: 0, AIR: 0 }, remoteAreaPct: 0},
-    role: 'COMPANY_ADMIN',
     logoUrl: '',
   })
   const handelCompanyRegister = (e: React.FormEvent) => {
     e.preventDefault();
+    // @ts-ignore
     mutate({...companyInfo, regions, supportedTypes: shippingType});
   }
   return (

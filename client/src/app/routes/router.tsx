@@ -5,7 +5,7 @@ import RegisterCompany from "../../pages/auth/RegisterCompany"
 import ProtectedRoute from "./ProtectedRoute"
 import ClientDashboard from "../../pages/client/Dashboard"
 import CompanyDashboard from "../../pages/company/Dashboard"
-import ParcelForm from "../../components/client/ParcelForm"
+import CreateRequest from "../../pages/client/CreateRequest"
 export const router = createBrowserRouter([
 
     { path: '/login', element: <Login/>},
@@ -14,7 +14,7 @@ export const router = createBrowserRouter([
 
     {path: '/client', element: ( <ProtectedRoute allowed={['USER']}><Outlet/></ProtectedRoute> ), children: [
         { path: 'dashboard', element: <ClientDashboard/>},
-        { path: 'create-request', element: <ParcelForm/>},
+        { path: 'create-request', element: <CreateRequest/>},
         { path: 'requests/:id', element: <><h1>client requests ID</h1></>},
         { path: 'track', element: <><h1>client Track Parcel</h1></>},
     ]},

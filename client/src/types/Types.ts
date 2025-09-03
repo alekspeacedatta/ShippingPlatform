@@ -25,6 +25,7 @@ export interface User {
     role: 'USER';
 }
 export interface Company {
+    _id: string,
     name: string;
     contactEmail: string;
     password: string;
@@ -36,6 +37,7 @@ export interface Company {
     role: 'COMPANY_ADMIN';
     logoUrl?: string;
 }
+export type CompanyCreate = Omit<Company, '_id' | 'role'>;
 export interface CompanyPricing {
     basePrice: number; // base in currency units
     pricePerKg: number;

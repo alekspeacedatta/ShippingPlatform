@@ -1,20 +1,25 @@
 import { create } from "zustand";
 import type { Company } from "../types/Types";
 import { createJSONStorage, persist } from "zustand/middleware";
-
+interface CompanyInfo {
+    companyId: string,
+    email: string,
+}
 interface CompanyStore {
-    company: Company | null;
-    setCompany: (company: Company | undefined) => void
+    companyInfo: CompanyInfo | null;
+    setCompanyInfo: (companyInfo: CompanyInfo | undefined) => void;
+    companyLogout: () => void;
 }
 export const useCompanyStore = create<CompanyStore>()(
     persist((set) => ({
-        company: null,
-        setCompany: (company) => set({company})
+        companyInfo: null,
+        setCompanyInfo: (companyInfo) => set({companyInfo}),
+        companyLogout: () => { set({ companyInfo: null }) }
         }),
         {
             name: 'company-storage',
             storage: createJSONStorage(() => localStorage),
-            partialize: (state) => ({ company: state.company })
+            partialize: (state) => ({ companyInfo: state.companyInfo })
         }
     )
 )

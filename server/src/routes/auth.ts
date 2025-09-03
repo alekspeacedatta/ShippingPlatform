@@ -24,33 +24,45 @@ router.post('/client/register', async (req: Request, res: Response) => {
         res.status(500).json({ message: 'Error Registering User', error })   
     }
 })
-router.post('/company/register', async ( req: Request, res: Response ) => {
-    try {
-        const companyInfo  = req.body;
+router.post('/company/register', async (req: Request, res: Response) => {
+  try {
+    const {
+      name, contactEmail, password, phone, hqAddress,
+      regions, supportedTypes, pricing, logoUrl
+    } = req.body;
 
-        const exsistingCompany = await ComapnyModel.findOne({ contactEmail: companyInfo.contactEmail, password: companyInfo.password});
-        const exsistingCompanyName = await ComapnyModel.findOne({ name: companyInfo.name });
-        const hashedPassword = await bcrypt.hash(companyInfo.password, 10);
+    const existingByEmail = await ComapnyModel.findOne({ contactEmail });
+    const existingByName  = await ComapnyModel.findOne({ name });
+    if (existingByEmail) return res.status(400).json({ message: 'This Company is already exist' });
+    if (existingByName)  return res.status(400).json({ message: 'This Company Name is already taken' });
 
-        if(exsistingCompany) return res.status(400).json({ message: 'This Company is already exsist' });
-        if(exsistingCompanyName) return res.status(400).json({ message: 'This Company Name is already taken' });
-        
-        const admin = new UserModel({ email: companyInfo.contactEmail, password: hashedPassword, fullName: 'aleksandre', addresses: [{country: 'ds', city:  'ds', line1: 'ds', postalCode: 'ds'},], phone: '', role: 'COMPANY_ADMIN' });
-        const newCompany = new ComapnyModel({...companyInfo, password: hashedPassword});
-        await admin.save();
-        await newCompany.save();
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-        const token = jwt.sign(
-            { id: newCompany._id, email: newCompany.contactEmail, role: newCompany.role },
-            process.env.JWT_SECRET!,
-            { expiresIn: '7d' }
-        );
-        res.status(201).json({ message: 'Company is registered Successuflly', company: newCompany});
-    } catch (error) {
-        console.error(error)
-        res.status(500).json({ message: 'Error Registering Company', error }) 
-    }
-})
+    const admin = new UserModel({
+      email: contactEmail,
+      password: hashedPassword,
+      fullName: 'aleksandre',
+      addresses: [{ country: 'ds', city: 'ds', line1: 'ds', postalCode: 'ds' }],
+      phone: '',
+      role: 'COMPANY_ADMIN',
+    });
+
+    const newCompany = new ComapnyModel({
+      name, contactEmail, phone, hqAddress, regions, supportedTypes, pricing, logoUrl,
+      password: hashedPassword,
+      role: 'COMPANY_ADMIN',
+    });
+
+    await admin.save();
+    await newCompany.save();
+
+    return res.status(201).json({ message: 'Company is registered Successfully', company: newCompany });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Error Registering Company', error });
+  }
+});
+
 router.post('/client/login', async (req: Request, res: Response) => {
     try {
         const { email, password } = req.body;

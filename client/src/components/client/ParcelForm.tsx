@@ -9,7 +9,7 @@ import { Select, Option } from "../commons/Select";
 gsap.registerPlugin(useGSAP);
 const steps = ['Parcel Details', 'Route', 'Shipping Type', 'Calculator', 'Summary & Submit'];
 
-export default function StepperDemo() {
+function ParcelForm() {
   const [step, setStep] = useState(0);
   const back = () => {setStep(s => Math.max(0, s - 1))}
   const next = () => {setStep(s => Math.min(steps.length - 1, s + 1))}
@@ -32,7 +32,7 @@ export default function StepperDemo() {
   );
 
   return (
-    <div className="max-w-3xl md:max-w-5xl mx-auto p-6 gap-5 min-h-screen flex justify-center flex-col">
+    <div className="max-w-3xl md:max-w-8xl mx-auto p-6 gap-5 min-h-screen flex justify-center flex-col">
       <Stepper steps={steps} current={step} />
 
       <form className="p-4 border rounded-xl min-h-28 flex flex-col justify-center">
@@ -199,3 +199,4 @@ export default function StepperDemo() {
     </div>
   );
 }
+export default ParcelForm
