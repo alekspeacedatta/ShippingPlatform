@@ -3,11 +3,11 @@ import { type Role } from "../../types/Types";
 import { useAuthStore } from "../../store/useAuthStore";
 
 const ProtectedRoute = ( { allowed, children } : { allowed: Role[]; children: React.ReactNode  }) => {
-    const user = useAuthStore(state => state.user);
+    const authInfo = useAuthStore(state => state.authInfo);
     const location = useLocation();
 
-    if(!user) return <Navigate to='/login' replace state={{ from: location}} />
-    if(!allowed.includes(user.role)) return <Navigate to='/403' replace/>
+    if(!authInfo) return <Navigate to='/login' replace state={{ from: location}} />
+    if(!allowed.includes(authInfo.role)) return <Navigate to='/403' replace/>
 
     return <>{children}</>
 }

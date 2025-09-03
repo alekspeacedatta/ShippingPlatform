@@ -76,4 +76,16 @@ router.post('/client/login', async (req: Request, res: Response) => {
         res.status(500).json({ message: 'Login Failed', error });
     }
 })
+router.get('/client/get', authenticateJWT, async (req: Request, res: Response) => {
+    try {
+        // @ts-ignore
+        const userId = req.user!.id
+        const client = await UserModel.findById(userId).select('-password');
+        if(!client) res.status(400).json({ message: 'error while getting user' })
+
+        res.status(200).json(client)
+    } catch (error) {
+        res.status(500).json({ message: 'errorr while getting user', error })
+    }
+})
 export default router

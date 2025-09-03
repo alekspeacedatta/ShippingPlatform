@@ -7,13 +7,26 @@ type RegisterClientResponse = { user: User, message: string };
 type RegisterCompanyResponse = { company: Company, message: string };
 
 export class Authentication {    
+    static async getUser (token: string, signal: AbortSignal) {
+
+        const res = await fetch(`${BASE_URL}/api/auth/client/get`, {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+            signal
+        })
+        if(!res.ok) throw new Error("Error getUser is not possible ");
+
+        return res.json();
+    }
     static async login(user: LoginPayload) : Promise<LoginResponse> {
         const res = await fetch(`${BASE_URL}/api/auth/client/login`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(user)
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(user)
         })
         if(!res.ok) throw new Error("incorrect email or password");
         const data = await res.json();

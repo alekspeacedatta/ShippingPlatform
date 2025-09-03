@@ -1,14 +1,19 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Button } from "../../components/commons/Button";
 import { useAuthStore } from "../../store/useAuthStore"
+import { useGetUser } from "../../api/useAuth";
 
 const Dashboard = () => {
+    const { data: user, isLoading, isError, error } = useGetUser();
     const logout = useAuthStore(state => state.logout);
-    const user = useAuthStore(state => state.user);
     const navigate = useNavigate();
     const navigation = (route: string) => {
         navigate(route);
     }
+
+    if(isLoading) return <p>Loading...</p>
+    if(isError) return <p>Error: {error.message}</p>
+
     return (
         <>
             <div className="min-h-screen flex justify-center items-center flex-col gap-3"> 
