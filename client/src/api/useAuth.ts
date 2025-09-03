@@ -9,7 +9,7 @@ export const useGetUser = () => {
     return useQuery({
         queryKey: ['user', token],
         enabled: !!token,
-        queryFn: ({ signal }) =>  Authentication.getUser(token!, signal),
+        queryFn: () =>  Authentication.getUser(token!),
         staleTime: 5 * 60 * 1000,
         refetchOnWindowFocus: true
     })

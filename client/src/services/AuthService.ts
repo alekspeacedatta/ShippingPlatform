@@ -7,14 +7,13 @@ type RegisterClientResponse = { user: User, message: string };
 type RegisterCompanyResponse = { company: Company, message: string };
 
 export class Authentication {    
-    static async getUser (token: string, signal: AbortSignal) {
+    static async getUser (token: string) {
 
         const res = await fetch(`${BASE_URL}/api/auth/client/get`, {
             method: "GET",
             headers: {
                 Authorization: `Bearer ${token}`
             },
-            signal
         })
         if(!res.ok) throw new Error("Error getUser is not possible ");
 
