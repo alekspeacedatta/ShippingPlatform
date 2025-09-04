@@ -1,15 +1,19 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "../commons/Button";
 import Stepper from "../commons/Stepper";
 import { Input } from "../commons/Input";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { Select, Option } from "../commons/Select";
-
-gsap.registerPlugin(useGSAP);
+import { useGetCompanies } from "../../api/useCompany";
+import type { CompanyCreate, ShippingType } from "../../types/Types";
 const steps = ['Parcel Details', 'Route', 'Shipping Type', 'Calculator', 'Summary & Submit'];
 
-function ParcelForm() {
+
+
+const ParcelForm = () => {
+  
+  gsap.registerPlugin(useGSAP);
   const [step, setStep] = useState(0);
   const back = () => {setStep(s => Math.max(0, s - 1))}
   const next = () => {setStep(s => Math.min(steps.length - 1, s + 1))}
@@ -31,10 +35,29 @@ function ParcelForm() {
     { dependencies: [step], scope: secRef }
   );
 
-  return (
-    <div className="max-w-3xl md:max-w-8xl mx-auto p-6 gap-5 min-h-screen flex justify-center flex-col">
-      <Stepper steps={steps} current={step} />
+  const {  data: companies } = useGetCompanies();
+  const [ companyData, setCompanyData ] = useState<CompanyCreate[]>(companies);
+  const [ selectedCompany, setSelectedCompany ] = useState<CompanyCreate | null>(null);
 
+  const searchCompany = (companyName: string) => {
+    const filteredCompany = companyData.filter(c => c.name === companyName);
+    setSelectedCompany(filteredCompany[0]);
+  }
+  useEffect(() => {
+    const first = companies[0].name;
+    searchCompany(first)
+  }, [])
+  return (
+    <>
+      <div className="flex flex-col gap-2">
+        <h1 className="text-2xl fonst-semibold">select company for transfer</h1>
+        <Select  onChange={e => searchCompany(e.target.value)}>
+          {companies.map((c : CompanyCreate) => (
+            <option key={c.contactEmail} value={c.name}> {c.name} </option>
+          ))}
+        </Select>
+      </div>
+      <Stepper steps={steps} current={step} />
       <form className="p-4 border rounded-xl min-h-28 flex flex-col justify-center">
         <div ref={secRef} key={step} className="w-full">
           {step === 0 && (
@@ -80,7 +103,7 @@ function ParcelForm() {
           {step === 1 && (
             <section className="p-4 border rounded-xl min-h-28 bg-white flex flex-col justify-center gap-3 mx-auto py-10 px-5 rounded-xl">
               <h2 className="text-2xl font-semibold">Route:</h2>
-              <section className="grid grid-cols-2 gap-2">
+              <section className="grid grid-cols-2 gap-2 items-center">
                 <section className="flex flex-col gap-2">
                   <label className=" text-lg ">Origin</label>
                   <Input placeholder="country"/>
@@ -97,7 +120,7 @@ function ParcelForm() {
                 </section>
                 
               </section>
-              <section className="grid grid-cols-2 gap-2">
+              <section className="grid grid-cols-2 gap-2 items-center">
                 <section className="flex flex-col gap-2">
                   <label className="text-lg">Destination</label>
                   <Input placeholder="country"/>
@@ -121,47 +144,103 @@ function ParcelForm() {
               <h2 className="text-2xl font-semibold">Shipping Type</h2>
 
               <section className="flex justify-between">
-                <section className="flex items-center gap-2">
-                  <h3 className="text-xl">Sea</h3>
-                  <input type="radio" name="shippingType" value="SEA" />
-                </section>
-                <section>
-                  <h3 className="text-xl">type multiplier</h3>
-                  <p>1.2x</p>
-                </section>
+                {selectedCompany?.supportedTypes.includes('SEA') ? (
+                    <section className="flex items-center gap-2">
+                      <h3 className="text-lg">SEA</h3>
+                      <input type="radio" name="shippingType" value="SEA" />
+                    </section>
+                  ) : (
+                    <section className="flex items-center gap-2">
+                      <h3 className="text-xl opacity-50">SEA</h3>
+                      <input type="radio" name="shippingType" value="SEA" disabled />
+                    </section>
+                )}
+                {selectedCompany?.supportedTypes.includes('SEA') ? (
+                    <section className="flex gap-2 items-center">
+                      <h3 className="">type multiplier:</h3>
+                      <p>{selectedCompany?.pricing.typeMultipliers.SEA}x</p>
+                    </section>
+                  ) : (
+                    <section className="flex gap-2 items-center">
+                      <h3 className="">type multiplier:</h3>
+                      <p>none</p>
+                    </section>
+                )}
               </section>
 
               <section className="flex justify-between">
-                <section className="flex items-center gap-2">
-                  <h3 className="text-xl">Road</h3>
-                  <input type="radio" name="shippingType" value="ROAD" />
-                </section>
-                <section>
-                  <h3 className="text-xl">type multiplier</h3>
-                  <p>1.5x</p>
-                </section>
+                {selectedCompany?.supportedTypes.includes('ROAD') ? (
+                    <section className="flex items-center gap-2">
+                      <h3 className="text-lg">ROAD</h3>
+                      <input type="radio" name="shippingType" value="ROAD" />
+                    </section>
+                  ) : (
+                    <section className="flex items-center gap-2">
+                      <h3 className="text-xl opacity-50">ROAD</h3>
+                      <input type="radio" name="shippingType" value="ROAD" disabled />
+                    </section>
+                )}
+                {selectedCompany?.supportedTypes.includes('ROAD') ? (
+                    <section className="flex gap-2 items-center">
+                      <h3 className="">type multiplier:</h3>
+                      <p>{selectedCompany?.pricing.typeMultipliers.ROAD}x</p>
+                    </section>
+                  ) : (
+                    <section className="flex gap-2 items-center">
+                      <h3 className="">type multiplier:</h3>
+                      <p>none</p>
+                    </section>
+                )}
               </section>
 
               <section className="flex justify-between">
-                <section className="flex items-center gap-2">
-                  <h3 className="text-xl">RailWay</h3>
-                  <input type="radio" name="shippingType" value="RAILWAY" />
-                </section>
-                <section>
-                  <h3 className="text-xl">type multiplier</h3>
-                  <p>1.3x</p>
-                </section>
+                {selectedCompany?.supportedTypes.includes('RAILWAY') ? (
+                    <section className="flex items-center gap-2">
+                      <h3 className="text-lg">RAILWAY</h3>
+                      <input type="radio" name="shippingType" value="RAILWAY" />
+                    </section>
+                  ) : (
+                    <section className="flex items-center gap-2">
+                      <h3 className="text-xl opacity-50">RAILWAY</h3>
+                      <input type="radio" name="shippingType" value="RAILWAY" disabled />
+                    </section>
+                )}
+                {selectedCompany?.supportedTypes.includes('RAILWAY') ? (
+                    <section className="flex gap-2 items-center">
+                      <h3 className="">type multiplier:</h3>
+                      <p>{selectedCompany?.pricing.typeMultipliers.RAILWAY}x</p>
+                    </section>
+                  ) : (
+                    <section className="flex gap-2 items-center">
+                      <h3 className="">type multiplier:</h3>
+                      <p>none</p>
+                    </section>
+                )}
               </section>
 
               <section className="flex justify-between">
-                <section className="flex items-center gap-2">
-                  <h3 className="text-xl">Air</h3>
-                  <input type="radio" name="shippingType" value="AIR" />
-                </section>
-                <section>
-                  <h3 className="text-xl">type multiplier</h3>
-                  <p>1.9x</p>
-                </section>
+                {selectedCompany?.supportedTypes.includes('AIR') ? (
+                    <section className="flex items-center gap-2">
+                      <h3 className="text-lg">AIR</h3>
+                      <input type="radio" name="shippingType" value="AIR" />
+                    </section>
+                  ) : (
+                    <section className="flex items-center gap-2">
+                      <h3 className="text-xl opacity-50">AIR</h3>
+                      <input type="radio" name="shippingType" value="AIR" disabled />
+                    </section>
+                )}
+                {selectedCompany?.supportedTypes.includes('AIR') ? (
+                    <section className="flex gap-2 items-center">
+                      <h3 className="">type multiplier:</h3>
+                      <p>{selectedCompany?.pricing.typeMultipliers.AIR}x</p>
+                    </section>
+                  ) : (
+                    <section className="flex gap-2 items-center">
+                      <h3 className="">type multiplier:</h3>
+                      <p>none</p>
+                    </section>
+                )}
               </section>
             </section>
           )}
@@ -195,8 +274,9 @@ function ParcelForm() {
           </div>
         </div>
       </form>
+    </>
 
-    </div>
+    
   );
 }
 export default ParcelForm
