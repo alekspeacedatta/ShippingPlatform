@@ -52,6 +52,7 @@ const ParcelForm = () => {
   const [ remoteSurcharge, setRemoteSurcharge ] = useState<number>(0);
   const [ incurance, setIncurance ] = useState<number>(0);
   const [ total, setTotal ] = useState<number>(0);
+  // @ts-ignore
   const [ surcharges, setSurcharges ] = useState<number>(0);
   const [ distanceFactor, setDistanceFactor ] = useState<number>(0);
 
