@@ -36,4 +36,11 @@ router.patch('/edit/:id', authenticateJWT, async (req: Request, res: Response) =
         res.status(500).json({ message: 'User updating Error', error })   
     }
 })
+router.post('/create-request', ( req: Request, res: Response ) => {
+    const parcelRequest = req.body;
+
+    if(!parcelRequest) res.status(400).json({ message: 'parcel request does not exsist' });
+
+    
+})
 export default router

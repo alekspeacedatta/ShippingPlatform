@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useGetCompanies } from "../../api/useCompany"
 import ParcelForm from "../../components/client/ParcelForm";
-import { Button } from "../../components/commons/Button";
 
 const CreateRequest = () => {
     const navigate = useNavigate();
