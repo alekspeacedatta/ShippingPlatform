@@ -72,40 +72,106 @@ const ParcelForm = () => {
     const filteredCompany = companyData.filter(c => c.name === companyName);
     setSelectedCompany(filteredCompany[0]);
   }
-  useEffect(() => {
-    setVolumetricWeight(
-      PricingService.volumetricWeight({
-        width: n(volumetricData.width),
-        height: n(volumetricData.height),
-        length: n(volumetricData.length),
-      })
+  // useEffect(() => {
+  //   setVolumetricWeight(
+  //     PricingService.volumetricWeight({
+  //       width: n(volumetricData.width),
+  //       height: n(volumetricData.height),
+  //       length: n(volumetricData.length),
+  //     })
+  //   );
+  //   setChargableWeight(PricingService.chargableWeight({weight: n(weightKg), volumetricWeight: volumetricWeight}));
+  //   setTypeMultipliers(
+  //     PricingService.typeMultiplier(
+  //       shippingType as ShippingType,
+  //       {
+  //         sea: selectedCompany?.pricing.typeMultipliers.SEA ?? 1,
+  //         railway: selectedCompany?.pricing.typeMultipliers.RAILWAY ?? 1,
+  //         road: selectedCompany?.pricing.typeMultipliers.ROAD ?? 1,
+  //         air: selectedCompany?.pricing.typeMultipliers.AIR ?? 1,
+  //       }
+  //     ) ?? 1
+  //   );
+  //   setBase(
+  //     PricingService.base(
+  //       selectedCompany?.pricing.basePrice ?? 0,
+  //       selectedCompany?.pricing.pricePerKg ?? 0,
+  //       chargableWeight
+  //     )
+  //   );
+  //   setFuelSurcharge( PricingService.fuelSurcharge(base, selectedCompany?.pricing.fuelPct ?? 0));
+  //   setRemoteSurcharge( PricingService.remoteSurcharge(base, selectedCompany?.pricing.remoteAreaPct ?? 0) );
+  //   setSurcharges( remoteSurcharge + fuelSurcharge );
+  //   setDistanceFactor(PricingService.distanceFactor(fromLocation.origin.country, toLocation.origin.country));
+  //   setIncurance( PricingService.insurance(n(declearedValue), selectedCompany?.pricing.insurancePct ?? 0) );
+  //   setTotal(PricingService.total(base, typeMultiplier, distanceFactor, surcharges, incurance ))
+  // }, [volumetricData, weightKg, chargableWeight, selectedCompany, base, declearedValue, shippingType, typeMultiplier])
+    useEffect(() => {
+    const width = n(volumetricData.width);
+    const height = n(volumetricData.height);
+    const length = n(volumetricData.length);
+    const weight = n(weightKg);
+    const declared = n(declearedValue);
+
+    const volW = PricingService.volumetricWeight({ width, height, length });
+    const chW = PricingService.chargableWeight({ weight, volumetricWeight: volW });
+
+    const tm =
+      PricingService.typeMultiplier(shippingType as ShippingType, {
+        sea: selectedCompany?.pricing.typeMultipliers.SEA ?? 1,
+        railway: selectedCompany?.pricing.typeMultipliers.RAILWAY ?? 1,
+        road: selectedCompany?.pricing.typeMultipliers.ROAD ?? 1,
+        air: selectedCompany?.pricing.typeMultipliers.AIR ?? 1,
+      }) ?? 1;
+
+    const baseLocal = PricingService.base(
+      selectedCompany?.pricing.basePrice ?? 0,
+      selectedCompany?.pricing.pricePerKg ?? 0,
+      chW
     );
-    setChargableWeight(PricingService.chargableWeight({weight: n(weightKg), volumetricWeight: volumetricWeight}));
-    setTypeMultipliers(
-      PricingService.typeMultiplier(
-        shippingType as ShippingType,
-        {
-          sea: selectedCompany?.pricing.typeMultipliers.SEA ?? 1,
-          railway: selectedCompany?.pricing.typeMultipliers.RAILWAY ?? 1,
-          road: selectedCompany?.pricing.typeMultipliers.ROAD ?? 1,
-          air: selectedCompany?.pricing.typeMultipliers.AIR ?? 1,
-        }
-      ) ?? 1
+
+    const fuel = PricingService.fuelSurcharge(
+      baseLocal,
+      selectedCompany?.pricing.fuelPct ?? 0
     );
-    setBase(
-      PricingService.base(
-        selectedCompany?.pricing.basePrice ?? 0,
-        selectedCompany?.pricing.pricePerKg ?? 0,
-        chargableWeight
-      )
+    const remote = PricingService.remoteSurcharge(
+      baseLocal,
+      selectedCompany?.pricing.remoteAreaPct ?? 0
     );
-    setFuelSurcharge( PricingService.fuelSurcharge(base, selectedCompany?.pricing.fuelPct ?? 0));
-    setRemoteSurcharge( PricingService.remoteSurcharge(base, selectedCompany?.pricing.remoteAreaPct ?? 0) );
-    setSurcharges( remoteSurcharge + fuelSurcharge );
-    setDistanceFactor(PricingService.distanceFactor(fromLocation.origin.country, toLocation.origin.country));
-    setIncurance( PricingService.insurance(n(declearedValue), selectedCompany?.pricing.insurancePct ?? 0) );
-    setTotal(PricingService.total(base, typeMultiplier, distanceFactor, surcharges, incurance ))
-  }, [volumetricData, weightKg, chargableWeight, selectedCompany, base, declearedValue, shippingType, typeMultiplier])
+    const sur = fuel + remote;
+
+    const df = PricingService.distanceFactor(
+      fromLocation.origin.country,
+      toLocation.origin.country
+    );
+
+    const ins = PricingService.insurance(
+      declared,
+      selectedCompany?.pricing.insurancePct ?? 0
+    );
+
+    const totalLocal = PricingService.total(baseLocal, tm, df, sur, ins);
+    
+    setVolumetricWeight(volW);
+    setChargableWeight(chW);
+    setTypeMultipliers(tm);
+    setBase(baseLocal);
+    setFuelSurcharge(fuel);
+    setRemoteSurcharge(remote);
+    setSurcharges(sur);
+    setDistanceFactor(df);
+    setIncurance(ins);
+    setTotal(totalLocal);
+  }, [
+    volumetricData,
+    weightKg,
+    declearedValue,
+    shippingType,
+    selectedCompany,
+    fromLocation.origin.country,
+    toLocation.origin.country,
+  ]);
+
   const handeCreateRequest = () => {
     
   }
