@@ -32,15 +32,15 @@ export class PricingService {
         return Number((basePrice + ( chargableWeight * pricePerKg )).toFixed(2));
     };
     static fuelSurcharge (base: number, fuelPtc: number) : number {
-        return base * fuelPtc;
+        return Number((base * fuelPtc).toFixed(2));
     };
     static remoteSurcharge (base: number, remotePct: number) : number {
         return Number((base * remotePct).toFixed(2));
     };
     static insurance (declaredValue: number, insurancePct: number) : number {
-        return declaredValue * insurancePct;
+        return Number((declaredValue * insurancePct).toFixed(2));
     };
     static total (base: number, typeMultiplier: number, distanceFactor: number, surcharges: number, insurance: number) : number {
-        return ( base * typeMultiplier * distanceFactor ) + surcharges + insurance
+        return Number((( base * typeMultiplier * distanceFactor ) + surcharges + insurance).toFixed(2))
     };
 }
