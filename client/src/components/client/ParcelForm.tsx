@@ -8,6 +8,7 @@ import gsap from "gsap";
 import { Select, Option } from "../commons/Select";
 import { useGetCompanies } from "../../api/useCompany";
 import type { CompanyCreate, ShippingType } from "../../types/Types";
+import { toNumOrNull, n } from "../../utils/utils";
 const steps = ['Parcel Details', 'Route', 'Shipping Type', 'Calculator', 'Summary & Submit'];
 
 
@@ -34,13 +35,13 @@ const ParcelForm = () => {
     },
     { dependencies: [step], scope: secRef }
   );
-  const [ declearedValue, setDeclearedValue ] = useState<number>(0);
-  const [ shippingType, setShippingType ] = useState<ShippingType>('SEA');
-  const [ weightKg, setWeightKg ] = useState<number>(0);
-  const [ volumetricData, setVolumetricData ] = useState<{width: number, height: number, length: number}>({
-    width: 0,
-    height: 0,
-    length: 0,
+  const [ declearedValue, setDeclearedValue ] = useState<number | null>(null);
+  const [ shippingType, setShippingType ] = useState<ShippingType | string>('');
+  const [ weightKg, setWeightKg ] = useState<number | null>(null);
+  const [ volumetricData, setVolumetricData ] = useState<{width: number | null, height: number | null, length: number | null}>({
+    width: null,
+    height: null,
+    length: null,
   });
 
   const [ volumetricWeight, setVolumetricWeight ] = useState<number>(0);
@@ -52,6 +53,16 @@ const ParcelForm = () => {
   const [ incurance, setIncurance ] = useState<number>(0);
   const [ total, setTotal ] = useState<number>(0);
   const [ surcharges, setSurcharges ] = useState<number>(0);
+  const [ distanceFactor, setDistanceFactor ] = useState<number>(0);
+
+  const [ fromLocation, setFromLocation ] = useState<{ origin: { country: string, city: string }, pickUp: { country: string, city: string, line1: string, postalcode: number }}>({
+    origin: { country: '', city: '' },
+    pickUp: { country: '', city: '', line1: '', postalcode: 0 }
+  });
+  const [ toLocation, setToLocation ] = useState<{ origin: { country: string, city: string }, pickUp: { country: string, city: string, line1: string, postalcode: number }}>({
+    origin: { country: '', city: '' },
+    pickUp: { country: '', city: '', line1: '', postalcode: 0 }
+  });
 
   const {  data: companies } = useGetCompanies();
   const [ companyData ] = useState<CompanyCreate[]>(companies);
@@ -62,15 +73,38 @@ const ParcelForm = () => {
     setSelectedCompany(filteredCompany[0]);
   }
   useEffect(() => {
-    setVolumetricWeight(PricingService.volumetricWeight(volumetricData));
-    setChargableWeight(PricingService.chargableWeight({weight: weightKg, volumetricWeight: volumetricWeight}));
-    setTypeMultipliers(PricingService.typeMultiplier(shippingType, {sea: selectedCompany?.pricing.typeMultipliers.SEA, railway: selectedCompany?.pricing.typeMultipliers.RAILWAY, road: selectedCompany?.pricing.typeMultipliers.ROAD, air: selectedCompany?.pricing.typeMultipliers.AIR}))
-    setBase(PricingService.base(selectedCompany?.pricing.basePrice, selectedCompany?.pricing.pricePerKg, chargableWeight));
-    setFuelSurcharge(PricingService.fuelSurcharge(base, selectedCompany?.pricing.fuelPct));
-    setRemoteSurcharge(PricingService.remoteSurcharge(base, selectedCompany?.pricing.remoteAreaPct));
+    setVolumetricWeight(
+      PricingService.volumetricWeight({
+        width: n(volumetricData.width),
+        height: n(volumetricData.height),
+        length: n(volumetricData.length),
+      })
+    );
+    setChargableWeight(PricingService.chargableWeight({weight: n(weightKg), volumetricWeight: volumetricWeight}));
+    setTypeMultipliers(
+      PricingService.typeMultiplier(
+        shippingType as ShippingType,
+        {
+          sea: selectedCompany?.pricing.typeMultipliers.SEA ?? 1,
+          railway: selectedCompany?.pricing.typeMultipliers.RAILWAY ?? 1,
+          road: selectedCompany?.pricing.typeMultipliers.ROAD ?? 1,
+          air: selectedCompany?.pricing.typeMultipliers.AIR ?? 1,
+        }
+      ) ?? 1
+    );
+    setBase(
+      PricingService.base(
+        selectedCompany?.pricing.basePrice ?? 0,
+        selectedCompany?.pricing.pricePerKg ?? 0,
+        chargableWeight
+      )
+    );
+    setFuelSurcharge( PricingService.fuelSurcharge(base, selectedCompany?.pricing.fuelPct ?? 0));
+    setRemoteSurcharge( PricingService.remoteSurcharge(base, selectedCompany?.pricing.remoteAreaPct ?? 0) );
     setSurcharges( remoteSurcharge + fuelSurcharge );
-    setIncurance(PricingService.insurance(declearedValue, selectedCompany?.pricing.insurancePct));
-    setTotal(PricingService.total(base, typeMultiplier, 32, surcharges, incurance ))
+    setDistanceFactor(PricingService.distanceFactor(fromLocation.origin.country, toLocation.origin.country));
+    setIncurance( PricingService.insurance(n(declearedValue), selectedCompany?.pricing.insurancePct ?? 0) );
+    setTotal(PricingService.total(base, typeMultiplier, distanceFactor, surcharges, incurance ))
   }, [volumetricData, weightKg, chargableWeight, selectedCompany, base, declearedValue, shippingType, typeMultiplier])
   const handeCreateRequest = () => {
     
@@ -96,7 +130,7 @@ const ParcelForm = () => {
               <section className="grid-cols-2 grid gap-2">
                 <section className="flex flex-col gap-2 ">
                   <label>Parcel Weight</label>
-                  <Input onChange={e => setWeightKg(Number(e.target.value))} type="number" placeholder="kg" />
+                  <Input value={weightKg ?? ''} onChange={e => setWeightKg(toNumOrNull(e.target.value))} type="number" placeholder="kg" />
                 </section>
                 <section className="flex flex-col gap-2">
                   <label>Parcel Type</label>
@@ -110,21 +144,21 @@ const ParcelForm = () => {
               <section className="grid grid-cols-2 gap-2">
                 <section className="flex flex-col col-span-2 gap-2">
                   <label>Width in cm:</label>
-                  <Input onChange={e => setVolumetricData({...volumetricData, width: Number(e.target.value)})} type="number" placeholder="width = 23" />
+                  <Input value={volumetricData.width ?? ''} onChange={e => setVolumetricData({...volumetricData, width: toNumOrNull(e.target.value)})} type="number" placeholder="width = 23" />
                 </section>
                 <section className="flex flex-col gap-2">
                   <label>Height in cm:</label>
-                  <Input onChange={e => setVolumetricData({...volumetricData, height: Number(e.target.value)})} type="text" placeholder="height = 5" />
+                  <Input value={volumetricData.height ?? ''} onChange={e => setVolumetricData({...volumetricData, height: toNumOrNull(e.target.value)})} type="text" placeholder="height = 5" />
                 </section>
                 <section className="flex flex-col gap-2">
                   <label>Length in cm:</label>
-                  <Input onChange={e => setVolumetricData({...volumetricData, length: Number(e.target.value)})} type="text" placeholder="length = 132" />
+                  <Input value={volumetricData.length ?? ''} onChange={e => setVolumetricData({...volumetricData, length: toNumOrNull(e.target.value)})} type="text" placeholder="length = 132" />
                 </section>
               </section>
 
               <section className="flex flex-col ">
                 <label htmlFor="">Decleared Value</label>
-                <Input onChange={e => setDeclearedValue(Number(e.target.value))} type="text" placeholder="30$"/>
+                <Input value={declearedValue ?? ''} onChange={e => setDeclearedValue(toNumOrNull(e.target.value))} type="text" placeholder="30$"/>
               </section>
             </section>
           )}
@@ -135,16 +169,16 @@ const ParcelForm = () => {
               <section className="grid grid-cols-2 gap-2 items-center">
                 <section className="flex flex-col gap-2">
                   <label className=" text-lg ">Origin</label>
-                  <Input placeholder="country"/>
-                  <Input placeholder="city"/>
+                  <Input value={fromLocation.origin.country} onChange={e => setFromLocation(p => ({...p, origin: {...p.origin, country: e.target.value}}))} placeholder="country"/>
+                  <Input value={fromLocation.origin.city} onChange={e => setFromLocation(p => ({...p, origin: {...p.origin, city: e.target.value}}))} placeholder="city"/>
                 </section>
                 <section className="flex flex-col gap-2">
                   <label className=" text-lg ">Pickup address</label>
                   <section className="grid grid-cols-2 gap-3">
-                    <Input placeholder="country"/>
-                    <Input placeholder="city"/>
-                    <Input placeholder="line1"/>
-                    <Input placeholder="postalcode"/>
+                    <Input value={fromLocation.pickUp.country} onChange={e => setFromLocation(p => ({...p, pickUp: {...p.pickUp, country: e.target.value}}))} placeholder="country"/>
+                    <Input value={fromLocation.pickUp.city} onChange={e => setFromLocation(p => ({...p, pickUp: {...p.pickUp, city: e.target.value}}))} placeholder="city"/>
+                    <Input value={fromLocation.pickUp.line1} onChange={e => setFromLocation(p => ({...p, pickUp: {...p.pickUp, line1: e.target.value}}))} placeholder="line1"/>
+                    <Input value={fromLocation.pickUp.postalcode} onChange={e => setFromLocation(p => ({...p, pickUp: {...p.pickUp, postalcode: Number(e.target.value)}}))} placeholder="postalcode"/>
                   </section>
                 </section>
                 
@@ -152,16 +186,16 @@ const ParcelForm = () => {
               <section className="grid grid-cols-2 gap-2 items-center">
                 <section className="flex flex-col gap-2">
                   <label className="text-lg">Destination</label>
-                  <Input placeholder="country"/>
-                  <Input placeholder="city"/>
+                  <Input value={toLocation.origin.country} onChange={e => setToLocation(p => ({...p, origin: {...p.origin, country: e.target.value}}))} placeholder="country"/>
+                  <Input value={toLocation.origin.city} onChange={e => setToLocation(p => ({...p, origin: {...p.origin, city: e.target.value}}))} placeholder="city"/>
                 </section>
                 <section className="flex flex-col gap-2">
                   <label className=" text-lg ">delivery address</label>
                   <section className="grid grid-cols-2 gap-3">
-                    <Input placeholder="country"/>
-                    <Input placeholder="city"/>
-                    <Input placeholder="line1"/>
-                    <Input placeholder="postalcode"/>
+                    <Input value={toLocation.pickUp.country} onChange={e => setToLocation(p => ({...p, pickUp: {...p.pickUp, country: e.target.value}}))} placeholder="country"/>
+                    <Input value={toLocation.pickUp.city} onChange={e => setToLocation(p => ({...p, pickUp: {...p.pickUp, city: e.target.value}}))} placeholder="city"/>
+                    <Input value={toLocation.pickUp.line1} onChange={e => setToLocation(p => ({...p, pickUp: {...p.pickUp, line1: e.target.value}}))} placeholder="line1"/>
+                    <Input value={toLocation.pickUp.postalcode} onChange={e => setToLocation(p => ({...p, pickUp: {...p.pickUp, postalcode: Number(e.target.value)}}))} placeholder="postalcode"/>
                   </section>
                 </section>
               </section>
@@ -287,6 +321,7 @@ const ParcelForm = () => {
               <section>
                 <p>volumetricWeight = {volumetricWeight} kg</p>
                 <p>chargableWeight = {chargableWeight} kg</p>
+                <p>distance factor = {distanceFactor}x</p>
                 <p>type multiplier = {shippingType} - {typeMultiplier}x</p>
                 <p>base = {base}$</p>
                 <p>fuelSurcharge = {fuelSurcharge}$</p>
