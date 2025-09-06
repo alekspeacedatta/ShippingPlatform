@@ -416,8 +416,8 @@ const ParcelForm = () => {
               <h2 className="text-xl font-semibold">Summary & Submit</h2>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-white">
-                {/* Company & Shipping */}
-                <div className="bg-[#f5f5f5] rounded-lg p-4 border">
+                
+                <div className="bg-white rounded-lg p-4 border">
                   <h3 className="font-semibold mb-2">Company & Shipping</h3>
                   <p><span className="text-gray-500">Company:</span> {selectedCompany?.name ?? '—'}</p>
                   <p><span className="text-gray-500">Shipping type:</span> {shippingType || '—'}</p>
@@ -425,7 +425,7 @@ const ParcelForm = () => {
                   <p><span className="text-gray-500">Distance factor:</span> {distanceFactor.toFixed(2)}x</p>
                 </div>
 
-                {/* Parcel */}
+                
                 <div className="bg-white rounded-lg p-4 border">
                   <h3 className="font-semibold mb-2">Parcel</h3>
                   <p><span className="text-gray-500">Kind:</span> {String(kind) || '—'}</p>
@@ -436,7 +436,7 @@ const ParcelForm = () => {
                   <p><span className="text-gray-500">Chargeable weight:</span> {chargableWeight.toFixed(2)} kg</p>
                 </div>
 
-                {/* Route */}
+                
                 <div className="bg-white rounded-lg p-4 border">
                   <h3 className="font-semibold mb-2">Route</h3>
                   <p className="text-sm"><span className="text-gray-500">Origin:</span> {fromLocation.origin.country}, {fromLocation.origin.city}</p>
@@ -461,8 +461,8 @@ const ParcelForm = () => {
                   </div>
                 </div>
 
-                {/* Pricing breakdown */}
-                <div className="bg-[#f5f5f5] rounded-lg p-4 border">
+                
+                <div className="bg-white rounded-lg p-4 border">
                   <h3 className="font-semibold mb-2">Pricing breakdown</h3>
                   <p><span className="text-gray-500">Base:</span> ${base.toFixed(2)}</p>
                   <p><span className="text-gray-500">Fuel surcharge:</span> ${fuelSurcharge.toFixed(2)}</p>
