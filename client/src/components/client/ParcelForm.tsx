@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "../commons/Button";
 import Stepper from "../commons/Stepper";
 import { Input } from "../commons/Input";
@@ -148,6 +148,7 @@ const ParcelForm = () => {
     e.preventDefault();
       mutate({
         userId: userId!,
+        companyId: selectedCompany!._id,
         shippingType: shippingType as ShippingType,
         parcel: {
           weightKg: n(weightKg),
@@ -394,7 +395,7 @@ const ParcelForm = () => {
           )}
 
           {step === 3 && (
-            <div className="p-4 border rounded-xl min-h-28 flex flex-col gap-5">
+            <div className="p-4 border rounded-xl min-h-28 flex flex-col gap-5 bg-white">
               <h2 className="text-2xl font-semibold mb-2">Calculator</h2>
               <section>
                 <p>volumetricWeight = {volumetricWeight} kg</p>
@@ -411,12 +412,72 @@ const ParcelForm = () => {
           )}
 
           {step === 4 && (
-            <div className="p-4 border rounded-xl min-h-28">
-              <h2 className="text-lg font-semibold mb-2">Summary & Submit</h2>
-              <input placeholder="Review details…" className="border p-2 w-full mb-2" />
-              <input placeholder="Notes" className="border p-2 w-full" />
+            <div className="p-4  border rounded-xl min-h-28 flex flex-col gap-4 overflow-y-scroll h-[50vh] bg-white">
+              <h2 className="text-xl font-semibold">Summary & Submit</h2>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-white">
+                {/* Company & Shipping */}
+                <div className="bg-[#f5f5f5] rounded-lg p-4 border">
+                  <h3 className="font-semibold mb-2">Company & Shipping</h3>
+                  <p><span className="text-gray-500">Company:</span> {selectedCompany?.name ?? '—'}</p>
+                  <p><span className="text-gray-500">Shipping type:</span> {shippingType || '—'}</p>
+                  <p><span className="text-gray-500">Type multiplier:</span> {typeMultiplier.toFixed(2)}x</p>
+                  <p><span className="text-gray-500">Distance factor:</span> {distanceFactor.toFixed(2)}x</p>
+                </div>
+
+                {/* Parcel */}
+                <div className="bg-white rounded-lg p-4 border">
+                  <h3 className="font-semibold mb-2">Parcel</h3>
+                  <p><span className="text-gray-500">Kind:</span> {String(kind) || '—'}</p>
+                  <p><span className="text-gray-500">Weight:</span> {weightKg ?? '—'} kg</p>
+                  <p><span className="text-gray-500">Size (W×H×L):</span> {(volumetricData.width ?? '—')}×{(volumetricData.height ?? '—')}×{(volumetricData.length ?? '—')} cm</p>
+                  <p><span className="text-gray-500">Declared value:</span> ${declearedValue ?? '—'}</p>
+                  <p><span className="text-gray-500">Volumetric weight:</span> {volumetricWeight.toFixed(2)} kg</p>
+                  <p><span className="text-gray-500">Chargeable weight:</span> {chargableWeight.toFixed(2)} kg</p>
+                </div>
+
+                {/* Route */}
+                <div className="bg-white rounded-lg p-4 border">
+                  <h3 className="font-semibold mb-2">Route</h3>
+                  <p className="text-sm"><span className="text-gray-500">Origin:</span> {fromLocation.origin.country}, {fromLocation.origin.city}</p>
+                  <p className="text-sm"><span className="text-gray-500">Destination:</span> {toLocation.destination.country}, {toLocation.destination.city}</p>
+
+                  <div className="mt-3">
+                    <p className="text-gray-500 text-sm">Pickup address</p>
+                    <p className="text-sm">{fromLocation.pickUp.country}, {fromLocation.pickUp.city}</p>
+                    <p className="text-sm">
+                      {fromLocation.pickUp.line1}
+                      {fromLocation.pickUp.postalcode ? `, ${fromLocation.pickUp.postalcode}` : ''}
+                    </p>
+                  </div>
+
+                  <div className="mt-3">
+                    <p className="text-gray-500 text-sm">Delivery address</p>
+                    <p className="text-sm">{toLocation.deliveryAddress.country}, {toLocation.deliveryAddress.city}</p>
+                    <p className="text-sm">
+                      {toLocation.deliveryAddress.line1}
+                      {toLocation.deliveryAddress.postalcode ? `, ${toLocation.deliveryAddress.postalcode}` : ''}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Pricing breakdown */}
+                <div className="bg-[#f5f5f5] rounded-lg p-4 border">
+                  <h3 className="font-semibold mb-2">Pricing breakdown</h3>
+                  <p><span className="text-gray-500">Base:</span> ${base.toFixed(2)}</p>
+                  <p><span className="text-gray-500">Fuel surcharge:</span> ${fuelSurcharge.toFixed(2)}</p>
+                  <p><span className="text-gray-500">Remote surcharge:</span> ${remoteSurcharge.toFixed(2)}</p>
+                  <p><span className="text-gray-500">Insurance:</span> ${incurance.toFixed(2)}</p>
+                  <p><span className="text-gray-500">Surcharges total:</span> ${surcharges.toFixed(2)}</p>
+                </div>
+              </div>
+
+              <div className="text-2xl font-semibold text-right border-t pt-4">
+                Total: ${total.toFixed(2)}
+              </div>
             </div>
           )}
+
           <div className="mt-6 flex justify-between">
             <Button
               onClick={back}

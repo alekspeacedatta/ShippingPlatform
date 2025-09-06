@@ -121,7 +121,7 @@ export interface Company {
     role: 'COMPANY_ADMIN';
     logoUrl?: string;
 }
-export type CompanyCreate = Omit<Company, '_id' | 'role'>;
+export type CompanyCreate = Omit<Company, 'role'> & { _id?: string };
 export interface CompanyPricing {
     basePrice: number; // base in currency units
     pricePerKg: number;
