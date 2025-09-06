@@ -1,4 +1,4 @@
-open two terminals one for clint and another for server
+open two terminals one for client and another for server
 
 cd server terminal -> npm i -> npm run dev
 
