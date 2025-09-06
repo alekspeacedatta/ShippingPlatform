@@ -6,6 +6,7 @@ import ProtectedRoute from "./ProtectedRoute"
 import ClientDashboard from "../../pages/client/Dashboard"
 import CompanyDashboard from "../../pages/company/Dashboard"
 import CreateRequest from "../../pages/client/CreateRequest"
+import Requests from "../../pages/company/Requests"
 export const router = createBrowserRouter([
 
     { path: '/login', element: <Login/>},
@@ -21,7 +22,7 @@ export const router = createBrowserRouter([
     
     {path: '/company', element: ( <ProtectedRoute allowed={['COMPANY_ADMIN']}><Outlet/></ProtectedRoute> ), children: [
         { path: 'dashboard', element: <CompanyDashboard/>},
-        { path: 'requests', element: <><h1>company request</h1></>},
+        { path: 'requests', element: <><h1><Requests/></h1></>},
         { path: 'requests/:id', element: <><h1>company request ID</h1></>},
         { path: 'pricing', element: <><h1>company pricing</h1></>},
         { path: 'settings', element: <><h1>company settings</h1></>},
