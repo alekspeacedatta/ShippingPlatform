@@ -1,14 +1,19 @@
 export const BASE_URL = 'http://localhost:5000';
 export type Role = 'USER' | 'COMPANY_ADMIN';
 export type ShippingType = 'SEA' | 'RAILWAY' | 'ROAD' | 'AIR';
-export type RequestStatus =
-| 'PENDING_REVIEW'
-| 'AWAITING_COMPANY_CONFIRMATION'
-| 'ACCEPTED'
-| 'IN_TRANSIT'
-| 'OUT_FOR_DELIVERY'
-| 'DELIVERED'
-| 'REJECTED';
+export const REQUEST_STATUS = [
+    'PENDING_REVIEW',
+    'AWAITING_COMPANY_CONFIRMATION',
+    'ACCEPTED',
+    'IN_TRANSIT',
+    'OUT_FOR_DELIVERY',
+    'DELIVERED',
+    'REJECTED'] as const;
+export type RequestStatus = typeof REQUEST_STATUS[number];
+export interface Location {
+    country: string,
+    city: string,
+}
 export interface Address {
     country: string;
     city: string;
@@ -44,18 +49,17 @@ export interface CompanyPricing {
     remoteAreaPct: number;
 }
 export interface ParcelRequest {
-    id: string;
     userId: string;
     companyId?: string; // set after acceptance
     shippingType: ShippingType;
     parcel: { weightKg: number; lengthCm: number; widthCm: number;
     heightCm: number; kind: 'DOCUMENTS'|'GOODS'; declaredValue: number;
     fragile?: boolean; };
-    route: { origin: Address; destination: Address; pickupAddress:
+    route: { origin: Location; destination: Location; pickupAddress:
     Address; deliveryAddress: Address; };
     priceEstimate: number;
     status: RequestStatus;
-    timeline: { status: RequestStatus; at: string; note?: string }[];
+    timeline: { status: RequestStatus; at: Date; note?: string }[];
     trackingId?: string;
-    messages: { from: 'USER'|'COMPANY'; text: string; at: string }[];
+    messages: { from: 'USER'|'COMPANY'; text: string; at: Date }[];
 }

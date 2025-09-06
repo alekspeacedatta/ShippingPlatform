@@ -1,5 +1,6 @@
 import { Router, Request, Response } from "express";
 import { UserModel } from "../models/User";
+import { ParcelModel } from "../models/Parcel";
 import { authenticateJWT } from "../middleware";
 import bcrypt from 'bcrypt';
 
@@ -36,11 +37,19 @@ router.patch('/edit/:id', authenticateJWT, async (req: Request, res: Response) =
         res.status(500).json({ message: 'User updating Error', error })   
     }
 })
-router.post('/create-request', ( req: Request, res: Response ) => {
-    const parcelRequest = req.body;
-
-    if(!parcelRequest) res.status(400).json({ message: 'parcel request does not exsist' });
-
+router.post('/create-request', async ( req: Request, res: Response ) => {
+    try {
+        const parcelRequestData = req.body;
     
+        if(!parcelRequestData) res.status(400).json({ message: 'parcel request does not exsist' });
+    
+        const parcelRequest = new ParcelModel(parcelRequestData);
+    
+        await parcelRequest.save();
+        res.status(200).json({message: 'parcel request created successfuly', parcelRequest: parcelRequest})
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: ' Parcel Request creating Failed ' });
+    }
 })
 export default router

@@ -95,6 +95,10 @@ export interface Address {
     line1: string;
     postalCode: string;
 }
+export interface Location {
+    country: string,
+    city: string,
+}
 export interface User {
     _id: string;
     email: string;
@@ -127,14 +131,14 @@ export interface CompanyPricing {
     remoteAreaPct: number;
 }
 export interface ParcelRequest {
-    id: string;
+    // id: string;
     userId: string;
     companyId?: string; // set after acceptance
     shippingType: ShippingType;
     parcel: { weightKg: number; lengthCm: number; widthCm: number;
     heightCm: number; kind: 'DOCUMENTS'|'GOODS'; declaredValue: number;
     fragile?: boolean; };
-    route: { origin: Address; destination: Address; pickupAddress:
+    route: { origin: Location; destination: Location; pickupAddress:
     Address; deliveryAddress: Address; };
     priceEstimate: number;
     status: RequestStatus;

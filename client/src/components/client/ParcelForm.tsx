@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { Button } from "../commons/Button";
 import Stepper from "../commons/Stepper";
 import { Input } from "../commons/Input";
@@ -9,6 +9,8 @@ import { Select, Option } from "../commons/Select";
 import { useGetCompanies } from "../../api/useCompany";
 import type { CompanyCreate, ShippingType } from "../../types/Types";
 import { toNumOrNull, n } from "../../utils/utils";
+import { useCreateParcelRequest } from "../../api/useParcel";
+import { useAuthStore } from "../../store/useAuthStore";
 const steps = ['Parcel Details', 'Route', 'Shipping Type', 'Calculator', 'Summary & Submit'];
 
 
@@ -38,6 +40,7 @@ const ParcelForm = () => {
   const [ declearedValue, setDeclearedValue ] = useState<number | null>(null);
   const [ shippingType, setShippingType ] = useState<ShippingType | string>('');
   const [ weightKg, setWeightKg ] = useState<number | null>(null);
+  const [ kind, setKind ] = useState<String>('');
   const [ volumetricData, setVolumetricData ] = useState<{width: number | null, height: number | null, length: number | null}>({
     width: null,
     height: null,
@@ -60,9 +63,9 @@ const ParcelForm = () => {
     origin: { country: '', city: '' },
     pickUp: { country: '', city: '', line1: '', postalcode: 0 }
   });
-  const [ toLocation, setToLocation ] = useState<{ origin: { country: string, city: string }, pickUp: { country: string, city: string, line1: string, postalcode: number }}>({
-    origin: { country: '', city: '' },
-    pickUp: { country: '', city: '', line1: '', postalcode: 0 }
+  const [ toLocation, setToLocation ] = useState<{ destination: { country: string, city: string }, deliveryAddress: { country: string, city: string, line1: string, postalcode: number }}>({
+    destination: { country: '', city: '' },
+    deliveryAddress: { country: '', city: '', line1: '', postalcode: 0 }
   });
 
   const {  data: companies } = useGetCompanies();
@@ -73,41 +76,8 @@ const ParcelForm = () => {
     const filteredCompany = companyData.filter(c => c.name === companyName);
     setSelectedCompany(filteredCompany[0]);
   }
-  // useEffect(() => {
-  //   setVolumetricWeight(
-  //     PricingService.volumetricWeight({
-  //       width: n(volumetricData.width),
-  //       height: n(volumetricData.height),
-  //       length: n(volumetricData.length),
-  //     })
-  //   );
-  //   setChargableWeight(PricingService.chargableWeight({weight: n(weightKg), volumetricWeight: volumetricWeight}));
-  //   setTypeMultipliers(
-  //     PricingService.typeMultiplier(
-  //       shippingType as ShippingType,
-  //       {
-  //         sea: selectedCompany?.pricing.typeMultipliers.SEA ?? 1,
-  //         railway: selectedCompany?.pricing.typeMultipliers.RAILWAY ?? 1,
-  //         road: selectedCompany?.pricing.typeMultipliers.ROAD ?? 1,
-  //         air: selectedCompany?.pricing.typeMultipliers.AIR ?? 1,
-  //       }
-  //     ) ?? 1
-  //   );
-  //   setBase(
-  //     PricingService.base(
-  //       selectedCompany?.pricing.basePrice ?? 0,
-  //       selectedCompany?.pricing.pricePerKg ?? 0,
-  //       chargableWeight
-  //     )
-  //   );
-  //   setFuelSurcharge( PricingService.fuelSurcharge(base, selectedCompany?.pricing.fuelPct ?? 0));
-  //   setRemoteSurcharge( PricingService.remoteSurcharge(base, selectedCompany?.pricing.remoteAreaPct ?? 0) );
-  //   setSurcharges( remoteSurcharge + fuelSurcharge );
-  //   setDistanceFactor(PricingService.distanceFactor(fromLocation.origin.country, toLocation.origin.country));
-  //   setIncurance( PricingService.insurance(n(declearedValue), selectedCompany?.pricing.insurancePct ?? 0) );
-  //   setTotal(PricingService.total(base, typeMultiplier, distanceFactor, surcharges, incurance ))
-  // }, [volumetricData, weightKg, chargableWeight, selectedCompany, base, declearedValue, shippingType, typeMultiplier])
-    useEffect(() => {
+  
+  useEffect(() => {
     const width = n(volumetricData.width);
     const height = n(volumetricData.height);
     const length = n(volumetricData.length);
@@ -143,7 +113,7 @@ const ParcelForm = () => {
 
     const df = PricingService.distanceFactor(
       fromLocation.origin.country,
-      toLocation.origin.country
+      toLocation.destination.country
     );
 
     const ins = PricingService.insurance(
@@ -170,11 +140,51 @@ const ParcelForm = () => {
     shippingType,
     selectedCompany,
     fromLocation.origin.country,
-    toLocation.origin.country,
+    toLocation.destination.country,
   ]);
-
-  const handeCreateRequest = () => {
-    
+  const userId = useAuthStore(state => state.authInfo?.userId);
+  const { mutate } = useCreateParcelRequest();
+  const handeCreateRequest = (e: React.FormEvent) => {
+    e.preventDefault();
+      mutate({
+        userId: userId!,
+        shippingType: shippingType as ShippingType,
+        parcel: {
+          weightKg: n(weightKg),
+          lengthCm: n(volumetricData.length),
+          widthCm:  n(volumetricData.width),
+          heightCm: n(volumetricData.height),
+          declaredValue: n(declearedValue),
+          kind: kind as 'DOCUMENTS' | 'GOODS',
+        },
+        route: {
+          origin: {
+            country: fromLocation.origin.country,
+            city: fromLocation.origin.city,
+          },
+          destination: {
+            country: toLocation.destination.country,
+            city: toLocation.destination.city,
+          },
+          pickupAddress: {
+            country: fromLocation.pickUp.country,
+            city: fromLocation.pickUp.city,
+            line1: fromLocation.pickUp.line1,
+            postalCode: String(fromLocation.pickUp.postalcode),
+          },
+          deliveryAddress: {
+            country: toLocation.deliveryAddress.country,
+            city: toLocation.deliveryAddress.city,
+            line1: toLocation.deliveryAddress.line1,
+            postalCode: String(toLocation.deliveryAddress.postalcode),
+          },
+        },
+        priceEstimate: total,
+        status: 'PENDING_REVIEW',
+        timeline: [{ status: 'PENDING_REVIEW', at: new Date().toISOString() }],
+        trackingId: 'dsds',
+        messages: [],
+      });
   }
   return (
     <>
@@ -201,9 +211,10 @@ const ParcelForm = () => {
                 </section>
                 <section className="flex flex-col gap-2">
                   <label>Parcel Type</label>
-                  <Select>
-                    <Option>DOCUMENTS</Option>
-                    <Option>GOODS</Option>
+                  <Select onChange={e => setKind(e.target.value)}>
+                    { kind === '' && (<option>select parcel kind</option>)}
+                    <Option value="DOCUMENTS">DOCUMENTS</Option>
+                    <Option value="GOODS">GOODS</Option>
                   </Select>
                 </section>
               </section>
@@ -253,16 +264,16 @@ const ParcelForm = () => {
               <section className="grid grid-cols-2 gap-2 items-center">
                 <section className="flex flex-col gap-2">
                   <label className="text-lg">Destination</label>
-                  <Input value={toLocation.origin.country} onChange={e => setToLocation(p => ({...p, origin: {...p.origin, country: e.target.value}}))} placeholder="country"/>
-                  <Input value={toLocation.origin.city} onChange={e => setToLocation(p => ({...p, origin: {...p.origin, city: e.target.value}}))} placeholder="city"/>
+                  <Input value={toLocation.destination.country} onChange={e => setToLocation(p => ({...p, destination: {...p.destination, country: e.target.value}}))} placeholder="country"/>
+                  <Input value={toLocation.destination.city} onChange={e => setToLocation(p => ({...p, destination: {...p.destination, city: e.target.value}}))} placeholder="city"/>
                 </section>
                 <section className="flex flex-col gap-2">
                   <label className=" text-lg ">delivery address</label>
                   <section className="grid grid-cols-2 gap-3">
-                    <Input value={toLocation.pickUp.country} onChange={e => setToLocation(p => ({...p, pickUp: {...p.pickUp, country: e.target.value}}))} placeholder="country"/>
-                    <Input value={toLocation.pickUp.city} onChange={e => setToLocation(p => ({...p, pickUp: {...p.pickUp, city: e.target.value}}))} placeholder="city"/>
-                    <Input value={toLocation.pickUp.line1} onChange={e => setToLocation(p => ({...p, pickUp: {...p.pickUp, line1: e.target.value}}))} placeholder="line1"/>
-                    <Input value={toLocation.pickUp.postalcode} onChange={e => setToLocation(p => ({...p, pickUp: {...p.pickUp, postalcode: Number(e.target.value)}}))} placeholder="postalcode"/>
+                    <Input value={toLocation.deliveryAddress.country} onChange={e => setToLocation(p => ({...p, deliveryAddress: {...p.deliveryAddress, country: e.target.value}}))} placeholder="country"/>
+                    <Input value={toLocation.deliveryAddress.city} onChange={e => setToLocation(p => ({...p, deliveryAddress: {...p.deliveryAddress, city: e.target.value}}))} placeholder="city"/>
+                    <Input value={toLocation.deliveryAddress.line1} onChange={e => setToLocation(p => ({...p, deliveryAddress: {...p.deliveryAddress, line1: e.target.value}}))} placeholder="line1"/>
+                    <Input value={toLocation.deliveryAddress.postalcode} onChange={e => setToLocation(p => ({...p, deliveryAddress: {...p.deliveryAddress, postalcode: Number(e.target.value)}}))} placeholder="postalcode"/>
                   </section>
                 </section>
               </section>

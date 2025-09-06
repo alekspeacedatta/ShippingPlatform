@@ -20,3 +20,7 @@ export const AddressSchema = new mongoose.Schema<Address>({
     line1: { type: String, required: true },
     postalCode: { type: String, required: true },
 })
+export const LocationSchema = new mongoose.Schema({
+        country: { type: String, required: true },
+        city: { type: String, required: true }
+}, { _id: false })
