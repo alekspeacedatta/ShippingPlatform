@@ -131,7 +131,7 @@ export interface CompanyPricing {
     remoteAreaPct: number;
 }
 export interface ParcelRequest {
-    // id: string;
+    // _id: string;
     userId: string;
     companyId?: string; // set after acceptance
     shippingType: ShippingType;

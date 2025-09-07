@@ -14,7 +14,7 @@ export class Parcelservice {
     };
     static async getParcelRequests(companyId: string) {
     const url = `${BASE_URL}/api/company/get-requests?companyId=${encodeURIComponent(companyId)}`;
-    const res = await fetch(url, { method: "GET" }); // ❌ no body on GET
+    const res = await fetch(url, { method: "GET" });
     if (!res.ok) throw new Error("Error while fetching requests");
     return res.json();
   }

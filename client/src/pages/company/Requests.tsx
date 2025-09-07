@@ -1,11 +1,23 @@
-// pages/company/Requests.tsx
 import { useGetRequests } from "../../api/useParcel";
+import { Badge } from "../../components/commons/Badge";
 import { useCompanyStore } from "../../store/useCompanyStore";
+import type { ParcelRequest, RequestStatus } from "../../types/Types";
+import { useNavigate } from "react-router-dom";
 
 const Requests = () => {
-  // pages/company/Requests.tsx
-    const companyId = useCompanyStore(s => s.companyInfo?.companyId);
-    const { data: requests, isLoading, isError, error } = useGetRequests(companyId);
+  const statusColors: Record<RequestStatus, string> = {
+    PENDING_REVIEW: "bg-orange-400",
+    AWAITING_COMPANY_CONFIRMATION: "bg-yellow-400",
+    ACCEPTED: "bg-green-500",
+    IN_TRANSIT: "bg-blue-500",
+    OUT_FOR_DELIVERY: "bg-purple-500",
+    DELIVERED: "bg-teal-500",
+    REJECTED: "bg-red-500",
+  };
+
+  const navigate = useNavigate();
+  const companyId = useCompanyStore(s => s.companyInfo?.companyId);
+  const { data: requests, isLoading, isError, error } = useGetRequests(companyId);
 
 
   if (!companyId) return <div className="p-4">No company selected.</div>;
@@ -13,23 +25,28 @@ const Requests = () => {
   if (isError) return <div className="p-4 text-red-600">Failed to load requests. {error.message}</div>;
 
   return (
-    <div className="p-4">
-      <h1 className="text-xl font-semibold mb-3">Requests</h1>
-      {(!requests || requests.length === 0) ? (
-        <p>No requests yet.</p>
-      ) : (
-            
-          <ul className="space-y-2">
-          {//@ts-ignore
-          requests.map((r, i) => (
-            <li key={i} className="border rounded p-3">
-              <div className="font-medium">{r.route.origin.country} → {r.route.destination.country}</div>
-              <div className="text-sm text-gray-600">Type: {r.shippingType} • Status: {r.status}</div>
-              <div className="text-sm">Estimate: ${r.priceEstimate}</div>
-            </li>
-          ))}
-        </ul>
-      )}
+    <div className="min-h-screen flex items-center justify-center p-3">
+        <div className="flex flex-col gap-3">
+            <div className="flex items-center gap-2">
+                <p className="cursor-pointer hover:underline hover:underline-offset-4 hover:font-semibold" onClick={() => navigate(-1)}>Dashboard</p>
+                <span>→</span>
+                <p className="cursor-pointer underline transition-all duration-200 underline-offset-4 font-semibold text-indigo-500" onClick={() => navigate(1)}>All Request</p>
+            </div>            
+            <div className="grid grid-cols-1 h-[90vh] md:h-auto overflow-y-scroll md:overflow-auto md:grid-cols-2 gap-3">
+              {requests.map((req : ParcelRequest, i: number )=> (
+                <div key={i} className="bg-white rounded border p-3 flex items-center justify-between gap-3 w-xl">
+                  <section className="flex flex-col gap-2">
+                    <p className="font-semibold text-xl">{req.route.origin.country} → {req.route.destination.country}</p>
+                    <section className="flex items-center gap-3">
+                      <p className="text-sm text-gray-600"><span className="font-semibold">Type:</span> {req.shippingType}</p>
+                      <p className="text-sm text-gray-600"><span className="font-semibold">Price estimate:</span> {req.priceEstimate}$</p>
+                    </section>
+                  </section>
+                    <Badge className={statusColors[req.status]}> {req.status.replace(/_/g, " ")} </Badge>                    
+                </div>
+              ))}
+            </div>
+        </div>
     </div>
   );
 };
