@@ -1,6 +1,5 @@
 import { useMutation, useQueries, useQuery } from "@tanstack/react-query";
 import { Parcelservice } from "../services/ParcelService";
-import type { ParcelRequest } from "../types/Types";
 
 export const useCreateParcelRequest = () => {
     return useMutation({
@@ -13,9 +12,9 @@ export const useCreateParcelRequest = () => {
         }
     })
 }
-export const useGetRequests = (companyId?: string) =>
+export const useGetRequests = (id?: string) =>
   useQuery({
-    queryKey: ["requests", companyId],
-    enabled: !!companyId,
-    queryFn: () => Parcelservice.getParcelRequests(companyId!),
+    queryKey: ["requests", id],
+    enabled: !!id,
+    queryFn: () => Parcelservice.getParcelRequests(id!),
   });

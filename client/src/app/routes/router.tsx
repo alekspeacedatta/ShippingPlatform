@@ -7,6 +7,7 @@ import ClientDashboard from "../../pages/client/Dashboard"
 import CompanyDashboard from "../../pages/company/Dashboard"
 import CreateRequest from "../../pages/client/CreateRequest"
 import Requests from "../../pages/company/Requests"
+import RequestList from "../../pages/client/RequestList"
 export const router = createBrowserRouter([
 
     { path: '/login', element: <Login/>},
@@ -16,6 +17,7 @@ export const router = createBrowserRouter([
     {path: '/client', element: ( <ProtectedRoute allowed={['USER']}><Outlet/></ProtectedRoute> ), children: [
         { path: 'dashboard', element: <ClientDashboard/>},
         { path: 'create-request', element: <CreateRequest/>},
+        { path: 'requests', element: <RequestList/>},
         { path: 'requests/:id', element: <><h1>client requests ID</h1></>},
         { path: 'track', element: <><h1>client Track Parcel</h1></>},
     ]},

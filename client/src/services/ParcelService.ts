@@ -12,8 +12,8 @@ export class Parcelservice {
         if(!res.ok) throw new Error("Error while sending request to back (parcel create)");
         return res.json()
     };
-    static async getParcelRequests(companyId: string) {
-    const url = `${BASE_URL}/api/company/get-requests?companyId=${encodeURIComponent(companyId)}`;
+    static async getParcelRequests(id: string) {
+    const url = `${BASE_URL}/api/parcel/get-requests?id=${encodeURIComponent(id)}`;
     const res = await fetch(url, { method: "GET" });
     if (!res.ok) throw new Error("Error while fetching requests");
     return res.json();

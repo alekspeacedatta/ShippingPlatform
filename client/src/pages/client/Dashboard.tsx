@@ -20,7 +20,7 @@ const Dashboard = () => {
                 <h1>{user?.fullName} this is your Dashboard</h1>
                 <div className="flex gap-10 items-center">
                     <Button onClick={() => { navigation('/client/create-request') }}>Create Request</Button>
-                    <Button onClick={() => { navigation('/client/requests/:id') }}>All Requests</Button>
+                    <Button onClick={() => { navigation('/client/requests') }}>All Requests</Button>
                     <Button onClick={() => { navigation('/client/track') }}>Track</Button>
                     <Button onClick={logout}>Logout</Button>
                 </div>
