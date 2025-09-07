@@ -8,6 +8,7 @@ import CompanyDashboard from "../../pages/company/Dashboard"
 import CreateRequest from "../../pages/client/CreateRequest"
 import RequestsTable from "../../pages/company/RequestsTable"
 import RequestList from "../../components/client/RequestList"
+import RequestDetail from "../../components/client/RequestDetail"
 export const router = createBrowserRouter([
 
     { path: '/login', element: <Login/>},
@@ -18,7 +19,7 @@ export const router = createBrowserRouter([
         { path: 'dashboard', element: <ClientDashboard/>},
         { path: 'create-request', element: <CreateRequest/>},
         { path: 'requests', element: <RequestList/>},
-        { path: 'requests/:id', element: <><h1>client requests ID</h1></>},
+        { path: 'requests/:id', element: <RequestDetail/>},
         { path: 'track', element: <><h1>client Track Parcel</h1></>},
     ]},
     

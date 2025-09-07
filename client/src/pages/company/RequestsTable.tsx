@@ -32,7 +32,7 @@ const RequestsTable = () => {
                 <span>→</span>
                 <p className="cursor-pointer underline transition-all duration-200 underline-offset-4 font-semibold text-indigo-500" onClick={() => navigate(1)}>All Request</p>
             </div>            
-            <div className="grid grid-cols-1 h-[90vh] md:h-auto overflow-y-scroll md:overflow-auto md:grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 h-[90vh] md:h-auto overflow-y-scroll md:overflow-auto md:grid-cols-2 gap-3 md:overflow-y-scroll md:h-[90vh]">
               {requests.map((req : ParcelRequest, i: number )=> (
                 <div key={i} className="bg-white rounded border p-3 flex items-center justify-between gap-3
              cursor-pointer transform transition-transform duration-200
