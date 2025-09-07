@@ -1,10 +1,10 @@
 import { useGetRequests } from "../../api/useParcel";
-import { Badge } from "../../components/commons/Badge";
-import { useCompanyStore } from "../../store/useCompanyStore";
+import { Badge } from "../commons/Badge";
+import { useAuthStore } from "../../store/useAuthStore";
 import type { ParcelRequest, RequestStatus } from "../../types/Types";
 import { useNavigate } from "react-router-dom";
 
-const Requests = () => {
+const RequestList = () => {
   const statusColors: Record<RequestStatus, string> = {
     PENDING_REVIEW: "bg-orange-400",
     AWAITING_COMPANY_CONFIRMATION: "bg-yellow-400",
@@ -16,11 +16,11 @@ const Requests = () => {
   };
 
   const navigate = useNavigate();
-  const companyId = useCompanyStore(s => s.companyInfo?.companyId);
-  const { data: requests, isLoading, isError, error } = useGetRequests(companyId);
+  const userId = useAuthStore(state => state.authInfo?.userId);
+  const { data: requests, isLoading, isError, error } = useGetRequests(userId);
 
 
-  if (!companyId) return <div className="p-4">No company selected.</div>;
+  if (!userId) return <div className="p-4">No company selected.</div>;
   if (isLoading) return <div className="p-4">Loading requests…</div>;
   if (isError) return <div className="p-4 text-red-600">Failed to load requests. {error.message}</div>;
 
@@ -34,7 +34,9 @@ const Requests = () => {
             </div>            
             <div className="grid grid-cols-1 h-[90vh] md:h-auto overflow-y-scroll md:overflow-auto md:grid-cols-2 gap-3">
               {requests.map((req : ParcelRequest, i: number )=> (
-                <div key={i} className="bg-white rounded border p-3 flex items-center justify-between gap-3 w-xl">
+                <div key={i} className="bg-white rounded border p-3 flex items-center justify-between gap-3
+             cursor-pointer transform transition-transform duration-200
+             hover:-translate-y-2 hover:shadow-lg">
                   <section className="flex flex-col gap-2">
                     <p className="font-semibold text-xl">{req.route.origin.country} → {req.route.destination.country}</p>
                     <section className="flex items-center gap-3">
@@ -50,4 +52,4 @@ const Requests = () => {
     </div>
   );
 };
-export default Requests;
+export default RequestList;
