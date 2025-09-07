@@ -1,4 +1,4 @@
-import { useMutation, useQueries, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { Parcelservice } from "../services/ParcelService";
 
 export const useCreateParcelRequest = () => {

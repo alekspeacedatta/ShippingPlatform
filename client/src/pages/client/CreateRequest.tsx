@@ -17,8 +17,6 @@ const steps = ['Parcel Details', 'Route', 'Shipping Type', 'Calculator', 'Summar
 const CreateRequest = () => {
   const navigate = useNavigate();
   const { data: companies = [], isLoading, isError, error } = useGetCompanies();
-
-  // hooks must always run
   const [step, setStep] = useState(0);
   const back = () => setStep(s => Math.max(0, s - 1));
   const next = () => setStep(s => Math.min(steps.length - 1, s + 1));
@@ -92,14 +90,12 @@ const CreateRequest = () => {
         <p className="cursor-pointer underline transition-all duration-200 underline-offset-4 font-semibold text-indigo-500">Create Request</p>
       </div>
 
-      {/* Load/error gate for selector + everything else */}
       {isLoading ? (
         <p>Loading...</p>
       ) : isError ? (
         <p>Error: {error?.message}</p>
       ) : (
         <>
-          {/* Company selector FIRST */}
           <div className="flex flex-col gap-2 my-4">
             <h1 className="text-2xl font-semibold">select company for transfer</h1>
             <Select
@@ -116,7 +112,6 @@ const CreateRequest = () => {
             </Select>
           </div>
 
-          {/* Stepper UNDER the selector */}
           <Stepper steps={steps} current={step} />
 
           <form onSubmit={handleSubmit} className="p-4 border rounded-xl min-h-28 flex flex-col justify-center">
@@ -157,7 +152,6 @@ const CreateRequest = () => {
                 <h2 className="text-xl font-semibold">Summary & Submit</h2>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-white">
-                  {/* Company & Shipping */}
                   <div className="bg-white rounded-lg p-4 border">
                     <h3 className="font-semibold mb-2">Company & Shipping</h3>
                     <p><span className="text-gray-500">Company:</span> {selectedCompany?.name ?? '—'}</p>
@@ -166,7 +160,6 @@ const CreateRequest = () => {
                     <p><span className="text-gray-500">Distance factor:</span> {(calc?.distanceFactor ?? 1).toFixed(2)}x</p>
                   </div>
 
-                  {/* Parcel */}
                   <div className="bg-white rounded-lg p-4 border">
                     <h3 className="font-semibold mb-2">Parcel</h3>
                     <p><span className="text-gray-500">Kind:</span> {String(kind) || '—'}</p>
@@ -180,7 +173,6 @@ const CreateRequest = () => {
                     <p><span className="text-gray-500">Chargeable weight:</span> {(calc?.chargableWeight ?? 0).toFixed(2)} kg</p>
                   </div>
 
-                  {/* Route */}
                   <div className="bg-white rounded-lg p-4 border">
                     <h3 className="font-semibold mb-2">Route</h3>
                     <p className="text-sm"><span className="text-gray-500">Origin:</span> {fromLocation.origin.country}, {fromLocation.origin.city}</p>
@@ -205,7 +197,6 @@ const CreateRequest = () => {
                     </div>
                   </div>
 
-                  {/* Pricing breakdown */}
                   <div className="bg-white rounded-lg p-4 border">
                     <h3 className="font-semibold mb-2">Pricing breakdown</h3>
                     <p><span className="text-gray-500">Base:</span> ${Number(calc?.base ?? 0).toFixed(2)}</p>
