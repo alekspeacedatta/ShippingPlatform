@@ -89,6 +89,19 @@ export const statusColors: Record<RequestStatus, string> = {
     DELIVERED: "bg-teal-500",
     REJECTED: "bg-red-500",
 };
+export interface Pricing {
+        basePrice: Number, 
+        pricePerKg: Number, 
+        fuelPct: Number, 
+        insurancePct: Number, 
+        typeMultipliers: {
+          SEA: Number, 
+          RAILWAY: Number, 
+          ROAD: Number, 
+          AIR: Number,
+        }
+        remoteAreaPct: Number
+    }
 export type RequestStatus =
 | 'PENDING_REVIEW'
 | 'AWAITING_COMPANY_CONFIRMATION'

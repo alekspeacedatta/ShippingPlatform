@@ -1,4 +1,4 @@
-import { BASE_URL } from "../types/Types";
+import { BASE_URL, type Pricing } from "../types/Types";
 
 export class CompanyService {
     static async getCompanies () {
@@ -13,4 +13,13 @@ export class CompanyService {
         if(!res.ok) throw new Error("Error while getting company");
         return res.json();
     }
+    static async updateCompanyPricing(params: { companyId: string; pricing: Pricing }) {
+    const res = await fetch(`${BASE_URL}/api/company/update-pricing`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(params),
+    });
+    if (!res.ok) throw new Error("Error updating pricing");
+    return res.json();
+  }
 }

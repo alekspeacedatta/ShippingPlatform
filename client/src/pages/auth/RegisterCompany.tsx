@@ -30,6 +30,7 @@ const RegisterCompany = () => {
     )
   }
   const [ companyInfo, setCompanyInfo ] = useState<CompanyCreate>({
+    _id: '',
     name: '',
     contactEmail: '',
     password: '',
@@ -52,7 +53,7 @@ const RegisterCompany = () => {
           <form className="flex  flex-col gap-4" onSubmit={handelCompanyRegister}>
             <h1 className="mb-1 text-2xl font-semibold">Company Registration</h1>
             { isError && ( <p className="text-red-800">{error.message}</p>)}
-            <section className="flex flex-col gap-5 max-h-[60vh] overflow-y-auto pr-2">
+            <section className="flex flex-col gap-5 max-h-[60vh] overflow-y-auto pr-2 py-3">
               <section className="flex flex-col gap-3 rounded-[8px]">
                 <h2 className="text-xl">main info</h2>
                 <section className="grid grid-cols-2  gap-4">

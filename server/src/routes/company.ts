@@ -26,7 +26,31 @@ router.get('/get-company', async ( req: Request, res: Response ) => {
         res.status(500).json({ message: "Error while fetching company", error })
     }
 })
+router.patch("/update-pricing", async (req, res) => {
+  try {
+    const { companyId, pricing } = req.body || {};
+    if (!companyId || !pricing) {
+      return res.status(400).json({ message: "companyId and pricing are required" });
+    }
 
+    const updated = await ComapnyModel.findByIdAndUpdate(
+      companyId,
+      { $set: { pricing } },
+      { new: true, runValidators: true }
+    ).lean();
 
+    if (!updated) {
+      return res.status(404).json({ message: "Company not found" });
+    }
+
+    return res.status(200).json({
+      message: "Pricing updated successfully",
+      company: updated,
+    });
+  } catch (error) {
+    console.error("Update pricing error:", error);
+    return res.status(500).json({ message: "Error while updating pricing" });
+  }
+});
 
 export default router

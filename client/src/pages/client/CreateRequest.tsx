@@ -80,6 +80,7 @@ const CreateRequest = () => {
       trackingId: 'dsds',
       messages: [],
     });
+    navigate('/client/requests');
   };
 
   return (

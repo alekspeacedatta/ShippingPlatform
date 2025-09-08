@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { CompanyService } from "../services/CompanyService"
 
 export const useGetCompanies = () => {
@@ -17,3 +17,17 @@ export const useGetCompany = (companyId: string) => {
         queryFn: () => CompanyService.getCompany(companyId!),
     })
 }
+export const usePricingUpdate = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: CompanyService.updateCompanyPricing,
+    onSuccess: (_data, variables) => {
+      qc.invalidateQueries({ queryKey: ["company", variables.companyId] });
+      qc.invalidateQueries({ queryKey: ["companies"] });
+      console.log("Pricing updated successfully");
+    },
+    onError: (err: any) => {
+      console.error("Failed to update pricing:", err?.message ?? err);
+    },
+  });
+};
