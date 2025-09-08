@@ -12,10 +12,19 @@ export const useCreateParcelRequest = () => {
         }
     })
 }
-export const useGetRequests = (id?: string) =>
-  useQuery({
-    queryKey: ["requests", id],
-    enabled: !!id,
-    refetchInterval: 5 * 60 * 1000,
-    queryFn: () => Parcelservice.getParcelRequests(id!),
-  });
+export const useGetRequests = (id?: string) => {
+    return useQuery({
+        queryKey: ["requests", id],
+        enabled: !!id,
+        refetchInterval: 5 * 60 * 1000,
+        queryFn: () => Parcelservice.getParcelRequests(id!),
+    });
+}
+export const useGetRequest = ( parcelId: string ) => {
+    return useQuery({
+        queryKey: ['requests', parcelId],
+        enabled: !!parcelId,
+        refetchInterval: 5 * 60 * 1000,
+        queryFn: () => Parcelservice.getParcelRequest(parcelId!)
+    })
+}

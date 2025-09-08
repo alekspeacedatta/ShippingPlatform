@@ -35,7 +35,7 @@ const RequestList = () => {
             <div className="grid grid-cols-1 h-[90vh] md:h-auto overflow-y-scroll md:overflow-auto md:grid-cols-2 gap-3 md:overflow-y-scroll md:h-[90vh]">
               {requests.map((req : ParcelRequest, i: number )=> (
                 //@ts-ignore
-                <div key={i} onClick={() => navigate(`/client/requests/:${req._id}`)} className="bg-white rounded border p-3 flex items-center justify-between gap-3
+                <div key={i} onClick={() => navigate(`/client/requests/${req._id}`)} className="bg-white rounded border p-3 flex items-center justify-between gap-3
              cursor-pointer transform transition-transform duration-200
              hover:-translate-y-2 hover:shadow-lg">
                   <section className="flex flex-col gap-2">

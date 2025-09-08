@@ -19,7 +19,7 @@ export const router = createBrowserRouter([
         { path: 'dashboard', element: <ClientDashboard/>},
         { path: 'create-request', element: <CreateRequest/>},
         { path: 'requests', element: <RequestList/>},
-        { path: 'requests/:id', element: <RequestDetail/>},
+        { path: 'requests/:parcelId', element: <RequestDetail/>},
         { path: 'track', element: <><h1>client Track Parcel</h1></>},
     ]},
     

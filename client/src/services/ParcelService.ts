@@ -13,9 +13,13 @@ export class Parcelservice {
         return res.json()
     };
     static async getParcelRequests(id: string) {
-    const url = `${BASE_URL}/api/parcel/get-requests?id=${encodeURIComponent(id)}`;
-    const res = await fetch(url, { method: "GET" });
-    if (!res.ok) throw new Error("Error while fetching requests");
-    return res.json();
-  }
+        const res = await fetch(`${BASE_URL}/api/parcel/get-requests?id=${encodeURIComponent(id)}`, { method: "GET" });
+        if (!res.ok) throw new Error("Error while fetching requests");
+        return res.json();
+    }
+    static async getParcelRequest( parcelId: string ){
+        const res = await fetch(`${BASE_URL}/api/parcel/get?parcelId=${encodeURIComponent(parcelId)}`, { method: 'GET' });
+        if(!res.ok) throw new Error("Error while fetching selected request");
+        return res.json();
+    }
 }
