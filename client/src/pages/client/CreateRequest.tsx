@@ -19,7 +19,7 @@ const CreateRequest = () => {
   const { data: companies = [], isLoading, isError, error } = useGetCompanies();
   const [step, setStep] = useState(0);
   const back = () => setStep(s => Math.max(0, s - 1));
-  const next = () => setStep(s => Math.min(steps.length - 1, s + 1));
+  const next = () => setStep(s => Math.min(steps.length, s + 1));
 
   const [selectedCompany, setSelectedCompany] = useState<CompanyCreate | null>(null);
   const [shippingType, setShippingType] = useState<ShippingType | string>('');
@@ -45,7 +45,7 @@ const CreateRequest = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const total = calc?.total ?? 0;
-    console.log(steps);    
+
     mutate({
       userId: userId!,
       companyId: (selectedCompany as any)?._id,
@@ -217,15 +217,9 @@ const CreateRequest = () => {
               <Button onClick={back} disabled={step === 0} type="button" className="px-4 py-2 rounded bg-gray-200 disabled:opacity-50">
                 back
               </Button>
-              {step < steps.length - 1 ? (
-                <Button type="button" onClick={next}>
-                  next
-                </Button>
-              ) : (
-                <Button type="submit">
-                  Submit
-                </Button>
-              )}
+              <Button onClick={step === steps.length ? undefined : next} type={step === steps.length? "submit" : "button"}>
+                {step === steps.length - 1 ? "Submit" : "next"}
+              </Button>
             </div>
           </form>
         </>
