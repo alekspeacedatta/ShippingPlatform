@@ -212,9 +212,15 @@ const CreateRequest = () => {
                 </div>
               </div>
             )}
+            {step === 5 && (
+              <div className="p-14 border rounded-xl min-h-max items-center justify-center flex gap-4 overflow-y-scroll bg-white items-center ">
+                <span className="p-3 text-2xl text-white rounded-full bg-green-600">✓</span>    
+                <h1>Congratulations you request Created Succesfuly</h1>
+              </div>
+            )}
 
             <div className="mt-6 flex justify-between">
-              <Button onClick={back} disabled={step === 0} type="button" className="px-4 py-2 rounded bg-gray-200 disabled:opacity-50">
+              <Button onClick={back} disabled={step === 0 || step === 5}  type="button" className="px-4 py-2 rounded bg-gray-200 disabled:opacity-50">
                 back
               </Button>
               <Button onClick={step === steps.length ? undefined : next} type={step === steps.length? "submit" : "button"}>

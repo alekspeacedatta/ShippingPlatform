@@ -3,9 +3,9 @@ const Stepper = ({ steps, current }: { steps: string[]; current: number }) => {
 
   return (
     <div className="relative">
-      <div className="absolute top-[25%] -translate-y-1/2 w-full h-[3px] bg-gray-300" />
+      <div className="absolute top-[25%] -translate-y-1/2 w-full max-w-[100%] h-[3px] bg-gray-300" />
       <div
-        className="absolute top-[25%] -translate-y-1/2 w-full h-[3px] bg-indigo-500 origin-left transition-transform duration-300"
+        className="absolute top-[25%] -translate-y-1/2 w-full h-[3px] max-w-[80%] bg-indigo-500 origin-left transition-transform duration-300"
         style={{ transform: `scaleX(${t})` }}
       />
       <ol className="relative flex items-start justify-between gap-1">
