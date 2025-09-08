@@ -10,6 +10,7 @@ import RequestList from "../../components/client/RequestList"
 import RequestDetail from "../../components/client/RequestDetail"
 import RequestDetailPanel from "../../components/company/RequestDetailPanel"
 import Requsests from "../../pages/company/Requsests"
+import Pricing from "../../pages/company/Pricing"
 export const router = createBrowserRouter([
 
     { path: '/login', element: <Login/>},
@@ -28,7 +29,7 @@ export const router = createBrowserRouter([
         { path: 'dashboard', element: <CompanyDashboard/>},
         { path: 'requests', element: <Requsests/>},
         { path: 'requests/:parcelId', element: <RequestDetailPanel/>},
-        { path: 'pricing', element: <><h1>company pricing</h1></>},
+        { path: 'pricing', element: <Pricing/>},
         { path: 'settings', element: <><h1>company settings</h1></>},
     ]},
 ]);

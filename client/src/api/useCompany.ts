@@ -9,3 +9,11 @@ export const useGetCompanies = () => {
         refetchOnWindowFocus: true
     })
 }
+export const useGetCompany = (companyId: string) => {
+    return useQuery({
+        queryKey: ['company', companyId],
+        enabled: !!companyId,
+        refetchInterval: 5 * 60 * 1000,
+        queryFn: () => CompanyService.getCompany(companyId!),
+    })
+}
