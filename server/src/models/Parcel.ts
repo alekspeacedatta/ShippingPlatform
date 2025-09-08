@@ -13,6 +13,7 @@ export const ParcelSchema = new mongoose.Schema({
         heightCm: { type: Number, required: true },
         kind: { type: String, required: true },
         fragile: { type: Boolean, required: false },
+        declaredValue: { type: Number, required: true }
     },
     route: { origin: LocationSchema, destination: LocationSchema, pickupAddress: AddressSchema, deliveryAddress: AddressSchema},
     priceEstimate: { type: Number, required: true },

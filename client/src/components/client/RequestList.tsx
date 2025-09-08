@@ -1,19 +1,11 @@
 import { useGetRequests } from "../../api/useParcel";
 import { Badge } from "../commons/Badge";
 import { useAuthStore } from "../../store/useAuthStore";
-import type { ParcelRequest, RequestStatus } from "../../types/Types";
+import type { ParcelRequest } from "../../types/Types";
 import { useNavigate } from "react-router-dom";
-
+import { statusColors } from "../../types/Types";
 const RequestList = () => {
-  const statusColors: Record<RequestStatus, string> = {
-    PENDING_REVIEW: "bg-orange-400",
-    AWAITING_COMPANY_CONFIRMATION: "bg-yellow-400",
-    ACCEPTED: "bg-green-500",
-    IN_TRANSIT: "bg-blue-500",
-    OUT_FOR_DELIVERY: "bg-purple-500",
-    DELIVERED: "bg-teal-500",
-    REJECTED: "bg-red-500",
-  };
+  
 
   const navigate = useNavigate();
   const userId = useAuthStore(state => state.authInfo?.userId);
@@ -32,10 +24,10 @@ const RequestList = () => {
                 <span>→</span>
                 <p className="cursor-pointer underline transition-all duration-200 underline-offset-4 font-semibold text-indigo-500" onClick={() => navigate(1)}>All Request</p>
             </div>            
-            <div className="grid grid-cols-1 h-[90vh] md:h-auto overflow-y-scroll md:overflow-auto md:grid-cols-2 gap-3 md:overflow-y-scroll md:h-[90vh]">
+            <div className="grid grid-cols-1 h-[90vh] md:h-auto py-5 overflow-y-scroll md:overflow-auto md:grid-cols-2 gap-3 md:overflow-y-scroll">
               {requests.map((req : ParcelRequest, i: number )=> (
                 //@ts-ignore
-                <div key={i} onClick={() => navigate(`/client/requests/${req._id}`)} className="bg-white rounded border p-3 flex items-center justify-between gap-3
+                <div key={i} onClick={() => navigate(`/client/requests/${req._id}`)} className="bg-white rounded border p-3 h-[10vh] flex items-center justify-between gap-3
              cursor-pointer transform transition-transform duration-200
              hover:-translate-y-2 hover:shadow-lg">
                   <section className="flex flex-col gap-2">

@@ -45,7 +45,7 @@ const CreateRequest = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const total = calc?.total ?? 0;
-
+    console.log(steps);    
     mutate({
       userId: userId!,
       companyId: (selectedCompany as any)?._id,
@@ -214,12 +214,18 @@ const CreateRequest = () => {
             )}
 
             <div className="mt-6 flex justify-between">
-              <Button onClick={back} disabled={step === 0} className="px-4 py-2 rounded bg-gray-200 disabled:opacity-50">
+              <Button onClick={back} disabled={step === 0} type="button" className="px-4 py-2 rounded bg-gray-200 disabled:opacity-50">
                 back
               </Button>
-              <Button onClick={step === steps.length - 1 ? undefined : next} type={step === steps.length - 1 ? "submit" : "button"}>
-                {step === steps.length - 1 ? "Submit" : "next"}
-              </Button>
+              {step < steps.length - 1 ? (
+                <Button type="button" onClick={next}>
+                  next
+                </Button>
+              ) : (
+                <Button type="submit">
+                  Submit
+                </Button>
+              )}
             </div>
           </form>
         </>

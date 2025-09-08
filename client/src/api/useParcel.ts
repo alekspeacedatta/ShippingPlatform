@@ -16,6 +16,7 @@ export const useGetRequests = (id?: string) => {
     return useQuery({
         queryKey: ["requests", id],
         enabled: !!id,
+        refetchOnMount: "always",
         refetchInterval: 5 * 60 * 1000,
         queryFn: () => Parcelservice.getParcelRequests(id!),
     });
