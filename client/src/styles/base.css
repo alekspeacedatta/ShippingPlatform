@@ -1,4 +1,3 @@
-/* src/styles/base.css */
 @layer base {
   *, *::before, *::after {
     box-sizing: border-box;
