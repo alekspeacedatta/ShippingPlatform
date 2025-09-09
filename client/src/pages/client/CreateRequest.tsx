@@ -306,7 +306,6 @@ const CreateRequest = () => {
                 <div className="flex min-h-max flex-col items-center justify-center gap-4 overflow-y-scroll rounded-xl border bg-white p-14">
                   <div className="flex flex-col items-center gap-4">
                     <div className="flex items-center gap-3">
-                      {/* <span className="p-3 text-2xl text-white rounded-full bg-green-600"></span>     */}
                       <h1 className="text-xl text-green-500">
                         {' '}
                         Congratulations you request Created Succesfuly{' '}
@@ -326,8 +325,7 @@ const CreateRequest = () => {
                 </div>
               ) : (
                 <div className="flex min-h-max items-center justify-center gap-4 overflow-y-scroll rounded-xl border bg-white p-14">
-                  <span className="rounded-full bg-red-600 p-3 text-2xl text-white">✓</span>
-                  <h1>failed to Create request</h1>
+                  <h1 className='text-xl text-red-500 font-semibold'>failed to Create request</h1>
                 </div>
               ))}
 
