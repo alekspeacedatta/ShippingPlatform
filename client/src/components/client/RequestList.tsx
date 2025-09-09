@@ -24,11 +24,11 @@ const RequestList = () => {
                 <span>→</span>
                 <p className="cursor-pointer underline transition-all duration-200 underline-offset-4 font-semibold text-indigo-500" onClick={() => navigate(1)}>All Request</p>
             </div>            
-            <div className="grid grid-cols-1 h-[90vh] md:h-auto py-5 md:h-[90vh] md:overflow-auto md:grid-cols-4 gap-3 md:overflow-y-scroll">
+            <div className="grid grid-cols-1 h-[90vh] md:h-auto py-5 md:h-[90vh] md:overflow-auto md:grid-cols-3 gap-3 md:overflow-y-scroll">
               {requests.map((req : ParcelRequest, i: number )=> (
                 //@ts-ignore
                 <div key={i} onClick={() => navigate(`/client/requests/${req._id}`)} className="bg-white rounded border p-3 h-[10vh] flex items-center justify-between gap-3
-             cursor-pointer transform transition-transform duration-200
+             cursor-pointer transform transition-transform duration-200 w-[30vw]
              hover:-translate-y-2 hover:shadow-lg">
                   <section className="flex flex-col gap-2">
                     <p className="font-semibold text-xl">{req.route.origin.country} → {req.route.destination.country}</p>

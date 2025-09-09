@@ -1,6 +1,5 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Parcelservice } from "../services/ParcelService";
-
 export const useCreateParcelRequest = () => {
     return useMutation({
         mutationFn: Parcelservice.createParcelRequest,
@@ -29,3 +28,19 @@ export const useGetRequest = ( parcelId: string ) => {
         queryFn: () => Parcelservice.getParcelRequest(parcelId!)
     })
 }
+export const useUpdateParcelStatus = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: Parcelservice.updateParcelStatus,
+    onSuccess: (updated) => {
+      qc.setQueryData(["requests", updated._id], (prev: any) => {
+        if (prev && "parcel" in prev) {
+          return { ...prev, parcel: updated };
+        }
+        return updated;
+      });
+      qc.invalidateQueries({ queryKey: ["requests"], exact: false });
+    },
+  });
+};
+  

@@ -1,8 +1,9 @@
-import { Request, Response } from "express";
+import { Router, Request, Response } from "express";
 import { ComapnyModel } from "../models/Company";
 import { ParcelModel } from "../models/Parcel";
-import { UserModel } from "../models/User";
-import router from "./auth";
+import { REQUEST_STATUS, RequestStatus } from "../types/types";
+
+const router = Router();
 
 
 router.get("/get-requests", async (req: Request, res: Response) => {
@@ -35,5 +36,33 @@ router.get('/get', async ( req: Request, res: Response ) => {
     res.status(500).json({ message: 'error while searching selected parcel'  })
   }  
 })
+router.patch("/update-status", async (req: Request, res: Response) => {
+  try {
+    const { parcelId, status } = req.body as { parcelId?: string; status?: RequestStatus };
+
+    if (!parcelId || !status) {
+      return res.status(400).json({ message: "parcelId and status are required" });
+    }
+    if (!REQUEST_STATUS.includes(status)) {
+      return res.status(400).json({ message: "Invalid status value" });
+    }
+
+    const updated = await ParcelModel.findByIdAndUpdate(
+      parcelId,
+      {
+        $set: { status },
+        $push: { timeline: { status, at: new Date().toISOString() } },
+      },
+      { new: true, runValidators: true }
+    ).lean();
+
+    if (!updated) return res.status(404).json({ message: "Parcel not found" });
+
+    return res.status(200).json(updated);
+  } catch (err) {
+    console.error("update-status error:", err);
+    return res.status(500).json({ message: "Error while updating status" });
+  }
+});
 
 export default router

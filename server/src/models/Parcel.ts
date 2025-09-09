@@ -17,7 +17,7 @@ export const ParcelSchema = new mongoose.Schema({
     },
     route: { origin: LocationSchema, destination: LocationSchema, pickupAddress: AddressSchema, deliveryAddress: AddressSchema},
     priceEstimate: { type: Number, required: true },
-    status: { type: String, enum: REQUEST_STATUS, required: true, default: 'PENDING_REVIEW'},
+    status: { type: String, enum: REQUEST_STATUS, required: true, default: 'AWAITING_COMPANY_CONFIRMATION'},
     timeline: [{
         status: { type: String, enum: REQUEST_STATUS, required: true },
         at: { type: Date, default: Date.now, required: true },

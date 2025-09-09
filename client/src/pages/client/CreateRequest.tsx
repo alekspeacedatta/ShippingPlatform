@@ -76,8 +76,8 @@ const CreateRequest = () => {
         },
       },
       priceEstimate: total,
-      status: 'PENDING_REVIEW',
-      timeline: [{ status: 'PENDING_REVIEW', at: new Date().toISOString() }],
+      status: 'AWAITING_COMPANY_CONFIRMATION',
+      timeline: [{ status: 'AWAITING_COMPANY_CONFIRMATION', at: new Date().toISOString() }],
       trackingId: 'dsds',
       messages: [],
     },{ onError: () => { setParcelErr(true) }, onSuccess: () => { setParcelErr(false) }  }) 
@@ -216,9 +216,12 @@ const CreateRequest = () => {
             {step === 5 && (
               !parcelErr ? (
                 <div className="p-14 border rounded-xl min-h-max items-center justify-center flex flex-col gap-4 overflow-y-scroll bg-white items-center ">
-                  <div className="flex items-center gap-4">
-                    <span className="p-3 text-2xl text-white rounded-full bg-green-600">✓</span>    
-                    <h1>Congratulations you request Created Succesfuly</h1>
+                  <div className="flex items-center gap-4 flex-col">
+                    <div className="flex items-center gap-3">
+                      {/* <span className="p-3 text-2xl text-white rounded-full bg-green-600"></span>     */}
+                      <h1 className="text-green-500 text-xl"> Congratulations you request Created Succesfuly </h1>
+                    </div>
+                    <p className="text-green-500 text-sm">✓ payment success ✓</p>
                   </div>
                   <p className="underline cursor-pointer " onClick={() => { navigate('/client/requests') } }> see the request </p>
                 </div>

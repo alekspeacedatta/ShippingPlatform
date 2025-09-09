@@ -80,15 +80,6 @@ export const AsiaCountries = [
   'vietnam',
   'yemen'
 ];
-export const statusColors: Record<RequestStatus, string> = {
-    PENDING_REVIEW: "bg-orange-400",
-    AWAITING_COMPANY_CONFIRMATION: "bg-yellow-400",
-    ACCEPTED: "bg-green-500",
-    IN_TRANSIT: "bg-blue-500",
-    OUT_FOR_DELIVERY: "bg-purple-500",
-    DELIVERED: "bg-teal-500",
-    REJECTED: "bg-red-500",
-};
 export interface Pricing {
         basePrice: Number, 
         pricePerKg: Number, 
@@ -102,14 +93,28 @@ export interface Pricing {
         }
         remoteAreaPct: Number
     }
-export type RequestStatus =
-| 'PENDING_REVIEW'
-| 'AWAITING_COMPANY_CONFIRMATION'
-| 'ACCEPTED'
-| 'IN_TRANSIT'
-| 'OUT_FOR_DELIVERY'
-| 'DELIVERED'
-| 'REJECTED';
+export const REQUEST_STATUS = [
+  'PENDING_REVIEW',
+  'AWAITING_COMPANY_CONFIRMATION',
+  'ACCEPTED',
+  'IN_TRANSIT',
+  'OUT_FOR_DELIVERY',
+  'DELIVERED',
+  'REJECTED',
+] as const;
+
+export type RequestStatus = typeof REQUEST_STATUS[number];
+
+
+export const statusColors: Record<RequestStatus, string> = {
+  PENDING_REVIEW: 'bg-orange-400',
+  AWAITING_COMPANY_CONFIRMATION: 'bg-yellow-400',
+  ACCEPTED: 'bg-green-500',
+  IN_TRANSIT: 'bg-blue-500',
+  OUT_FOR_DELIVERY: 'bg-purple-500',
+  DELIVERED: 'bg-teal-500',
+  REJECTED: 'bg-red-500',
+};
 export interface Address {
     country: string;
     city: string;
