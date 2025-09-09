@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useGetRequest } from "../../api/useParcel";
 import { Badge } from "../commons/Badge";
 import type { Company, ParcelRequest } from "../../types/Types";
@@ -7,6 +7,7 @@ import { statusColors } from "../../types/Types";
 
 const RequestDetailPanel = () => {
 
+  const navigate = useNavigate()
   const { parcelId } = useParams<{ parcelId: string }>();
   const { data, isLoading, isError, error } = useGetRequest(parcelId!);
 
@@ -19,6 +20,11 @@ const RequestDetailPanel = () => {
   return (
     <div className="min-h-screen flex items-center justify-center flex-col">
       <div className="flex flex-col gap-5 min-w-5xl mx-auto">
+        <div className="flex items-center gap-2">
+          <p className="cursor-pointer hover:underline hover:underline-offset-4 hover:font-semibold" onClick={() => navigate(-1)}>all request</p>
+          <span>→</span>
+          <p className="cursor-pointer underline transition-all duration-200 underline-offset-4 font-semibold text-indigo-500" onClick={() => navigate(1)}>request details panel</p>
+        </div>
         <div className="flex justify-between items-center">
           <h1 className="text-2xl font-semibold">Your parcel details</h1>
           <Badge className={statusColors[parcel.status]}>{parcel.status}</Badge>

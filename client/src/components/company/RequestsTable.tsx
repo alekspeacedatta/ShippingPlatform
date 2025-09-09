@@ -31,8 +31,8 @@ const RequestsTable = () => {
                 <p className="cursor-pointer hover:underline hover:underline-offset-4 hover:font-semibold" onClick={() => navigate(-1)}>Dashboard</p>
                 <span>→</span>
                 <p className="cursor-pointer underline transition-all duration-200 underline-offset-4 font-semibold text-indigo-500" onClick={() => navigate(1)}>All Request</p>
-            </div>            
-            <div className="grid grid-cols-1 h-[90vh] md:h-auto overflow-y-scroll md:overflow-auto md:grid-cols-2 gap-3 md:overflow-y-scroll md:h-[90vh]">
+            </div>
+            <div className="grid grid-cols-1 h-[90vh] md:h-auto overflow-y-scroll md:overflow-auto md:grid-cols-4 gap-3 md:overflow-y-scroll md:h-[90vh]">
               {requests.map((req : ParcelRequest, i: number )=> (
                 // @ts-ignore
                 <div key={i} onClick={() => navigate(`/company/requests/${req._id}`)} className="bg-white rounded border p-3 flex items-center justify-between gap-3

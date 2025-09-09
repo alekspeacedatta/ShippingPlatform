@@ -21,6 +21,7 @@ const CreateRequest = () => {
   const back = () => setStep(s => Math.max(0, s - 1));
   const next = () => setStep(s => Math.min(steps.length, s + 1));
 
+  const [ parcelErr, setParcelErr ] = useState(false);
   const [selectedCompany, setSelectedCompany] = useState<CompanyCreate | null>(null);
   const [shippingType, setShippingType] = useState<ShippingType | string>('');
   const [kind, setKind] = useState<string>('');
@@ -79,8 +80,7 @@ const CreateRequest = () => {
       timeline: [{ status: 'PENDING_REVIEW', at: new Date().toISOString() }],
       trackingId: 'dsds',
       messages: [],
-    });
-    navigate('/client/requests');
+    },{ onError: () => { setParcelErr(true) }, onSuccess: () => { setParcelErr(false) }  }) 
   };
 
   return (
@@ -214,14 +214,25 @@ const CreateRequest = () => {
               </div>
             )}
             {step === 5 && (
-              <div className="p-14 border rounded-xl min-h-max items-center justify-center flex gap-4 overflow-y-scroll bg-white items-center ">
-                <span className="p-3 text-2xl text-white rounded-full bg-green-600">✓</span>    
-                <h1>Congratulations you request Created Succesfuly</h1>
-              </div>
-            )}
+              !parcelErr ? (
+                <div className="p-14 border rounded-xl min-h-max items-center justify-center flex flex-col gap-4 overflow-y-scroll bg-white items-center ">
+                  <div className="flex items-center gap-4">
+                    <span className="p-3 text-2xl text-white rounded-full bg-green-600">✓</span>    
+                    <h1>Congratulations you request Created Succesfuly</h1>
+                  </div>
+                  <p className="underline cursor-pointer " onClick={() => { navigate('/client/requests') } }> see the request </p>
+                </div>
+              ) : (
+                <div className="p-14 border rounded-xl min-h-max items-center justify-center flex gap-4 overflow-y-scroll bg-white items-center ">
+                  <span className="p-3 text-2xl text-white rounded-full bg-red-600">✓</span>    
+                  <h1>failed to Create request</h1>
+                </div>
+              )
+            )
+            }
 
             <div className="mt-6 flex justify-between">
-              <Button onClick={back} disabled={step === 0 || step === 5}  type="button" className="px-4 py-2 rounded bg-gray-200 disabled:opacity-50">
+              <Button onClick={back} disabled={step === 0 || (step === 5 && !parcelErr)}  type="button" className="px-4 py-2 rounded bg-gray-200 disabled:opacity-50">
                 back
               </Button>
               <Button onClick={step === steps.length ? undefined : next} type={step === steps.length? "submit" : "button"}>
