@@ -1,6 +1,4 @@
 const Track = () => {
-  return (
-    <div>dd</div>
-  )
-}
-export default Track
+  return <div>dd</div>;
+};
+export default Track;

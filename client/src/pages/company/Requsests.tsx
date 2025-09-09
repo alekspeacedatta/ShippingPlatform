@@ -1,10 +1,10 @@
-import RequestsTable from "../../components/company/RequestsTable"
+import RequestsTable from '../../components/company/RequestsTable';
 
 const Requsests = () => {
   return (
-    <>    
-      <RequestsTable/>
+    <>
+      <RequestsTable />
     </>
-  )
-}
-export default Requsests
+  );
+};
+export default Requsests;

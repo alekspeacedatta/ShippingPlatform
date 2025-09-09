@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const Input = styled.input`
   padding: 12px 16px;
@@ -16,8 +16,8 @@ export const Input = styled.input`
   &:hover {
     border-color: #8b94f5;
     &::placeholder {
-        color: #8b94f5;
-        transition: color 0.2s ease;
+      color: #8b94f5;
+      transition: color 0.2s ease;
     }
   }
   &:focus {

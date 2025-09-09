@@ -1,10 +1,16 @@
-import { useEffect, useMemo } from "react";
-import { PricingService } from "../../services/PricingService";
-import type { CompanyCreate, ShippingType } from "../../types/Types";
+import { useEffect, useMemo } from 'react';
+import { PricingService } from '../../services/PricingService';
+import type { CompanyCreate, ShippingType } from '../../types/Types';
 
 type Volumetric = { width: number | null; height: number | null; length: number | null };
-type LocFrom = { origin: { country: string; city: string }; pickUp: { country: string; city: string; line1: string; postalcode: number } };
-type LocTo = { destination: { country: string; city: string }; deliveryAddress: { country: string; city: string; line1: string; postalcode: number } };
+type LocFrom = {
+  origin: { country: string; city: string };
+  pickUp: { country: string; city: string; line1: string; postalcode: number };
+};
+type LocTo = {
+  destination: { country: string; city: string };
+  deliveryAddress: { country: string; city: string; line1: string; postalcode: number };
+};
 
 export type CalcResult = {
   volumetricWeight: number;
@@ -59,16 +65,19 @@ export default function Calculator({
     const base = PricingService.base(
       selectedCompany?.pricing.basePrice ?? 0,
       selectedCompany?.pricing.pricePerKg ?? 0,
-      chW
+      chW,
     );
 
     const fuel = PricingService.fuelSurcharge(base, selectedCompany?.pricing.fuelPct ?? 0);
-    const remote = PricingService.remoteSurcharge(base, selectedCompany?.pricing.remoteAreaPct ?? 0);
+    const remote = PricingService.remoteSurcharge(
+      base,
+      selectedCompany?.pricing.remoteAreaPct ?? 0,
+    );
     const sur = fuel + remote;
 
     const df = PricingService.distanceFactor(
       fromLocation.origin.country,
-      toLocation.destination.country
+      toLocation.destination.country,
     );
 
     const ins = PricingService.insurance(declared, selectedCompany?.pricing.insurancePct ?? 0);
@@ -103,13 +112,15 @@ export default function Calculator({
   }, [result, onChange]);
 
   return (
-    <div className="p-4 border rounded-xl min-h-28 flex flex-col gap-5 bg-white">
-      <h2 className="text-2xl font-semibold mb-2">Calculator</h2>
+    <div className="flex min-h-28 flex-col gap-5 rounded-xl border bg-white p-4">
+      <h2 className="mb-2 text-2xl font-semibold">Calculator</h2>
       <section>
         <p>volumetricWeight = {result.volumetricWeight.toFixed(2)} kg</p>
         <p>chargableWeight = {result.chargableWeight.toFixed(2)} kg</p>
         <p>distance factor = {result.distanceFactor.toFixed(2)}x</p>
-        <p>type multiplier = {String(shippingType)} - {result.typeMultiplier.toFixed(2)}x</p>
+        <p>
+          type multiplier = {String(shippingType)} - {result.typeMultiplier.toFixed(2)}x
+        </p>
         <p>base = {result.base}$</p>
         <p>fuelSurcharge = {result.fuelSurcharge}$</p>
         <p>remoteSurcharge = {result.remoteSurcharge}$</p>

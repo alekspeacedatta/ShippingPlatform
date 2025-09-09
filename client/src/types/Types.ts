@@ -29,7 +29,7 @@ export const EuCountries = [
   'slovakia',
   'slovenia',
   'spain',
-  'sweden'
+  'sweden',
 ];
 export const AsiaCountries = [
   'afghanistan',
@@ -41,7 +41,7 @@ export const AsiaCountries = [
   'brunei',
   'cambodia',
   'china',
-  'cyprus',  
+  'cyprus',
   'india',
   'indonesia',
   'iran',
@@ -78,21 +78,21 @@ export const AsiaCountries = [
   'united arab emirates',
   'uzbekistan',
   'vietnam',
-  'yemen'
+  'yemen',
 ];
 export interface Pricing {
-        basePrice: Number, 
-        pricePerKg: Number, 
-        fuelPct: Number, 
-        insurancePct: Number, 
-        typeMultipliers: {
-          SEA: Number, 
-          RAILWAY: Number, 
-          ROAD: Number, 
-          AIR: Number,
-        }
-        remoteAreaPct: Number
-    }
+  basePrice: Number;
+  pricePerKg: Number;
+  fuelPct: Number;
+  insurancePct: Number;
+  typeMultipliers: {
+    SEA: Number;
+    RAILWAY: Number;
+    ROAD: Number;
+    AIR: Number;
+  };
+  remoteAreaPct: Number;
+}
 export const REQUEST_STATUS = [
   'PENDING_REVIEW',
   'AWAITING_COMPANY_CONFIRMATION',
@@ -103,8 +103,7 @@ export const REQUEST_STATUS = [
   'REJECTED',
 ] as const;
 
-export type RequestStatus = typeof REQUEST_STATUS[number];
-
+export type RequestStatus = (typeof REQUEST_STATUS)[number];
 
 export const statusColors: Record<RequestStatus, string> = {
   PENDING_REVIEW: 'bg-orange-400',
@@ -116,59 +115,69 @@ export const statusColors: Record<RequestStatus, string> = {
   REJECTED: 'bg-red-500',
 };
 export interface Address {
-    country: string;
-    city: string;
-    line1: string;
-    postalCode: string;
+  country: string;
+  city: string;
+  line1: string;
+  postalCode: string;
 }
 export interface Location {
-    country: string,
-    city: string,
+  country: string;
+  city: string;
 }
 export interface User {
-    _id: string;
-    email: string;
-    fullName: string;
-    password: string;
-    phone?: string;
-    addresses: Address[];
-    role: 'USER';
+  _id: string;
+  email: string;
+  fullName: string;
+  password: string;
+  phone?: string;
+  addresses: Address[];
+  role: 'USER';
 }
 export interface Company {
-    _id: string,
-    name: string;
-    contactEmail: string;
-    password: string;
-    phone?: string;
-    hqAddress: Address;
-    regions: string[]; // ISO2 codes
-    supportedTypes: ShippingType[];
-    pricing: CompanyPricing;
-    role: 'COMPANY_ADMIN';
-    logoUrl?: string;
+  _id: string;
+  name: string;
+  contactEmail: string;
+  password: string;
+  phone?: string;
+  hqAddress: Address;
+  regions: string[]; // ISO2 codes
+  supportedTypes: ShippingType[];
+  pricing: CompanyPricing;
+  role: 'COMPANY_ADMIN';
+  logoUrl?: string;
 }
 export type CompanyCreate = Omit<Company, 'role'> & { _id?: string };
 export interface CompanyPricing {
-    basePrice: number; // base in currency units
-    pricePerKg: number;
-    fuelPct: number; // 0.10 = 10%
-    insurancePct: number; // 0.01 = 1%
-    typeMultipliers: Record<ShippingType, number>;
-    remoteAreaPct: number;
+  basePrice: number; // base in currency units
+  pricePerKg: number;
+  fuelPct: number; // 0.10 = 10%
+  insurancePct: number; // 0.01 = 1%
+  typeMultipliers: Record<ShippingType, number>;
+  remoteAreaPct: number;
 }
 export interface ParcelRequest {
-    // _id: string;
-    userId: string;
-    companyId?: string; // set after acceptance
-    shippingType: ShippingType;
-    parcel: { weightKg: number; lengthCm: number; widthCm: number;
-    heightCm: number; kind: 'DOCUMENTS'|'GOODS'; declaredValue: number;
-    fragile?: boolean; };
-    route: { origin: Location; destination: Location; pickupAddress:
-    Address; deliveryAddress: Address; };
-    priceEstimate: number;
-    status: RequestStatus;
-    timeline: { status: RequestStatus; at: string; note?: string }[];
-    trackingId?: string;
-    messages: { from: 'USER'|'COMPANY'; text: string; at: string }[];
+  // _id: string;
+  userId: string;
+  companyId?: string; // set after acceptance
+  shippingType: ShippingType;
+  parcel: {
+    weightKg: number;
+    lengthCm: number;
+    widthCm: number;
+    heightCm: number;
+    kind: 'DOCUMENTS' | 'GOODS';
+    declaredValue: number;
+    fragile?: boolean;
+  };
+  route: {
+    origin: Location;
+    destination: Location;
+    pickupAddress: Address;
+    deliveryAddress: Address;
+  };
+  priceEstimate: number;
+  status: RequestStatus;
+  timeline: { status: RequestStatus; at: string; note?: string }[];
+  trackingId?: string;
+  messages: { from: 'USER' | 'COMPANY'; text: string; at: string }[];
 }
