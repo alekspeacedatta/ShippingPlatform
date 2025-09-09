@@ -13,7 +13,10 @@ const Dashboard = () => {
 
     if(isLoading) return <p>Loading...</p>
     if(isError) return <p>Error: {error.message}</p>
-
+    const handleLogout = () => {
+         logout();
+        navigate("/login", { replace: true });
+    }
     return (
         <>
             <div className="min-h-screen flex justify-center items-center flex-col gap-3"> 
@@ -22,7 +25,7 @@ const Dashboard = () => {
                     <Button onClick={() => { navigation('/client/create-request') }}>Create Request</Button>
                     <Button onClick={() => { navigation('/client/requests') }}>All Requests</Button>
                     <Button onClick={() => { navigation('/client/track') }}>Track</Button>
-                    <Button onClick={logout}>Logout</Button>
+                    <Button onClick={handleLogout}>Logout</Button>
                 </div>
             </div>
         </>

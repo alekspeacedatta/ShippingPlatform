@@ -18,6 +18,7 @@ const Dashboard = () => {
     const handleLogout = () => {
         logout();
         companyLogout();
+        navigate("/login", { replace: true });
     }
     return (
         <>
