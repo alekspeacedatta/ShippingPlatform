@@ -6,29 +6,29 @@ import { useNavigate } from 'react-router-dom';
 import { REQUEST_STATUS, statusColors } from '../../types/Types';
 import { Select } from '../commons/Select';
 import { useMemo, useState } from 'react';
-const RequestList = () => {
 
-  type parcelWithId = ParcelRequest & {_id: string};
+const RequestList = () => {
+  type parcelWithId = ParcelRequest & { _id: string };
 
   const navigate = useNavigate();
   const userId = useAuthStore((state) => state.authInfo?.userId);
-  const { data = [] , isLoading, isError, error } = useGetRequests(userId);
-  const [ filteredState, setFilteredState ] = useState<RequestStatus | 'ALL'>('ALL');
+  const { data = [], isLoading, isError, error } = useGetRequests(userId);
+  const [filteredState, setFilteredState] = useState<RequestStatus | 'ALL'>('ALL');
   const requests = data as parcelWithId[];
 
-  const filtered = useMemo( () => 
-    filteredState === 'ALL' ? requests : requests.filter(e => e.status === filteredState), 
-    [ requests, filteredState]
-  )
+  const filtered = useMemo(
+    () => (filteredState === 'ALL' ? requests : requests.filter((e) => e.status === filteredState)),
+    [requests, filteredState]
+  );
 
   if (!userId) return <div className="p-4">No company selected.</div>;
   if (isLoading) return <div className="p-4">Loading requests…</div>;
   if (isError) return <div className="p-4 text-red-600">Failed to load requests. {error.message}</div>;
 
   return (
-    <div className="flex min-h-screen items-center justify-center p-3">
-      <div className="flex flex-col gap-3">
-        <div className='flex justify-between items-center'>
+    <div className="flex min-h-screen items-start justify-center p-3">
+      <div className="flex w-full max-w-full flex-col gap-3">
+        <div className="flex w-full flex-col items-start justify-between gap-3 md:flex-row md:items-center">
           <div className="flex items-center gap-2">
             <p
               className="cursor-pointer hover:font-semibold hover:underline hover:underline-offset-4"
@@ -44,49 +44,62 @@ const RequestList = () => {
               All Request
             </p>
           </div>
-          <div className='flex items-center gap-3'>
-            <p className='font-semibold'>filter requests by status</p>
-            <span className='font-semibold'>-</span>
-            <Select value={filteredState} onChange={(e) => { setFilteredState(e.target.value as RequestStatus) }} className='font-semibold'>
+
+          <div className="flex w-full flex-col items-start gap-2 sm:w-auto sm:flex-row sm:items-center">
+            <p className="font-semibold">filter requests by status</p>
+            <span className="hidden sm:inline font-semibold">-</span>
+            <Select
+              value={filteredState}
+              onChange={(e) => {
+                setFilteredState(e.target.value as RequestStatus | 'ALL');
+              }}
+              className="w-full font-semibold sm:w-64"
+            >
               <option value="ALL">ALL</option>
-              { REQUEST_STATUS.map((req : RequestStatus )  => (
-                <option key={req} value={req}>{req}</option>
-              ) ) }
+              {REQUEST_STATUS.map((req: RequestStatus) => (
+                <option key={req} value={req}>
+                  {req}
+                </option>
+              ))}
             </Select>
           </div>
         </div>
-        <div className="h-[90vh] py-1.5  md:h-[90vh]  md:overflow-y-scroll">
-          <div className='h-[max-content] w-[max-content] grid grid-cols-1 md:grid-cols-3 gap-3'>
-            { filtered.length === 0  ? (
-              <div className="text-gray-500">No requests found.</div>) : (
-                filtered.map(req => (
-                  <div
-              key={req._id}
-                onClick={() => navigate(`/client/requests/${req._id}`)}
-                className="flex h-[10vh] w-[30vw] transform cursor-pointer items-center justify-between gap-3 rounded border bg-white p-3 transition-transform duration-200 hover:-translate-y-2 hover:shadow-lg"
-              >
-                <section className="flex flex-col gap-2">
-                  <p className="text-xl font-semibold">
-                    {req.route.origin.country} → {req.route.destination.country}
-                  </p>
-                  <section className="flex items-center gap-3">
-                    <p className="text-sm text-gray-600">
-                      <span className="font-semibold">Type:</span> {req.shippingType}
+
+        <div className="h-[90vh] overflow-y-auto py-1.7">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {filtered.length === 0 ? (
+              <div className="col-span-full rounded-lg border bg-white p-6 text-gray-500">No requests found.</div>
+            ) : (
+              filtered.map((req) => (
+                <div
+                  key={req._id}
+                  onClick={() => navigate(`/client/requests/${req._id}`)}
+                  className="flex w-full cursor-pointer items-center justify-between gap-3 rounded-lg border bg-white p-4 transform transition-transform duration-200 hover:-translate-y-2 hover:shadow-lg"
+                >
+                  <section className="min-w-0 flex flex-col gap-1">
+                    <p className="truncate text-sm font-semibold md:text-base lg:text-lg">
+                      {req.route.origin.country} → {req.route.destination.country}
                     </p>
-                    <p className="text-sm text-gray-600">
-                      <span className="font-semibold">Price estimate:</span> {req.priceEstimate}$
-                    </p>
+                    <section className="flex flex-wrap items-center gap-x-4 gap-y-1">
+                      <p className="text-xs text-gray-600 md:text-sm">
+                        <span className="font-semibold">Type:</span> {req.shippingType}
+                      </p>
+                      <p className="text-xs text-gray-600 md:text-sm">
+                        <span className="font-semibold">Price estimate:</span> {req.priceEstimate}$
+                      </p>
+                    </section>
                   </section>
-                </section>  
-                <Badge className={statusColors[req.status]}> {req.status.replace(/_/g, ' ')} </Badge>
-              </div> 
-                ))
+                  <Badge className={statusColors[req.status]}>
+                    <span className="text-xs md:text-sm lg:text-base">{req.status.replace(/_/g, ' ')}</span>
+                  </Badge>
+                </div>
+              ))
             )}
           </div>
-
         </div>
       </div>
     </div>
   );
 };
+
 export default RequestList;
