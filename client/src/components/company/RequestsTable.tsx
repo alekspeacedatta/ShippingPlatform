@@ -21,32 +21,14 @@ const RequestsTable = () => {
 
   if (!companyId) return <div className="p-4">No company selected.</div>;
   if (isLoading) return <div className="p-4">Loading requests…</div>;
-  if (isError)
-    return <div className="p-4 text-red-600">Failed to load requests. {error.message}</div>;
+  if (isError) return <div className="p-4 text-red-600">Failed to load requests. {error.message}</div>;
 
   return (
-    <div className="flex min-h-screen items-center justify-center p-3">
-      <div className="flex flex-col gap-3">
-        <div className="flex items-center gap-2">
-          <p
-            className="cursor-pointer hover:font-semibold hover:underline hover:underline-offset-4"
-            onClick={() => navigate(-1)}
-          >
-            Dashboard
-          </p>
-          <span>→</span>
-          <p
-            className="cursor-pointer font-semibold text-indigo-500 underline underline-offset-4 transition-all duration-200"
-            onClick={() => navigate(1)}
-          >
-            All Request
-          </p>
-        </div>
         <div className="grid h-[90vh] grid-cols-1 gap-3 overflow-y-scroll md:h-[90vh] md:h-auto md:grid-cols-3 md:overflow-auto md:overflow-y-scroll">
           {requests.map((req: ParcelRequest, i: number) => (
-            // @ts-ignore
             <div
-              key={i}
+            key={i}
+            // @ts-ignore
               onClick={() => navigate(`/company/requests/${req._id}`)}
               className="flex w-[30vw] transform cursor-pointer items-center justify-between gap-3 rounded border bg-white p-3 transition-transform duration-200 hover:-translate-y-1 hover:shadow-lg"
             >
@@ -67,8 +49,6 @@ const RequestsTable = () => {
             </div>
           ))}
         </div>
-      </div>
-    </div>
   );
 };
 export default RequestsTable;
