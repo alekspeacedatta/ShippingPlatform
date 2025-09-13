@@ -13,11 +13,10 @@ const RequestsTable = () => {
   const navigate = useNavigate();
   const companyId = useCompanyStore((s) => s.companyInfo?.companyId);
 
-  const { data, isLoading, isError, error } = useGetRequests(companyId);
+  const { data = [], isLoading, isError, error } = useGetRequests(companyId);
   const [filteredState, setFilteredState] = useState<RequestStatus | 'ALL'>('ALL');
 
-  const requests = (data ?? []) as ParcelWithId[];
-
+  const requests = data as ParcelWithId[];
   const filtered = useMemo(
     () => (filteredState === 'ALL' ? requests : requests.filter((r) => r.status === filteredState)),
     [requests, filteredState]
@@ -29,8 +28,9 @@ const RequestsTable = () => {
 
   return (
     <>
-      <div className="mb-3 flex w-full flex-col items-start gap-2 sm:flex-row sm:items-center sm:justify-end">
+      <div className="flex w-full flex-col items-start gap-2 sm:w-auto sm:flex-row sm:items-center sm:justify-end">
         <p className="font-semibold">filter requests by status</p>
+        <span className="hidden font-semibold sm:inline">-</span>
         <Select
           value={filteredState}
           onChange={(e) => setFilteredState(e.target.value as RequestStatus | 'ALL')}
@@ -45,7 +45,7 @@ const RequestsTable = () => {
         </Select>
       </div>
 
-      <div className="h-[70vh] overflow-y-auto md:h-[80vh]">
+      <div className="h-[90vh] overflow-y-auto py-1.7">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {filtered.length === 0 ? (
             <div className="col-span-full rounded-lg border bg-white p-6 text-gray-500">No requests found.</div>
@@ -54,7 +54,7 @@ const RequestsTable = () => {
               <div
                 key={req._id}
                 onClick={() => navigate(`/company/requests/${req._id}`)}
-                className="flex items-center justify-between gap-3 rounded-lg border bg-white p-4 transform transition-transform duration-200 hover:-translate-y-1 hover:shadow-lg"
+                className="flex w-full cursor-pointer items-center justify-between gap-3 rounded-lg border bg-white p-4 transform transition-transform duration-200 hover:-translate-y-2 hover:shadow-lg"
               >
                 <section className="min-w-0 flex flex-col gap-1">
                   <p className="truncate text-sm font-semibold md:text-base lg:text-lg">

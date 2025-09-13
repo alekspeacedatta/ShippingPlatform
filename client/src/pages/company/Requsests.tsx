@@ -1,29 +1,34 @@
 import RequestsTable from '../../components/company/RequestsTable';
 import { useNavigate } from 'react-router-dom';
 
-const Requsests = () => {
+const Requests = () => {
   const navigate = useNavigate();
+
   return (
-    <div className="flex min-h-screen items-center justify-center p-3">
+    <div className="flex min-h-screen items-start justify-center p-3">
       <div className="flex w-full max-w-full flex-col gap-3">
-        <div className="flex items-center gap-2 absolute">
-          <p
-            className="cursor-pointer hover:font-semibold hover:underline hover:underline-offset-4"
-            onClick={() => navigate(-1)}
-          >
-            Dashboard
-          </p>
-          <span>→</span>
-          <p
-            className="cursor-pointer font-semibold text-indigo-500 underline underline-offset-4 transition-all duration-200"
-            onClick={() => navigate(1)}
-          >
-            All Request
-          </p>
+        <div className="flex w-full flex-col items-start justify-between gap-3 md:flex-row md:items-center">
+          <div className="flex items-center gap-2 absolute top-9.125">
+            <p
+              className="cursor-pointer hover:font-semibold hover:underline hover:underline-offset-4"
+              onClick={() => navigate(-1)}
+            >
+              Dashboard
+            </p>
+            <span>→</span>
+            <p
+              className="cursor-pointer font-semibold text-indigo-500 underline underline-offset-4 transition-all duration-200"
+              onClick={() => navigate(1)}
+            >
+              All Request
+            </p>
+          </div>
         </div>
+
         <RequestsTable />
       </div>
     </div>
   );
 };
-export default Requsests;
+
+export default Requests;
