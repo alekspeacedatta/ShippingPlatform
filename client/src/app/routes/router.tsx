@@ -1,20 +1,20 @@
 // routes/router.tsx
-import { createBrowserRouter, Outlet } from 'react-router-dom'
-import Login from '../../pages/auth/Login'
-import RegisterUser from '../../pages/auth/RegisterUser'
-import RegisterCompany from '../../pages/auth/RegisterCompany'
-import ProtectedRoute from './ProtectedRoute'
-import PublicOnlyRoute from './PublicOnlyRoutes'
+import { createBrowserRouter, Outlet } from 'react-router-dom';
+import Login from '../../pages/auth/Login';
+import RegisterUser from '../../pages/auth/RegisterUser';
+import RegisterCompany from '../../pages/auth/RegisterCompany';
+import ProtectedRoute from './ProtectedRoute';
+import PublicOnlyRoute from './PublicOnlyRoutes';
 
-import ClientDashboard from '../../pages/client/Dashboard'
-import CompanyDashboard from '../../pages/company/Dashboard'
-import CreateRequest from '../../pages/client/CreateRequest'
-import RequestList from '../../components/client/RequestList'
-import RequestDetail from '../../components/client/RequestDetail'
-import RequestDetailPanel from '../../components/company/RequestDetailPanel'
-import Requsests from '../../pages/company/Requsests'
-import Pricing from '../../pages/company/Pricing'
-import Settings from '../../pages/company/Settings'
+import ClientDashboard from '../../pages/client/Dashboard';
+import CompanyDashboard from '../../pages/company/Dashboard';
+import CreateRequest from '../../pages/client/CreateRequest';
+import RequestList from '../../components/client/RequestList';
+import RequestDetail from '../../components/client/RequestDetail';
+import RequestDetailPanel from '../../components/company/RequestDetailPanel';
+import Requsests from '../../pages/company/Requsests';
+import Pricing from '../../pages/company/Pricing';
+import Settings from '../../pages/company/Settings';
 
 export const router = createBrowserRouter([
   {
@@ -82,4 +82,4 @@ export const router = createBrowserRouter([
       },
     ],
   },
-])
+]);

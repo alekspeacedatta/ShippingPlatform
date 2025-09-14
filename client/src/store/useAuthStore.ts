@@ -1,14 +1,14 @@
-import { create } from 'zustand'
-import { createJSONStorage, persist } from 'zustand/middleware'
+import { create } from 'zustand';
+import { createJSONStorage, persist } from 'zustand/middleware';
 interface AuthInfo {
-  token: string
-  role: 'USER' | 'COMPANY_ADMIN'
-  userId: string
+  token: string;
+  role: 'USER' | 'COMPANY_ADMIN';
+  userId: string;
 }
 interface AuthState {
-  authInfo: AuthInfo | null
-  setAuthInfo: (authInfo: AuthInfo) => void
-  logout: () => void
+  authInfo: AuthInfo | null;
+  setAuthInfo: (authInfo: AuthInfo) => void;
+  logout: () => void;
 }
 export const useAuthStore = create<AuthState>()(
   persist(
@@ -16,7 +16,7 @@ export const useAuthStore = create<AuthState>()(
       authInfo: null,
       setAuthInfo: (authInfo) => set({ authInfo }),
       logout: () => {
-        set({ authInfo: null })
+        set({ authInfo: null });
       },
     }),
     {
@@ -25,4 +25,4 @@ export const useAuthStore = create<AuthState>()(
       partialize: (state) => ({ authInfo: state.authInfo }),
     },
   ),
-)
+);

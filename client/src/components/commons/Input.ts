@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from 'styled-components';
 
 export const Input = styled.input`
   padding: 12px 16px;
@@ -26,4 +26,4 @@ export const Input = styled.input`
       color: #5b60acff;
     }
   }
-`
+`;
