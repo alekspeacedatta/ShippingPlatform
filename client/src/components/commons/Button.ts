@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
 
 export const Button = styled.button`
   color: white;
@@ -18,4 +18,4 @@ export const Button = styled.button`
   // &:active {
   //     transform: scale(0.98);
   // }
-`;
+`

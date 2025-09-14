@@ -1,67 +1,67 @@
-import { ASIA_COUNTRIES, EU_COUNTRIES, type ShippingType } from '../types/Types';
+import { ASIA_COUNTRIES, EU_COUNTRIES, type ShippingType } from '../types/Types'
 
 export class PricingService {
   static volumetricWeight(p: { width: number; height: number; length: number }): number {
-    return (p.width * p.height * p.length) / 5000;
+    return (p.width * p.height * p.length) / 5000
   }
   static chargableWeight(p: { weight: number; volumetricWeight: number }): number {
-    return Math.max(p.weight, p.volumetricWeight);
+    return Math.max(p.weight, p.volumetricWeight)
   }
   static distanceFactor(fromCountry: string, toCountry: string): number {
-    let distanceFactor = 0;
+    let distanceFactor = 0
     if (
       EU_COUNTRIES.includes(fromCountry.toLocaleLowerCase()) &&
       EU_COUNTRIES.includes(toCountry.toLocaleLowerCase())
     ) {
-      distanceFactor = 1;
+      distanceFactor = 1
     } else if (
       EU_COUNTRIES.includes(fromCountry.toLocaleLowerCase()) ||
       (ASIA_COUNTRIES.includes(fromCountry.toLocaleLowerCase()) &&
         EU_COUNTRIES.includes(toCountry.toLocaleLowerCase())) ||
       ASIA_COUNTRIES.includes(toCountry.toLocaleLowerCase())
     ) {
-      distanceFactor = 1.3;
+      distanceFactor = 1.3
     } else if (
       !EU_COUNTRIES.includes(fromCountry.toLocaleLowerCase()) ||
       (!ASIA_COUNTRIES.includes(fromCountry.toLocaleLowerCase()) &&
         !EU_COUNTRIES.includes(toCountry.toLocaleLowerCase())) ||
       !ASIA_COUNTRIES.includes(toCountry.toLocaleLowerCase())
     ) {
-      distanceFactor = 1.6;
+      distanceFactor = 1.6
     }
-    return distanceFactor;
+    return distanceFactor
   }
   static typeMultiplier(
     type: ShippingType,
     typeMultiplier: {
-      sea: number | undefined;
-      air: number | undefined;
-      road: number | undefined;
-      railway: number | undefined;
+      sea: number | undefined
+      air: number | undefined
+      road: number | undefined
+      railway: number | undefined
     },
   ): number | undefined {
     switch (type) {
       case 'AIR':
-        return typeMultiplier.air;
+        return typeMultiplier.air
       case 'ROAD':
-        return typeMultiplier.road;
+        return typeMultiplier.road
       case 'RAILWAY':
-        return typeMultiplier.railway;
+        return typeMultiplier.railway
       case 'SEA':
-        return typeMultiplier.sea;
+        return typeMultiplier.sea
     }
   }
   static base(basePrice: number, pricePerKg: number, chargableWeight: number): number {
-    return Number((basePrice + chargableWeight * pricePerKg).toFixed(2));
+    return Number((basePrice + chargableWeight * pricePerKg).toFixed(2))
   }
   static fuelSurcharge(base: number, fuelPtc: number): number {
-    return Number((base * fuelPtc).toFixed(2));
+    return Number((base * fuelPtc).toFixed(2))
   }
   static remoteSurcharge(base: number, remotePct: number): number {
-    return Number((base * remotePct).toFixed(2));
+    return Number((base * remotePct).toFixed(2))
   }
   static insurance(declaredValue: number, insurancePct: number): number {
-    return Number((declaredValue * insurancePct).toFixed(2));
+    return Number((declaredValue * insurancePct).toFixed(2))
   }
   static total(
     base: number,
@@ -70,6 +70,6 @@ export class PricingService {
     surcharges: number,
     insurance: number,
   ): number {
-    return Number((base * typeMultiplier * distanceFactor + surcharges + insurance).toFixed(2));
+    return Number((base * typeMultiplier * distanceFactor + surcharges + insurance).toFixed(2))
   }
 }

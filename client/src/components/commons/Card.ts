@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
 
 export const Card = styled.section`
   position: relative;
@@ -15,4 +15,4 @@ export const Card = styled.section`
     0 0 0 1px rgba(0, 0, 0, 0.05),
     0 25px 50px -12px rgba(0, 0, 0, 0.25);
   backdrop-filter: blur(0);
-`;
+`

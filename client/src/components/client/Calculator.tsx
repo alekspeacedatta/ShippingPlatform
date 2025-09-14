@@ -1,29 +1,29 @@
-import { useEffect, useMemo } from 'react';
-import { PricingService } from '../../services/PricingService';
-import type { CompanyCreate, ShippingType } from '../../types/Types';
+import { useEffect, useMemo } from 'react'
+import { PricingService } from '../../services/PricingService'
+import type { CompanyCreate, ShippingType } from '../../types/Types'
 
-type Volumetric = { width: number | null; height: number | null; length: number | null };
+type Volumetric = { width: number | null; height: number | null; length: number | null }
 type LocFrom = {
-  origin: { country: string; city: string };
-  pickUp: { country: string; city: string; line1: string; postalcode: number };
-};
+  origin: { country: string; city: string }
+  pickUp: { country: string; city: string; line1: string; postalcode: number }
+}
 type LocTo = {
-  destination: { country: string; city: string };
-  deliveryAddress: { country: string; city: string; line1: string; postalcode: number };
-};
+  destination: { country: string; city: string }
+  deliveryAddress: { country: string; city: string; line1: string; postalcode: number }
+}
 
 export type CalcResult = {
-  volumetricWeight: number;
-  chargableWeight: number;
-  typeMultiplier: number;
-  base: number;
-  fuelSurcharge: number;
-  remoteSurcharge: number;
-  surcharges: number;
-  distanceFactor: number;
-  insurance: number;
-  total: number;
-};
+  volumetricWeight: number
+  chargableWeight: number
+  typeMultiplier: number
+  base: number
+  fuelSurcharge: number
+  remoteSurcharge: number
+  surcharges: number
+  distanceFactor: number
+  insurance: number
+  total: number
+}
 
 export default function Calculator({
   volumetricData,
@@ -35,24 +35,24 @@ export default function Calculator({
   toLocation,
   onChange,
 }: {
-  volumetricData: Volumetric;
-  weightKg: number | null;
-  declaredValue: number | null;
-  shippingType: ShippingType | string;
-  selectedCompany: CompanyCreate | null;
-  fromLocation: LocFrom;
-  toLocation: LocTo;
-  onChange?: (r: CalcResult) => void;
+  volumetricData: Volumetric
+  weightKg: number | null
+  declaredValue: number | null
+  shippingType: ShippingType | string
+  selectedCompany: CompanyCreate | null
+  fromLocation: LocFrom
+  toLocation: LocTo
+  onChange?: (r: CalcResult) => void
 }) {
-  const width = Number(volumetricData.width ?? 0);
-  const height = Number(volumetricData.height ?? 0);
-  const length = Number(volumetricData.length ?? 0);
-  const weight = Number(weightKg ?? 0);
-  const declared = Number(declaredValue ?? 0);
+  const width = Number(volumetricData.width ?? 0)
+  const height = Number(volumetricData.height ?? 0)
+  const length = Number(volumetricData.length ?? 0)
+  const weight = Number(weightKg ?? 0)
+  const declared = Number(declaredValue ?? 0)
 
   const result = useMemo<CalcResult>(() => {
-    const volW = PricingService.volumetricWeight({ width, height, length });
-    const chW = PricingService.chargableWeight({ weight, volumetricWeight: volW });
+    const volW = PricingService.volumetricWeight({ width, height, length })
+    const chW = PricingService.chargableWeight({ weight, volumetricWeight: volW })
 
     // typeMultipliers
     const tm =
@@ -61,28 +61,22 @@ export default function Calculator({
         railway: selectedCompany?.pricing.typeMultipliers.RAILWAY ?? 1,
         road: selectedCompany?.pricing.typeMultipliers.ROAD ?? 1,
         air: selectedCompany?.pricing.typeMultipliers.AIR ?? 1,
-      }) ?? 1;
+      }) ?? 1
 
     const base = PricingService.base(
       selectedCompany?.pricing.basePrice ?? 0,
       selectedCompany?.pricing.pricePerKg ?? 0,
       chW,
-    );
+    )
 
-    const fuel = PricingService.fuelSurcharge(base, selectedCompany?.pricing.fuelPct ?? 0);
-    const remote = PricingService.remoteSurcharge(
-      base,
-      selectedCompany?.pricing.remoteAreaPct ?? 0,
-    );
-    const sur = fuel + remote;
+    const fuel = PricingService.fuelSurcharge(base, selectedCompany?.pricing.fuelPct ?? 0)
+    const remote = PricingService.remoteSurcharge(base, selectedCompany?.pricing.remoteAreaPct ?? 0)
+    const sur = fuel + remote
 
-    const df = PricingService.distanceFactor(
-      fromLocation.origin.country,
-      toLocation.destination.country,
-    );
+    const df = PricingService.distanceFactor(fromLocation.origin.country, toLocation.destination.country)
 
-    const ins = PricingService.insurance(declared, selectedCompany?.pricing.insurancePct ?? 0);
-    const total = PricingService.total(base, tm, df, sur, ins);
+    const ins = PricingService.insurance(declared, selectedCompany?.pricing.insurancePct ?? 0)
+    const total = PricingService.total(base, tm, df, sur, ins)
 
     return {
       volumetricWeight: volW,
@@ -95,7 +89,7 @@ export default function Calculator({
       distanceFactor: df,
       insurance: ins,
       total,
-    };
+    }
   }, [
     width,
     height,
@@ -106,15 +100,15 @@ export default function Calculator({
     selectedCompany,
     fromLocation.origin.country,
     toLocation.destination.country,
-  ]);
+  ])
 
   useEffect(() => {
-    onChange?.(result);
-  }, [result, onChange]);
+    onChange?.(result)
+  }, [result, onChange])
 
   return (
-    <div className="flex min-h-28 flex-col gap-5 rounded-xl border bg-white p-4">
-      <h2 className="mb-2 text-2xl font-semibold">Calculator</h2>
+    <div className='flex min-h-28 flex-col gap-5 rounded-xl border bg-white p-4'>
+      <h2 className='mb-2 text-2xl font-semibold'>Calculator</h2>
       <section>
         <p>volumetricWeight = {result.volumetricWeight.toFixed(2)} kg</p>
         <p>chargableWeight = {result.chargableWeight.toFixed(2)} kg</p>
@@ -127,7 +121,7 @@ export default function Calculator({
         <p>remoteSurcharge = {result.remoteSurcharge}$</p>
         <p>incurance = {result.insurance}$</p>
       </section>
-      <p className="text-2xl font-semibold">total = {result.total}$</p>
+      <p className='text-2xl font-semibold'>total = {result.total}$</p>
     </div>
-  );
+  )
 }

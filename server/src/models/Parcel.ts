@@ -1,7 +1,7 @@
-import mongoose, { Document } from 'mongoose';
-import { type ParcelRequest } from '../types/types';
-import { REQUEST_STATUS } from '../types/types';
-import { LocationSchema, AddressSchema } from './defaults';
+import mongoose, { Document } from 'mongoose'
+import { type ParcelRequest } from '../types/types'
+import { REQUEST_STATUS } from '../types/types'
+import { LocationSchema, AddressSchema } from './defaults'
 export const ParcelSchema = new mongoose.Schema({
   userId: { type: String, required: true },
   companyId: { type: String },
@@ -46,7 +46,7 @@ export const ParcelSchema = new mongoose.Schema({
     ],
     default: [],
   },
-});
+})
 export interface ParcelDocument extends ParcelRequest, Document {}
 
-export const ParcelModel = mongoose.model<ParcelDocument>('Parcel', ParcelSchema);
+export const ParcelModel = mongoose.model<ParcelDocument>('Parcel', ParcelSchema)

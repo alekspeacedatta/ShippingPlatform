@@ -1,6 +1,6 @@
-import mongoose, { Document } from 'mongoose';
-import { Company } from '../types/types';
-import { AddressSchema, CompanyPricingSchema } from './defaults';
+import mongoose, { Document } from 'mongoose'
+import { Company } from '../types/types'
+import { AddressSchema, CompanyPricingSchema } from './defaults'
 
 const CompanySchema = new mongoose.Schema({
   name: { type: String, required: true },
@@ -13,8 +13,8 @@ const CompanySchema = new mongoose.Schema({
   pricing: { type: CompanyPricingSchema, required: true },
   role: { type: String, required: true },
   logoUrl: { type: String, required: false },
-});
+})
 
 export interface CompanyDocument extends Company, Document {}
 
-export const ComapnyModel = mongoose.model<CompanyDocument>('Company', CompanySchema);
+export const ComapnyModel = mongoose.model<CompanyDocument>('Company', CompanySchema)

@@ -1,6 +1,6 @@
-import mongoose, { Document } from 'mongoose';
-import { AddressSchema } from './defaults';
-import { User } from '../types/types';
+import mongoose, { Document } from 'mongoose'
+import { AddressSchema } from './defaults'
+import { User } from '../types/types'
 
 const UserSchema = new mongoose.Schema({
   email: { type: String, required: true },
@@ -9,7 +9,7 @@ const UserSchema = new mongoose.Schema({
   phone: { type: String, required: false },
   addresses: { type: [AddressSchema], required: true },
   role: { type: String, required: true },
-});
+})
 
 export interface UserDocument extends User, Document {}
-export const UserModel = mongoose.model<UserDocument>('Client', UserSchema);
+export const UserModel = mongoose.model<UserDocument>('Client', UserSchema)

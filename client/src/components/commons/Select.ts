@@ -1,9 +1,9 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
 export const Option = styled.option`
   font-size: 15px;
   color: #222;
   background: #fff;
-`;
+`
 
 export const Select = styled.select`
   padding: 12px 16px;
@@ -14,4 +14,4 @@ export const Select = styled.select`
   color: #222;
   outline: none;
   transition: all 0.25s ease;
-`;
+`

@@ -1,5 +1,5 @@
-import mongoose from 'mongoose';
-import { CompanyPricing, Address } from '../types/types';
+import mongoose from 'mongoose'
+import { CompanyPricing, Address } from '../types/types'
 
 export const CompanyPricingSchema = new mongoose.Schema<CompanyPricing>({
   basePrice: { type: Number, required: true, min: 0 },
@@ -13,17 +13,17 @@ export const CompanyPricingSchema = new mongoose.Schema<CompanyPricing>({
     AIR: { type: Number, default: 1, min: 0 },
   },
   remoteAreaPct: { type: Number, required: true, min: 0 },
-});
+})
 export const AddressSchema = new mongoose.Schema<Address>({
   country: { type: String, required: true },
   city: { type: String, required: true },
   line1: { type: String, required: true },
   postalCode: { type: String, required: true },
-});
+})
 export const LocationSchema = new mongoose.Schema(
   {
     country: { type: String, required: true },
     city: { type: String, required: true },
   },
   { _id: false },
-);
+)
