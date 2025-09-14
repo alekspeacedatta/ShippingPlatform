@@ -41,7 +41,7 @@ export default function RegisterUser() {
                 <span>Full name</span>
                 <Input
                   type="text"
-                  placeholder="Aleksandre Kobulashvili"
+                  placeholder="name and lastname"
                   onChange={(e) =>
                     setRegisteredInfo({ ...registeredInfo, fullName: e.target.value })
                   }
@@ -53,7 +53,7 @@ export default function RegisterUser() {
                 <span>Email</span>
                 <Input
                   type="email"
-                  placeholder="luka@example.com"
+                  placeholder="someemail@example.com"
                   onChange={(e) => setRegisteredInfo({ ...registeredInfo, email: e.target.value })}
                   required
                 />

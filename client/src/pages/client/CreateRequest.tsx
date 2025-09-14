@@ -27,6 +27,7 @@ const CreateRequest = () => {
   const [kind, setKind] = useState<string>('');
   const [weightKg, setWeightKg] = useState<number | null>(null);
   const [declaredValue, setDeclaredValue] = useState<number | null>(null);
+  
   const [volumetricData, setVolumetricData] = useState<{
     width: number | null;
     height: number | null;

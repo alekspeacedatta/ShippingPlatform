@@ -14,6 +14,7 @@ import RequestDetail from '../../components/client/RequestDetail';
 import RequestDetailPanel from '../../components/company/RequestDetailPanel';
 import Requsests from '../../pages/company/Requsests';
 import Pricing from '../../pages/company/Pricing';
+import Settings from '../../pages/company/Settings';
 
 export const router = createBrowserRouter([
   {
@@ -77,11 +78,7 @@ export const router = createBrowserRouter([
       { path: 'pricing', element: <Pricing /> },
       {
         path: 'settings',
-        element: (
-          <>
-            <h1>company settings</h1>
-          </>
-        ),
+        element: <Settings/>
       },
     ],
   },

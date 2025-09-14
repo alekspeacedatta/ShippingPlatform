@@ -56,7 +56,7 @@ router.post('/company/register', async (req: Request, res: Response) => {
     const admin = new UserModel({
       email: contactEmail,
       password: hashedPassword,
-      fullName: 'aleksandre',
+      fullName: name,
       addresses: [{ country: 'ds', city: 'ds', line1: 'ds', postalCode: 'ds' }],
       phone: '',
       role: 'COMPANY_ADMIN',

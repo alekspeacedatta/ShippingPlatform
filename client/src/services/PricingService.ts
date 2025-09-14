@@ -1,4 +1,4 @@
-import { AsiaCountries, EuCountries, type ShippingType } from '../types/Types';
+import { ASIA_COUNTRIES, EU_COUNTRIES, type ShippingType } from '../types/Types';
 
 export class PricingService {
   static volumetricWeight(p: { width: number; height: number; length: number }): number {
@@ -10,22 +10,22 @@ export class PricingService {
   static distanceFactor(fromCountry: string, toCountry: string): number {
     let distanceFactor = 0;
     if (
-      EuCountries.includes(fromCountry.toLocaleLowerCase()) &&
-      EuCountries.includes(toCountry.toLocaleLowerCase())
+      EU_COUNTRIES.includes(fromCountry.toLocaleLowerCase()) &&
+      EU_COUNTRIES.includes(toCountry.toLocaleLowerCase())
     ) {
       distanceFactor = 1;
     } else if (
-      EuCountries.includes(fromCountry.toLocaleLowerCase()) ||
-      (AsiaCountries.includes(fromCountry.toLocaleLowerCase()) &&
-        EuCountries.includes(toCountry.toLocaleLowerCase())) ||
-      AsiaCountries.includes(toCountry.toLocaleLowerCase())
+      EU_COUNTRIES.includes(fromCountry.toLocaleLowerCase()) ||
+      (ASIA_COUNTRIES.includes(fromCountry.toLocaleLowerCase()) &&
+        EU_COUNTRIES.includes(toCountry.toLocaleLowerCase())) ||
+      ASIA_COUNTRIES.includes(toCountry.toLocaleLowerCase())
     ) {
       distanceFactor = 1.3;
     } else if (
-      !EuCountries.includes(fromCountry.toLocaleLowerCase()) ||
-      (!AsiaCountries.includes(fromCountry.toLocaleLowerCase()) &&
-        !EuCountries.includes(toCountry.toLocaleLowerCase())) ||
-      !AsiaCountries.includes(toCountry.toLocaleLowerCase())
+      !EU_COUNTRIES.includes(fromCountry.toLocaleLowerCase()) ||
+      (!ASIA_COUNTRIES.includes(fromCountry.toLocaleLowerCase()) &&
+        !EU_COUNTRIES.includes(toCountry.toLocaleLowerCase())) ||
+      !ASIA_COUNTRIES.includes(toCountry.toLocaleLowerCase())
     ) {
       distanceFactor = 1.6;
     }

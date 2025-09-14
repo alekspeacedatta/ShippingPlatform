@@ -1,4 +1,3 @@
-// components/client/ParcelForm.tsx
 import { useRef } from 'react';
 import { Input } from '../commons/Input';
 import { Select, Option } from '../commons/Select';
@@ -154,17 +153,12 @@ export default function ParcelForm({
           <h2 className="text-2xl font-semibold">Route:</h2>
           <section className="grid grid-cols-2 items-center gap-2">
             <section className="flex flex-col gap-2">
-              <label className="text-lg">Origin</label>
-              <Input
-                value={fromLocation.origin.country}
-                onChange={(e) =>
-                  setFromLocation((p) => ({
-                    ...p,
-                    origin: { ...p.origin, country: e.target.value },
-                  }))
-                }
-                placeholder="country"
-              />
+              <label className="text-lg font-semibold">Origin</label>
+              <Select onChange={(e) => setFromLocation((p) => ({ ...p, origin: { ...p.origin, country: e.target.value } }))}>
+                {selectedCompany?.regions.map(region => (
+                  <option key={region} value={region}>{region}</option>
+                ))}
+              </Select>
               <Input
                 value={fromLocation.origin.city}
                 onChange={(e) =>
@@ -176,16 +170,11 @@ export default function ParcelForm({
             <section className="flex flex-col gap-2">
               <label className="text-lg">Pickup address</label>
               <section className="grid grid-cols-2 gap-3">
-                <Input
-                  value={fromLocation.pickUp.country}
-                  onChange={(e) =>
-                    setFromLocation((p) => ({
-                      ...p,
-                      pickUp: { ...p.pickUp, country: e.target.value },
-                    }))
-                  }
-                  placeholder="country"
-                />
+                <Select onChange={(e) => setFromLocation((p) => ({ ...p, pickUp: { ...p.pickUp, country: e.target.value } }))}>
+                  {selectedCompany?.regions.map(region => (
+                    <option key={region} value={region}>{region}</option>
+                  ))}
+                </Select>
                 <Input
                   value={fromLocation.pickUp.city}
                   onChange={(e) =>
@@ -222,17 +211,12 @@ export default function ParcelForm({
 
           <section className="grid grid-cols-2 items-center gap-2">
             <section className="flex flex-col gap-2">
-              <label className="text-lg">Destination</label>
-              <Input
-                value={toLocation.destination.country}
-                onChange={(e) =>
-                  setToLocation((p) => ({
-                    ...p,
-                    destination: { ...p.destination, country: e.target.value },
-                  }))
-                }
-                placeholder="country"
-              />
+              <label className="text-lg font-semibold">Destination</label>
+              <Select onChange={(e) => setToLocation((p) => ({ ...p, destination: { ...p.destination, country: e.target.value } }))}>
+                  {selectedCompany?.regions.map(region => (
+                    <option key={region} value={region}>{region}</option>
+                  ))}
+                </Select>
               <Input
                 value={toLocation.destination.city}
                 onChange={(e) =>
@@ -247,16 +231,11 @@ export default function ParcelForm({
             <section className="flex flex-col gap-2">
               <label className="text-lg">delivery address</label>
               <section className="grid grid-cols-2 gap-3">
-                <Input
-                  value={toLocation.deliveryAddress.country}
-                  onChange={(e) =>
-                    setToLocation((p) => ({
-                      ...p,
-                      deliveryAddress: { ...p.deliveryAddress, country: e.target.value },
-                    }))
-                  }
-                  placeholder="country"
-                />
+                <Select onChange={(e) => setToLocation((p) => ({ ...p, deliveryAddress: { ...p.deliveryAddress, country: e.target.value } }))}>
+                  {selectedCompany?.regions.map(region => (
+                    <option key={region} value={region}>{region}</option>
+                  ))}
+                </Select>
                 <Input
                   value={toLocation.deliveryAddress.city}
                   onChange={(e) =>

@@ -54,6 +54,7 @@ export default function Calculator({
     const volW = PricingService.volumetricWeight({ width, height, length });
     const chW = PricingService.chargableWeight({ weight, volumetricWeight: volW });
 
+    // typeMultipliers
     const tm =
       PricingService.typeMultiplier(shippingType as ShippingType, {
         sea: selectedCompany?.pricing.typeMultipliers.SEA ?? 1,

@@ -1,7 +1,7 @@
 import { Button } from '../../components/commons/Button';
 import { Input } from '../../components/commons/Input';
 import { Link } from 'react-router-dom';
-import type { CompanyCreate, ShippingType } from '../../types/Types';
+import { ISO2_COUNTRY_CODES, type CompanyCreate, type ShippingType } from '../../types/Types';
 import { useRegisterCompany } from '../../api/useAuth';
 import { useState, useRef } from 'react';
 import { useGSAP } from '@gsap/react';
@@ -23,10 +23,18 @@ const RegisterCompany = () => {
       checked ? [...prev, typedValue] : prev.filter((v) => v !== typedValue),
     );
   };
+  
   const toggleRegions = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { checked, value } = e.target;
-    setRegions((prev) => (checked ? [...prev, value] : prev.filter((v) => v !== value)));
-  };
+  const { checked, value } = e.target;
+
+  if (value === "ALL") {
+    setRegions(checked ? [...ISO2_COUNTRY_CODES] : []);
+  } else {
+    setRegions((prev) =>
+      checked ? [...prev, value] : prev.filter((v) => v !== value)
+    );
+  }
+};
   const [companyInfo, setCompanyInfo] = useState<CompanyCreate>({
     _id: '',
     name: '',
@@ -52,7 +60,7 @@ const RegisterCompany = () => {
     mutate({ ...companyInfo, regions, supportedTypes: shippingType });
   };
   return (
-    <div className="flex h-[100vh] items-stretch">
+    <div className="flex overflow-hidden h-[100vh] items-stretch">
       <div className="flex shrink-0 basis-full items-center justify-center px-6 py-8 md:basis-[760px]">
         <section
           ref={formRef}
@@ -107,91 +115,40 @@ const RegisterCompany = () => {
                       placeholder="enter your logo url"
                     />
                   </section>
-                  <section className="flex flex-col gap-[10px]">
+                  <section className="flex flex-col gap-[10px] h-[14vh]">
                     <label>Regions: </label>
-                    <section className="flex flex-wrap gap-1 rounded-[8px] border-[2px] border-[#d0d4ff] bg-white p-2">
-                      <label className="flex cursor-pointer select-none items-center">
+                    <section className="flex flex-wrap gap-1 rounded-[8px] border-[2px] border-[#d0d4ff] bg-white p-2 overflow-y-auto h-[14vh]">
+                    <label className="flex cursor-pointer select-none items-center">
+                      <input
+                        onChange={toggleRegions}
+                        type="checkbox"
+                        value="ALL"
+                        checked={regions.length === ISO2_COUNTRY_CODES.length}
+                        className="peer sr-only"
+                      />
+                      <span className="peer-checked:(bg-[#aab0ff] text-white) rounded-[28px] border-[2px] border-[#aab0ff] px-3 py-2 text-[14px] text-[#aaaaaa]">
+                        All
+                      </span>
+                    </label>
+                     {ISO2_COUNTRY_CODES.map(reg => (
+                      <label key={reg} className="flex cursor-pointer select-none items-center">
                         <input
                           onChange={toggleRegions}
                           type="checkbox"
-                          value="AR"
+                          value={reg}
                           className="peer sr-only"
                         />
                         <span className="peer-checked:(bg-[#aab0ff] text-white) rounded-[28px] border-[2px] border-[#aab0ff] px-3 py-2 text-[14px] text-[#aaaaaa]">
-                          AR
+                          {reg}
                         </span>
                       </label>
-                      <label className="flex cursor-pointer select-none items-center">
-                        <input
-                          onChange={toggleRegions}
-                          type="checkbox"
-                          value="DE"
-                          className="peer sr-only"
-                        />
-                        <span className="peer-checked:(bg-[#aab0ff] text-white) rounded-[28px] border-[2px] border-[#aab0ff] px-3 py-2 text-[14px] text-[#aaaaaa]">
-                          DE
-                        </span>
-                      </label>
-                      <label className="flex cursor-pointer select-none items-center">
-                        <input
-                          onChange={toggleRegions}
-                          type="checkbox"
-                          value="FR"
-                          className="peer sr-only"
-                        />
-                        <span className="peer-checked:(bg-[#aab0ff] text-white) rounded-[28px] border-[2px] border-[#aab0ff] px-3 py-2 text-[14px] text-[#aaaaaa]">
-                          FR
-                        </span>
-                      </label>
-                      <label className="flex cursor-pointer select-none items-center">
-                        <input
-                          onChange={toggleRegions}
-                          type="checkbox"
-                          value="IT"
-                          className="peer sr-only"
-                        />
-                        <span className="peer-checked:(bg-[#aab0ff] text-white) rounded-[28px] border-[2px] border-[#aab0ff] px-3 py-2 text-[14px] text-[#aaaaaa]">
-                          IT
-                        </span>
-                      </label>
-                      <label className="flex cursor-pointer select-none items-center">
-                        <input
-                          onChange={toggleRegions}
-                          type="checkbox"
-                          value="US"
-                          className="peer sr-only"
-                        />
-                        <span className="peer-checked:(bg-[#aab0ff] text-white) rounded-[28px] border-[2px] border-[#aab0ff] px-3 py-2 text-[14px] text-[#aaaaaa]">
-                          US
-                        </span>
-                      </label>
-                      <label className="flex cursor-pointer select-none items-center">
-                        <input
-                          onChange={toggleRegions}
-                          type="checkbox"
-                          value="UK"
-                          className="peer sr-only"
-                        />
-                        <span className="peer-checked:(bg-[#aab0ff] text-white) rounded-[28px] border-[2px] border-[#aab0ff] px-3 py-2 text-[14px] text-[#aaaaaa]">
-                          UK
-                        </span>
-                      </label>
-                      <label className="flex cursor-pointer select-none items-center">
-                        <input
-                          onChange={toggleRegions}
-                          type="checkbox"
-                          value="GE"
-                          className="peer sr-only"
-                        />
-                        <span className="peer-checked:(bg-[#aab0ff] text-white) rounded-[28px] border-[2px] border-[#aab0ff] px-3 py-2 text-[14px] text-[#aaaaaa]">
-                          GE
-                        </span>
-                      </label>
+                     ))}
                     </section>
                   </section>
+                  
                   <section className="flex flex-col gap-[10px]">
                     <label>Shipping types: </label>
-                    <section className="flex flex-wrap gap-1 rounded-[8px] border-[2px] border-[#d0d4ff] bg-white p-2">
+                    <section className="flex flex-wrap gap-1 rounded-[8px] border-[2px] border-[#d0d4ff]  bg-white p-2">
                       <label className="flex cursor-pointer select-none items-center">
                         <input
                           type="checkbox"
