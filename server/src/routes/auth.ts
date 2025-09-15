@@ -1,8 +1,9 @@
 import { Router, Request, Response } from 'express'
-import { UserDocument, UserModel } from '../models/User'
+import { UserModel } from '../models/User'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
-import { authenticateJWT } from '../middleware'
+import { authenticateJWT } from '../middleware';
+
 import { ComapnyModel } from '../models/Company'
 const router = Router()
 

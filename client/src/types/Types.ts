@@ -1,4 +1,4 @@
-export const BASE_URL = 'http://localhost:5000';
+export const BASE_URL = 'https://shippingplatform.onrender.com';
 export type Role = 'USER' | 'COMPANY_ADMIN';
 export type ShippingType = 'SEA' | 'RAILWAY' | 'ROAD' | 'AIR';
 export const EU_COUNTRIES = [

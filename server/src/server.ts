@@ -1,33 +1,38 @@
-import cors from 'cors'
-import { connectDB } from './config/db'
-import authRoutes from './routes/auth'
-import userRoutes from './routes/user'
-import companyRoutes from './routes/company'
-import parcelRoutes from './routes/parcel'
-import express from 'express'
-import dotenv from 'dotenv'
+import 'dotenv/config';
+import cors from 'cors';
+import express from 'express';
+import { connectDB } from './config/db';
+import authRoutes from './routes/auth';
+import userRoutes from './routes/user';
+import companyRoutes from './routes/company';
+import parcelRoutes from './routes/parcel';
 
-const app = express()
+const app = express();
 
-dotenv.config()
-console.log('JWT_SECRET loaded:', process.env.JWT_SECRET ? 'Yes' : 'No')
-console.log('Environment variables loaded from .env file')
+const ALLOWLIST = [
+  'http://localhost:5173',
+  'http://127.0.0.1:5173',
+  'https://alekspeacedatta.github.io',
+];
 app.use(
   cors({
-    origin: '*',
-    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    origin: (origin, cb) => cb(null, !origin || ALLOWLIST.includes(origin)),
     credentials: true,
-  }),
-)
-app.use(express.json())
+  })
+);
+app.use(express.json());
 
-app.use('/api/client', userRoutes)
-app.use('/api/auth', authRoutes)
-app.use('/api/company', companyRoutes)
-app.use('/api/parcel', parcelRoutes)
+app.get('/healthz', (_req, res) => res.send('ok'));
 
-connectDB()
-app.listen(5000, () => {
-  console.log('http://localhost:5000')
-})
+app.use('/api/client', userRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/company', companyRoutes);
+app.use('/api/parcel', parcelRoutes);
+
+
+const PORT = Number(process.env.PORT) || 5000;
+connectDB().then(() => {
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server listening on ${PORT}`);
+  });
+});
