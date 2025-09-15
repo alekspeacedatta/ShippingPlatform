@@ -1,8 +1,7 @@
-# .github/workflows/ci-cd.yml
 name: CI-CD
 on:
   push:
-    branches: [ main ]
+    branches: [ main, master ]   # ← triggers either branch
   workflow_dispatch:
 
 permissions:
@@ -27,6 +26,8 @@ jobs:
       - run: npm run typecheck
       - run: npm run lint
       - run: npm run build
+      # optional SPA fallback (harmless with HashRouter; useful if you switch later)
+      - run: cp dist/index.html dist/404.html
       - uses: actions/upload-pages-artifact@v3
         with:
           path: client/dist
