@@ -31,9 +31,10 @@ export const useLogin = () => {
       if (data.user.role === 'USER') {
         navigate('/client/dashboard', { replace: true });
       } else {
-        // @ts-ignore
         setCompanyInfo({
+          // @ts-ignore
           companyId: data.company?._id,
+          // @ts-ignore
           email: data.company?.contactEmail,
         });
         navigate('/company/dashboard', { replace: true });

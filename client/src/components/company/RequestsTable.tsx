@@ -45,7 +45,7 @@ const RequestsTable = () => {
         </Select>
       </div>
 
-      <div className="py-1.7 h-[90vh] overflow-y-auto">
+      <div className="py-1.7 h-[79vh] overflow-y-auto">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {filtered.length === 0 ? (
             <div className="col-span-full rounded-lg border bg-white p-6 text-gray-500">No requests found.</div>

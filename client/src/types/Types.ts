@@ -187,18 +187,13 @@ export const NORTH_AMERICA_COUNTRIES = [
 export const SOUTH_AMERICA_COUNTRIES = ['AR', 'BO', 'BR', 'CL', 'CO', 'EC', 'GY', 'PY', 'PE', 'SR', 'UY', 'VE'];
 
 export const OCEANIA_COUNTRIES = ['AU', 'NZ', 'FJ', 'PG', 'SB', 'VU', 'WS', 'TO', 'TV', 'KI', 'MH', 'FM', 'PW', 'NR'];
-export interface Pricing {
-  basePrice: Number;
-  pricePerKg: Number;
-  fuelPct: Number;
-  insurancePct: Number;
-  typeMultipliers: {
-    SEA: Number;
-    RAILWAY: Number;
-    ROAD: Number;
-    AIR: Number;
-  };
-  remoteAreaPct: Number;
+export type Pricing = {
+  basePrice: number;
+  pricePerKg: number;
+  fuelPct: number;
+  insurancePct: number;
+  typeMultipliers: { SEA: number; RAILWAY: number; ROAD: number; AIR: number };
+  remoteAreaPct: number;
 }
 export const REQUEST_STATUS = [
   'PENDING_REVIEW',
@@ -498,7 +493,7 @@ export interface Company {
   password: string;
   phone?: string;
   hqAddress: Address;
-  regions: string[]; // ISO2 codes
+  regions: string[]; 
   supportedTypes: ShippingType[];
   pricing: CompanyPricing;
   role: 'COMPANY_ADMIN';
@@ -506,17 +501,16 @@ export interface Company {
 }
 export type CompanyCreate = Omit<Company, 'role'> & { _id?: string };
 export interface CompanyPricing {
-  basePrice: number; // base in currency units
+  basePrice: number; 
   pricePerKg: number;
-  fuelPct: number; // 0.10 = 10%
-  insurancePct: number; // 0.01 = 1%
+  fuelPct: number; 
+  insurancePct: number;
   typeMultipliers: Record<ShippingType, number>;
   remoteAreaPct: number;
 }
 export interface ParcelRequest {
-  // _id: string;
   userId: string;
-  companyId?: string; // set after acceptance
+  companyId?: string;
   shippingType: ShippingType;
   parcel: {
     weightKg: number;

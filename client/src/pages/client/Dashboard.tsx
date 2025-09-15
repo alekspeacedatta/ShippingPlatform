@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '../../components/commons/Button';
 import { useAuthStore } from '../../store/useAuthStore';
 import { useGetUser } from '../../api/useAuth';
+import ClientHeader from '../../components/client/ClientHeader';
 
 const Dashboard = () => {
   const { data: user, isLoading, isError, error } = useGetUser();
@@ -19,6 +20,7 @@ const Dashboard = () => {
   };
   return (
     <>
+      <ClientHeader/>
       <div className="flex min-h-screen flex-col items-center justify-center gap-3">
         <h1>{user?.fullName} this is your Dashboard</h1>
         <div className="flex items-center gap-10">

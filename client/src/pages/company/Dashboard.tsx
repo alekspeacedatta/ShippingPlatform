@@ -1,52 +1,48 @@
-import { useGetUser } from '../../api/useAuth';
-import { Button } from '../../components/commons/Button';
 import { useNavigate } from 'react-router-dom';
-import { useAuthStore } from '../../store/useAuthStore';
-import { useCompanyStore } from '../../store/useCompanyStore';
+import DashboardHeader from '../../components/company/dashboardHeader';
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const navigation = (route: string) => {
     navigate(route);
   };
-  const { data: admin, isLoading, isError, error } = useGetUser();
-  const logout = useAuthStore((state) => state.logout);
-  const companyLogout = useCompanyStore((state) => state.companyLogout);
-
-  if (isLoading) return <p>Loading...</p>;
-  if (isError) return <p>Error {error.message}</p>;
-  const handleLogout = () => {
-    logout();
-    companyLogout();
-    navigate('/login', { replace: true });
-  };
   return (
     <>
+      <DashboardHeader/>
       <div className="flex min-h-screen flex-col items-center justify-center gap-3">
-        <h1>{admin?.fullName} this is your Admin Dashboard</h1>
-        <div className="flex items-center gap-10">
-          <Button
-            onClick={() => {
-              navigation('/company/requests');
-            }}
+        <div className="flex items-center gap-6">
+          <div
+            onClick={() => navigation('/company/requests')}
+            className=" col-span-2 rounded-xl border-2 border-indigo-400 p-5 h-[30vh] flex flex-col justify-between cursor-pointer transform transition-transform duration-300 hover:scale-105 hover:shadow-lg"
           >
-            All Requests
-          </Button>
-          <Button
-            onClick={() => {
-              navigation('/company/pricing');
-            }}
+            <img
+              src="../../public/Screenshot 2025-09-15 162420.png"
+              className="w-full h-full object-cover rounded-lg"
+              alt="Requests"
+            />
+          </div>
+
+          <div
+            onClick={() => navigation('/company/pricing')}
+            className="rounded-xl cursor-pointer ring hover:ring-indigo-400 transform transition-transform duration-300 hover:scale-105 hover:shadow-lg p-3 w-[10vw] flex flex-col justify-between"
           >
-            pricing
-          </Button>
-          <Button
-            onClick={() => {
-              navigation('/company/settings');
-            }}
+            <img
+              src="../../Screenshot 2025-09-15 163300.png"
+              className="rounded-xl object-cover w-full h-full"
+              alt=""
+            />
+          </div>
+
+          <div
+            onClick={() => navigation('/company/settings')}
+            className="rounded-xl border-2 border-indigo-400 p-5 h-[30vh] flex flex-col justify-between cursor-pointer transform transition-transform duration-300 hover:scale-105 hover:shadow-lg"
           >
-            settings
-          </Button>
-          <Button onClick={handleLogout}>Logout</Button>
+            <img
+              src="../../public/Screenshot 2025-09-15 164708.png"
+              className="w-full h-full object-cover rounded-lg"
+              alt="Requests"
+            />
+          </div>
         </div>
       </div>
     </>
