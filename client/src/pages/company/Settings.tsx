@@ -29,13 +29,11 @@ const Settings = () => {
   const userId = useAuthStore((s) => s.authInfo?.userId) ?? '';
   const { data, isLoading, isError, error } = useGetCompany(companyId ?? '');
 
-  const { mutate, isPending } =
-    useCompanyDataUpdate?.() ?? ({ mutate: () => {}, isPending: false } as any);
+  const { mutate, isPending } = useCompanyDataUpdate?.() ?? ({ mutate: () => {}, isPending: false } as any);
 
   const [banner, setBanner] = useState<Banner>(null);
   const [errors, setErrors] = useState<FieldErrors>({});
 
-  
   const [companyData, setCompanyData] = useState<CompanyForm>({
     userId: '',
     companyId: '',
@@ -48,7 +46,6 @@ const Settings = () => {
     confirmPassword: '',
   });
 
-  
   const [initialData, setInitialData] = useState<
     Pick<CompanyForm, 'userId' | 'companyId' | 'name' | 'contactEmail' | 'phone' | 'logoUrl'>
   >({
@@ -77,41 +74,29 @@ const Settings = () => {
   }, [data, userId]);
 
   const wantsPasswordChange = Boolean(
-    companyData.currentPassword || companyData.newPassword || companyData.confirmPassword
+    companyData.currentPassword || companyData.newPassword || companyData.confirmPassword,
   );
 
   const isDirty = useMemo(() => {
-    const keys: (keyof typeof initialData)[] = [
-      'userId',
-      'companyId',
-      'name',
-      'contactEmail',
-      'phone',
-      'logoUrl',
-    ];
-    const changed =
-      keys.some((k) => (companyData as any)[k] !== (initialData as any)[k]) || wantsPasswordChange;
+    const keys: (keyof typeof initialData)[] = ['userId', 'companyId', 'name', 'contactEmail', 'phone', 'logoUrl'];
+    const changed = keys.some((k) => (companyData as any)[k] !== (initialData as any)[k]) || wantsPasswordChange;
     return changed;
   }, [companyData, initialData, wantsPasswordChange]);
 
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>Error: {error.message}</p>;
 
-  const clearFieldError = (field: keyof CompanyForm) =>
-    setErrors((e) => ({ ...e, [field]: undefined }));
+  const clearFieldError = (field: keyof CompanyForm) => setErrors((e) => ({ ...e, [field]: undefined }));
 
   const handleDataUpdate = (e: React.FormEvent) => {
     e.preventDefault();
     setBanner(null);
     setErrors({});
 
-    
     if (!isDirty) {
-    
       return;
     }
 
-    
     if (wantsPasswordChange) {
       if (!companyData.currentPassword) {
         setErrors((e) => ({ ...e, currentPassword: 'Required.' }));
@@ -137,13 +122,10 @@ const Settings = () => {
         setErrors((e) => ({ ...e, newPassword: 'Must be at least 6 characters.' }));
       }
 
-      
-      const anyPwdError =
-        !!errors.currentPassword || !!errors.newPassword || !!errors.confirmPassword;
-      
+      const anyPwdError = !!errors.currentPassword || !!errors.newPassword || !!errors.confirmPassword;
+
       const computedPwdErrors = {
-        currentPassword:
-          (!companyData.currentPassword && 'Required.') || undefined,
+        currentPassword: (!companyData.currentPassword && 'Required.') || undefined,
         newPassword:
           (!companyData.newPassword && 'Required.') ||
           (companyData.newPassword && companyData.newPassword.length < 6
@@ -183,7 +165,6 @@ const Settings = () => {
       },
       {
         onSuccess: () => {
-          
           const nextInitial = {
             userId: companyData.userId,
             companyId: companyData.companyId,
@@ -194,7 +175,6 @@ const Settings = () => {
           };
           setInitialData(nextInitial);
 
-          
           setCompanyData((p) => ({
             ...p,
             currentPassword: '',
@@ -205,7 +185,6 @@ const Settings = () => {
           setBanner({ type: 'success', text: 'Company information updated successfully.' });
         },
         onError: (err: any) => {
-          
           const fieldErrors: Record<string, string> | undefined = err?.response?.data?.errors;
           if (fieldErrors && typeof fieldErrors === 'object') {
             const mapped: FieldErrors = {};
@@ -216,18 +195,15 @@ const Settings = () => {
           }
 
           const msg =
-            (err?.response?.data?.message as string) ||
-            (err?.message as string) ||
-            'Update failed. Please try again.';
+            (err?.response?.data?.message as string) || (err?.message as string) || 'Update failed. Please try again.';
           setBanner({ type: 'error', text: msg });
         },
-      }
+      },
     );
   };
 
   const errorClass = 'ring-2 ring-red-300 border-red-300';
-  const help = (msg?: string) =>
-    msg ? <p className="mt-1 text-sm text-red-600">{msg}</p> : null;
+  const help = (msg?: string) => (msg ? <p className="mt-1 text-sm text-red-600">{msg}</p> : null);
 
   return (
     <>

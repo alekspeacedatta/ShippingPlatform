@@ -7,7 +7,7 @@ const Requests = () => {
 
   return (
     <>
-      <DashboardHeader/>
+      <DashboardHeader />
       <div className="flex items-start justify-center p-3">
         <div className="flex w-8xl max-w-full flex-col gap-3">
           <div className="flex w-full flex-col items-start justify-between gap-3 md:flex-row md:items-center">

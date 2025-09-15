@@ -1,15 +1,39 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { NavLink, useMatch, useResolvedPath, useNavigate } from 'react-router-dom';
 import { useGetUser } from '../../api/useAuth';
 import { useAuthStore } from '../../store/useAuthStore';
 import { useCompanyStore } from '../../store/useCompanyStore';
-import { Button } from '../commons/Button';
+
+const linkBase = 'inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-md no-underline';
+const activeLink = 'text-indigo-600 bg-black/5 dark:bg-white/5';
+const inactiveLink = 'text-gray-700 hover:text-indigo-600 hover:bg-black/5 dark:text-gray-200 dark:hover:bg-white/5';
+
+function DeskNavItem({ to, label }: { to: string; label: string }) {
+  const resolved = useResolvedPath(to);
+  const match = useMatch({ path: resolved.pathname, end: false });
+  const isActive = !!match;
+
+  return (
+    <div className="relative group px-1">
+      <NavLink to={to} className={[linkBase, isActive ? activeLink : inactiveLink].join(' ')}>
+        {label}
+      </NavLink>
+      <span
+        aria-hidden
+        className={[
+          'pointer-events-none absolute left-1/2 -bottom-2 h-0.5 w-6 -translate-x-1/2 rounded-full transition',
+          isActive ? 'bg-indigo-500 opacity-100' : 'bg-gray-300 opacity-0 group-hover:opacity-100 dark:bg-white/30',
+        ].join(' ')}
+      />
+    </div>
+  );
+}
 
 const ClientHeader = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
 
-  const { data: admin, isLoading, isError, error } = useGetUser();
+  const { data: client, isLoading, isError, error } = useGetUser();
   const logout = useAuthStore((s) => s.logout);
   const companyLogout = useCompanyStore((s) => s.companyLogout);
 
@@ -29,20 +53,24 @@ const ClientHeader = () => {
   if (isError) return <p>Error {error.message}</p>;
 
   return (
-    <header className="sticky top-0 z-10 backdrop-blur bg-white/70 dark:bg-dark-600/70 border-b border-black/5 dark:border-white/10">
+    <header className="sticky top-0 z-10 backdrop-blur bg-white dark:bg-dark-600/70 border-b border-black/5 dark:border-white/10">
       <div className="mx-auto max-w-6xl px-4 py-4 flex items-center justify-between">
-        <div onClick={() => go('/company/dashboard')} className="cursor-pointer select-none">
-          <h1 className="text-xl md:text-2xl font-semibold tracking-tight">
-            {admin?.fullName}
-          </h1>
-          <p className="text-sm text-gray-600 dark:text-gray-300">Admin Dashboard</p>
+        <div onClick={() => go('/client/dashboard')} className="cursor-pointer select-none">
+          <h1 className="text-xl md:text-2xl font-semibold tracking-tight">{client?.fullName}</h1>
+          <p className="text-sm text-gray-600 dark:text-gray-300">Client Dashboard</p>
         </div>
 
-        <nav className="hidden md:flex items-center gap-3">
-          <Button onClick={() => go('/client/create-request')}>Create Request</Button>
-          <Button onClick={() => go('/client/requests')}>Requests</Button>
-          <Button onClick={() => go('/client/settings')}>Settings</Button>
-          <Button onClick={handleLogout}>Logout</Button>
+        <nav className="hidden md:flex items-center gap-2">
+          <DeskNavItem to="/client/create-request" label="Create Request" />
+          <DeskNavItem to="/client/requests" label="Requests" />
+          <DeskNavItem to="/client/profile" label="Profile" />
+
+          <button
+            onClick={handleLogout}
+            className="ml-2 px-3 py-2 text-sm font-medium text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-md transition"
+          >
+            Logout
+          </button>
         </nav>
 
         <button
@@ -73,19 +101,56 @@ const ClientHeader = () => {
           open ? 'scale-y-100 opacity-100' : 'scale-y-0 opacity-0 pointer-events-none'
         }`}
       >
-        <div className="mx-auto max-w-6xl px-4 pb-4 grid gap-2">
-          <Button className="w-full" onClick={() => go('/company/requests')}>
-            All Requests
-          </Button>
-          <Button className="w-full" onClick={() => go('/company/pricing')}>
-            Pricing
-          </Button>
-          <Button className="w-full" onClick={() => go('/company/settings')}>
-            Settings
-          </Button>
-          <Button className="w-full" onClick={handleLogout}>
+        <div className="mx-auto max-w-6xl px-4 pb-4 grid gap-1">
+          <NavLink
+            to="/client/create-request"
+            onClick={() => setOpen(false)}
+            className={({ isActive }) =>
+              [
+                'block w-full rounded-lg px-3 py-2 text-sm transition',
+                isActive
+                  ? 'text-indigo-600 bg-black/5 dark:bg-white/5'
+                  : 'text-gray-800 hover:bg-black/5 dark:text-gray-200 dark:hover:bg-white/5',
+              ].join(' ')
+            }
+          >
+            Create Request
+          </NavLink>
+          <NavLink
+            to="/client/requests"
+            onClick={() => setOpen(false)}
+            className={({ isActive }) =>
+              [
+                'block w-full rounded-lg px-3 py-2 text-sm transition',
+                isActive
+                  ? 'text-indigo-600 bg-black/5 dark:bg-white/5'
+                  : 'text-gray-800 hover:bg-black/5 dark:text-gray-200 dark:hover:bg-white/5',
+              ].join(' ')
+            }
+          >
+            Requests
+          </NavLink>
+          <NavLink
+            to="/client/profile"
+            onClick={() => setOpen(false)}
+            className={({ isActive }) =>
+              [
+                'block w-full rounded-lg px-3 py-2 text-sm transition',
+                isActive
+                  ? 'text-indigo-600 bg-black/5 dark:bg-white/5'
+                  : 'text-gray-800 hover:bg-black/5 dark:text-gray-200 dark:hover:bg-white/5',
+              ].join(' ')
+            }
+          >
+            Profile
+          </NavLink>
+
+          <button
+            onClick={handleLogout}
+            className="mt-1 w-full rounded-lg px-3 py-2 text-left text-sm text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20 transition"
+          >
             Logout
-          </Button>
+          </button>
         </div>
       </div>
     </header>

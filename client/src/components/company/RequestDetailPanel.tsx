@@ -147,7 +147,9 @@ const RequestDetailPanel = () => {
         </div>
 
         <div>
-          <h2 className="text-2xl font-semibold">Total price {parcel.priceEstimate}$</h2>
+          <h2 className="text-2xl font-semibold">
+            Total price <span className="font-bold text-green-500">{parcel.priceEstimate}$</span>
+          </h2>
         </div>
       </div>
     </div>

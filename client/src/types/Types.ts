@@ -194,7 +194,7 @@ export type Pricing = {
   insurancePct: number;
   typeMultipliers: { SEA: number; RAILWAY: number; ROAD: number; AIR: number };
   remoteAreaPct: number;
-}
+};
 export const REQUEST_STATUS = [
   'PENDING_REVIEW',
   'AWAITING_COMPANY_CONFIRMATION',
@@ -493,7 +493,7 @@ export interface Company {
   password: string;
   phone?: string;
   hqAddress: Address;
-  regions: string[]; 
+  regions: string[];
   supportedTypes: ShippingType[];
   pricing: CompanyPricing;
   role: 'COMPANY_ADMIN';
@@ -501,9 +501,9 @@ export interface Company {
 }
 export type CompanyCreate = Omit<Company, 'role'> & { _id?: string };
 export interface CompanyPricing {
-  basePrice: number; 
+  basePrice: number;
   pricePerKg: number;
-  fuelPct: number; 
+  fuelPct: number;
   insurancePct: number;
   typeMultipliers: Record<ShippingType, number>;
   remoteAreaPct: number;

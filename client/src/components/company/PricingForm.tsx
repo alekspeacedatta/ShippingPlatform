@@ -107,7 +107,6 @@ const PricingForm = ({ onResult }: Props) => {
 
     if (!isDirty) return;
 
-
     const v = validate(updatedPricing);
     if (Object.keys(v).length) {
       setErrors(v);
@@ -123,7 +122,6 @@ const PricingForm = ({ onResult }: Props) => {
       return;
     }
 
-
     mutate(
       { companyId, pricing: updatedPricing },
       {
@@ -133,11 +131,10 @@ const PricingForm = ({ onResult }: Props) => {
           onResult?.({ type: 'success', text: 'Pricing updated successfully.' });
         },
         onError: (err: any) => {
-          
           const serverErrors: Record<string, string> | undefined = err?.response?.data?.errors;
           if (serverErrors && typeof serverErrors === 'object') {
             const next: FieldErrors = {};
-          
+
             Object.entries(serverErrors).forEach(([k, msg]) => {
               if (k.endsWith('basePrice')) next.basePrice = String(msg);
               else if (k.endsWith('pricePerKg')) next.pricePerKg = String(msg);
@@ -146,21 +143,16 @@ const PricingForm = ({ onResult }: Props) => {
               else if (k.endsWith('remoteAreaPct')) next.remoteAreaPct = String(msg);
               else if (k.endsWith('typeMultipliers.SEA') || k.endsWith('SEA')) next.SEA = String(msg);
               else if (k.endsWith('typeMultipliers.AIR') || k.endsWith('AIR')) next.AIR = String(msg);
-              else if (k.endsWith('typeMultipliers.RAILWAY') || k.endsWith('RAILWAY'))
-                next.RAILWAY = String(msg);
-              else if (k.endsWith('typeMultipliers.ROAD') || k.endsWith('ROAD'))
-                next.ROAD = String(msg);
+              else if (k.endsWith('typeMultipliers.RAILWAY') || k.endsWith('RAILWAY')) next.RAILWAY = String(msg);
+              else if (k.endsWith('typeMultipliers.ROAD') || k.endsWith('ROAD')) next.ROAD = String(msg);
             });
             if (Object.keys(next).length) setErrors(next);
           }
 
-          const msg =
-            err?.response?.data?.message ||
-            err?.message ||
-            'Failed to update pricing. Please try again.';
+          const msg = err?.response?.data?.message || err?.message || 'Failed to update pricing. Please try again.';
           onResult?.({ type: 'error', text: msg });
         },
-      }
+      },
     );
   };
 

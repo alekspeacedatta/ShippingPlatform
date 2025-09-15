@@ -1,5 +1,4 @@
-// pages/client/CreateRequest.tsx
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGetCompanies } from '../../api/useCompany';
 import { useCreateParcelRequest } from '../../api/useParcel';
@@ -15,12 +14,42 @@ import ClientHeader from '../../components/client/ClientHeader';
 
 const steps = ['Parcel Details', 'Route', 'Shipping Type', 'Calculator', 'Summary & Submit'];
 
+type FieldErrors = Partial<{
+  weightKg: string;
+  kind: string;
+  width: string;
+  height: string;
+  length: string;
+  declaredValue: string;
+  originCountry: string;
+  originCity: string;
+  pickupCountry: string;
+  pickupCity: string;
+  pickupLine1: string;
+  pickupPostal: string;
+  destCountry: string;
+  destCity: string;
+  deliveryCountry: string;
+  deliveryCity: string;
+  deliveryLine1: string;
+  deliveryPostal: string;
+  shippingType: string;
+  company: string;
+  calc: string;
+}>;
+
+const errorClass = 'ring-2 ring-red-300 border-red-300';
+const help = (m?: string) => (m ? <p className="mt-1 text-sm text-red-600">{m}</p> : null);
+
 const CreateRequest = () => {
   const navigate = useNavigate();
   const { data: companies = [], isLoading, isError, error } = useGetCompanies();
+
   const [step, setStep] = useState(0);
   const back = () => setStep((s) => Math.max(0, s - 1));
-  const next = () => setStep((s) => Math.min(steps.length, s + 1));
+
+  const [errors, setErrors] = useState<FieldErrors>({});
+  const clearError = (k: keyof FieldErrors) => setErrors((e) => ({ ...e, [k]: undefined }));
 
   const [parcelErr, setParcelErr] = useState(false);
   const [selectedCompany, setSelectedCompany] = useState<CompanyCreate | null>(null);
@@ -29,33 +58,17 @@ const CreateRequest = () => {
   const [weightKg, setWeightKg] = useState<number | null>(null);
   const [declaredValue, setDeclaredValue] = useState<number | null>(null);
 
-  const [volumetricData, setVolumetricData] = useState<{
-    width: number | null;
-    height: number | null;
-    length: number | null;
-  }>({ width: null, height: null, length: null });
+  const [volumetricData, setVolumetricData] = useState({
+    width: null as number | null,
+    height: null as number | null,
+    length: null as number | null,
+  });
 
-  const [fromLocation, setFromLocation] = useState<{
-    origin: { country: string; city: string };
-    pickUp: {
-      country: string;
-      city: string;
-      line1: string;
-      postalcode: number;
-    };
-  }>({
+  const [fromLocation, setFromLocation] = useState({
     origin: { country: '', city: '' },
     pickUp: { country: '', city: '', line1: '', postalcode: 0 },
   });
-  const [toLocation, setToLocation] = useState<{
-    destination: { country: string; city: string };
-    deliveryAddress: {
-      country: string;
-      city: string;
-      line1: string;
-      postalcode: number;
-    };
-  }>({
+  const [toLocation, setToLocation] = useState({
     destination: { country: '', city: '' },
     deliveryAddress: { country: '', city: '', line1: '', postalcode: 0 },
   });
@@ -65,8 +78,90 @@ const CreateRequest = () => {
   const userId = useAuthStore((s) => s.authInfo?.userId);
   const { mutate } = useCreateParcelRequest();
 
+  const pos = (v: number | null | undefined) => typeof v === 'number' && v > 0;
+  const nonNeg = (v: number | null | undefined) => typeof v === 'number' && v >= 0;
+  const nonEmpty = (s: string | null | undefined) => !!String(s ?? '').trim();
+  const posInt = (v: number | null | undefined) => typeof v === 'number' && Number.isInteger(v) && v > 0;
+
+  const validateStep0 = () => {
+    const e: FieldErrors = {};
+    if (!pos(weightKg)) e.weightKg = 'Enter weight > 0';
+    if (!nonEmpty(kind)) e.kind = 'Choose parcel kind';
+    if (!pos(volumetricData.width)) e.width = 'Enter width > 0';
+    if (!pos(volumetricData.height)) e.height = 'Enter height > 0';
+    if (!pos(volumetricData.length)) e.length = 'Enter length > 0';
+    if (!nonNeg(declaredValue)) e.declaredValue = 'Must be ≥ 0';
+    setErrors((p) => ({ ...p, ...e }));
+    return Object.keys(e).length === 0;
+  };
+
+  const validateStep1 = () => {
+    const e: FieldErrors = {};
+    if (!nonEmpty(fromLocation.origin.country)) e.originCountry = 'Required';
+    if (!nonEmpty(fromLocation.origin.city)) e.originCity = 'Required';
+    if (!nonEmpty(fromLocation.pickUp.country)) e.pickupCountry = 'Required';
+    if (!nonEmpty(fromLocation.pickUp.city)) e.pickupCity = 'Required';
+    if (!nonEmpty(fromLocation.pickUp.line1)) e.pickupLine1 = 'Required';
+    if (!posInt(fromLocation.pickUp.postalcode)) e.pickupPostal = 'Integer > 0';
+
+    if (!nonEmpty(toLocation.destination.country)) e.destCountry = 'Required';
+    if (!nonEmpty(toLocation.destination.city)) e.destCity = 'Required';
+    if (!nonEmpty(toLocation.deliveryAddress.country)) e.deliveryCountry = 'Required';
+    if (!nonEmpty(toLocation.deliveryAddress.city)) e.deliveryCity = 'Required';
+    if (!nonEmpty(toLocation.deliveryAddress.line1)) e.deliveryLine1 = 'Required';
+    if (!posInt(toLocation.deliveryAddress.postalcode)) e.deliveryPostal = 'Integer > 0';
+
+    setErrors((p) => ({ ...p, ...e }));
+    return Object.keys(e).length === 0;
+  };
+
+  const validateStep2 = () => {
+    const e: FieldErrors = {};
+    if (!selectedCompany) e.company = 'Select company';
+    if (!nonEmpty(shippingType)) e.shippingType = 'Select shipping type';
+    setErrors((p) => ({ ...p, ...e }));
+    return Object.keys(e).length === 0;
+  };
+
+  const validateStep3 = () => {
+    const e: FieldErrors = {};
+    if (!calc || !(calc.total > 0)) e.calc = 'Calculate price first';
+    setErrors((p) => ({ ...p, ...e }));
+    return Object.keys(e).length === 0;
+  };
+
+  const validateCurrentStep = (s: number) => {
+    if (s === 0) return validateStep0();
+    if (s === 1) return validateStep1();
+    if (s === 2) return validateStep2();
+    if (s === 3) return validateStep3();
+    return true;
+  };
+
+  const handleNext = () => {
+    if (!selectedCompany) {
+      setErrors((p) => ({ ...p, company: 'Select company' }));
+      return;
+    }
+    if (!validateCurrentStep(step)) return;
+    setStep((s) => Math.min(steps.length - 1, s + 1));
+  };
+
+  const companyInvalid = useMemo(() => !!errors.company, [errors.company]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    const ok0 = validateStep0();
+    const ok1 = validateStep1();
+    const ok2 = validateStep2();
+    const ok3 = validateStep3();
+    if (!ok0) setStep(0);
+    else if (!ok1) setStep(1);
+    else if (!ok2) setStep(2);
+    else if (!ok3) setStep(3);
+    if (!(ok0 && ok1 && ok2 && ok3)) return;
+
     const total = calc?.total ?? 0;
 
     mutate(
@@ -106,34 +201,32 @@ const CreateRequest = () => {
         },
         priceEstimate: total,
         status: 'AWAITING_COMPANY_CONFIRMATION',
-        timeline: [
-          {
-            status: 'AWAITING_COMPANY_CONFIRMATION',
-            at: new Date().toISOString(),
-          },
-        ],
+        timeline: [{ status: 'AWAITING_COMPANY_CONFIRMATION', at: new Date().toISOString() }],
         trackingId: 'dsds',
         messages: [],
       },
       {
         onError: () => {
           setParcelErr(true);
+          setStep(5);
         },
         onSuccess: () => {
           setParcelErr(false);
+          setStep(5);
         },
       },
     );
   };
-
+  const showSeeRequest = step === 5 && !parcelErr;
+  const isSubmitStep = step === steps.length - 1;
   return (
     <>
-      <ClientHeader/>
-      <div className="mx-auto flex min-h-screen max-w-3xl flex-col justify-center gap-5 p-6 md:max-w-5xl">
+      <ClientHeader />
+      <div className="mx-auto flex min-h-[40vh] max-w-3xl flex-col justify-center gap-5 p-6 md:max-w-5xl">
         <div className="flex items-center gap-2">
           <p
             className="cursor-pointer hover:font-semibold hover:underline hover:underline-offset-4"
-            onClick={() => navigate(-1)}
+            onClick={() => navigate('/client/dashboard')}
           >
             Dashboard
           </p>
@@ -150,13 +243,15 @@ const CreateRequest = () => {
         ) : (
           <>
             <div className="my-4 flex flex-col gap-2">
-              <h1 className="text-2xl font-semibold">select company for transfer</h1>
+              <h1 className="text-2xl font-semibold">Select company for transfer</h1>
               <Select
+                value={selectedCompany?.name ?? ''}
                 onChange={(e) => {
                   const found = companies.find((c: CompanyCreate) => c.name === e.target.value) || null;
                   setSelectedCompany(found);
+                  clearError('company');
                 }}
-                value={selectedCompany?.name ?? ''}
+                className={companyInvalid ? errorClass : ''}
               >
                 {!selectedCompany && <option value="">select company</option>}
                 {companies.map((c: CompanyCreate) => (
@@ -165,6 +260,7 @@ const CreateRequest = () => {
                   </Option>
                 ))}
               </Select>
+              {help(errors.company)}
             </div>
 
             <Stepper steps={steps} current={step} />
@@ -174,19 +270,53 @@ const CreateRequest = () => {
                 step={step}
                 selectedCompany={selectedCompany}
                 shippingType={shippingType}
-                setShippingType={(v) => setShippingType(v)}
+                setShippingType={(v) => {
+                  setShippingType(v);
+                  clearError('shippingType');
+                }}
                 kind={kind}
-                setKind={setKind}
+                setKind={(v) => {
+                  setKind(v);
+                  clearError('kind');
+                }}
                 weightKg={weightKg}
-                setWeightKg={setWeightKg}
+                setWeightKg={(v) => {
+                  setWeightKg(v);
+                  clearError('weightKg');
+                }}
                 volumetricData={volumetricData}
-                setVolumetricData={setVolumetricData}
+                setVolumetricData={(v) => {
+                  setVolumetricData(v);
+                  clearError('width');
+                  clearError('height');
+                  clearError('length');
+                }}
                 declaredValue={declaredValue}
-                setDeclaredValue={setDeclaredValue}
+                setDeclaredValue={(v) => {
+                  setDeclaredValue(v);
+                  clearError('declaredValue');
+                }}
                 fromLocation={fromLocation}
-                setFromLocation={setFromLocation}
+                setFromLocation={(u) => {
+                  setFromLocation(u);
+                  clearError('originCountry');
+                  clearError('originCity');
+                  clearError('pickupCountry');
+                  clearError('pickupCity');
+                  clearError('pickupLine1');
+                  clearError('pickupPostal');
+                }}
                 toLocation={toLocation}
-                setToLocation={setToLocation}
+                setToLocation={(u) => {
+                  setToLocation(u);
+                  clearError('destCountry');
+                  clearError('destCity');
+                  clearError('deliveryCountry');
+                  clearError('deliveryCity');
+                  clearError('deliveryLine1');
+                  clearError('deliveryPostal');
+                }}
+                errors={errors}
               />
 
               <div style={{ display: step === 3 ? 'block' : 'none' }}>
@@ -198,8 +328,12 @@ const CreateRequest = () => {
                   selectedCompany={selectedCompany}
                   fromLocation={fromLocation}
                   toLocation={toLocation}
-                  onChange={setCalc}
+                  onChange={(c) => {
+                    setCalc(c);
+                    if (c && c.total > 0) clearError('calc');
+                  }}
                 />
+                {help(errors.calc)}
               </div>
 
               {step === 4 && (
@@ -216,10 +350,12 @@ const CreateRequest = () => {
                         <span className="text-gray-500">Shipping type:</span> {shippingType || '—'}
                       </p>
                       <p>
-                        <span className="text-gray-500">Type multiplier:</span> {(calc?.typeMultiplier ?? 1).toFixed(2)}x
+                        <span className="text-gray-500">Type multiplier:</span> {(calc?.typeMultiplier ?? 1).toFixed(2)}
+                        x
                       </p>
                       <p>
-                        <span className="text-gray-500">Distance factor:</span> {(calc?.distanceFactor ?? 1).toFixed(2)}x
+                        <span className="text-gray-500">Distance factor:</span> {(calc?.distanceFactor ?? 1).toFixed(2)}
+                        x
                       </p>
                     </div>
 
@@ -310,28 +446,25 @@ const CreateRequest = () => {
                   </div>
                 </div>
               )}
+
               {step === 5 &&
                 (!parcelErr ? (
                   <div className="flex min-h-max flex-col items-center justify-center gap-4 overflow-y-scroll rounded-xl border bg-white p-14">
                     <div className="flex flex-col items-center gap-4">
                       <div className="flex items-center gap-3">
-                        <h1 className="text-xl text-green-500"> Congratulations you request Created Succesfuly </h1>
+                        <h1 className="text-xl text-green-500">
+                          Congratulations! Your request was created successfully.
+                        </h1>
                       </div>
                       <p className="text-sm text-green-500">✓ payment success ✓</p>
                     </div>
-                    <p
-                      className="cursor-pointer underline"
-                      onClick={() => {
-                        navigate('/client/requests');
-                      }}
-                    >
-                      {' '}
-                      see the request{' '}
+                    <p className="cursor-pointer underline" onClick={() => navigate('/client/requests')}>
+                      see the request
                     </p>
                   </div>
                 ) : (
                   <div className="flex min-h-max items-center justify-center gap-4 overflow-y-scroll rounded-xl border bg-white p-14">
-                    <h1 className="text-xl font-semibold text-red-500">failed to Create request</h1>
+                    <h1 className="text-xl font-semibold text-red-500">Failed to create request</h1>
                   </div>
                 ))}
 
@@ -345,10 +478,10 @@ const CreateRequest = () => {
                   back
                 </Button>
                 <Button
-                  onClick={step === steps.length ? undefined : next}
-                  type={step === steps.length ? 'submit' : 'button'}
+                  onClick={showSeeRequest ? () => navigate('/client/requests') : isSubmitStep ? undefined : handleNext}
+                  type={showSeeRequest ? 'button' : isSubmitStep ? 'submit' : 'button'}
                 >
-                  {step === steps.length - 1 ? 'Submit' : 'next'}
+                  {showSeeRequest ? 'see request' : isSubmitStep ? 'Submit' : 'next'}
                 </Button>
               </div>
             </form>
