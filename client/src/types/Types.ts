@@ -1,4 +1,4 @@
-export const BASE_URL = 'https://shippingplatform.onrender.com';
+export const BASE_URL = import.meta.env.BASE_URL
 export type Role = 'USER' | 'COMPANY_ADMIN';
 export type ShippingType = 'SEA' | 'RAILWAY' | 'ROAD' | 'AIR';
 export const EU_COUNTRIES = [
