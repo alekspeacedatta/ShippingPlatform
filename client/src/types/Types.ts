@@ -1,4 +1,4 @@
-export const BASE_URL = import.meta.env.BASE_URL
+export const BASE_URL = import.meta.env.VITE_API_URL;
 export type Role = 'USER' | 'COMPANY_ADMIN';
 export type ShippingType = 'SEA' | 'RAILWAY' | 'ROAD' | 'AIR';
 export const EU_COUNTRIES = [

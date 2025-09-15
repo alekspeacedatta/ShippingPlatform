@@ -18,8 +18,11 @@ app.use(
   cors({
     origin: (origin, cb) => cb(null, !origin || ALLOWLIST.includes(origin)),
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
   })
 );
+
 app.use(express.json());
 
 app.get('/healthz', (_req, res) => res.send('ok'));
