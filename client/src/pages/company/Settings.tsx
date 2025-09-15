@@ -6,7 +6,7 @@ import type { Company } from '../../types/Types';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../../components/commons/Button';
 import { useAuthStore } from '../../store/useAuthStore';
-import DashboardHeader from '../../components/company/dashboardHeader';
+import DashboardHeader from '../../components/company/DashboardHeader';
 
 type CompanyForm = {
   userId: string;

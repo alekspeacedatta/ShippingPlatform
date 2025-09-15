@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PricingForm, { type Banner } from '../../components/company/PricingForm';
-import DashboardHeader from '../../components/company/dashboardHeader';
+import DashboardHeader from '../../components/company/DashboardHeader';
 
 const Pricing = () => {
   const navigate = useNavigate();
