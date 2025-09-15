@@ -5,11 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
-    "lint": "eslint .",
+    "build": "vite build",
     "preview": "vite preview",
-    "format": "prettier \"src/**/*.{ts,tsx,js,jsx,json,css,md}\" --write",
-    "format:check": "prettier . --check"
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . --ext .ts,.tsx",
+    "format": "prettier -c ."
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
