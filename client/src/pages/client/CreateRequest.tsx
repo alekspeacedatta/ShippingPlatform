@@ -458,9 +458,6 @@ const CreateRequest = () => {
                       </div>
                       <p className="text-sm text-green-500">✓ payment success ✓</p>
                     </div>
-                    <p className="cursor-pointer underline" onClick={() => navigate('/client/requests')}>
-                      see the request
-                    </p>
                   </div>
                 ) : (
                   <div className="flex min-h-max items-center justify-center gap-4 overflow-y-scroll rounded-xl border bg-white p-14">
