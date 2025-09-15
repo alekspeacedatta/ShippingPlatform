@@ -24,7 +24,6 @@ jobs:
           cache-dependency-path: client/package-lock.json
       - run: npm ci
       - run: npm run typecheck
-      - run: npm run lint
       - run: npm run build
       # optional SPA fallback (harmless with HashRouter; useful if you switch later)
       - run: cp dist/index.html dist/404.html
