@@ -1,4 +1,4 @@
-import DashboardHeader from '../../components/company/dashboardHeader';
+import DashboardHeader from '../../components/company/DashboardHeader';
 import RequestsTable from '../../components/company/RequestsTable';
 import { useNavigate } from 'react-router-dom';
 
