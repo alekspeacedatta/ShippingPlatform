@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGetCompanies } from '../../api/useCompany';
 import { useCreateParcelRequest } from '../../api/useParcel';
@@ -77,6 +77,8 @@ const CreateRequest = () => {
 
   const userId = useAuthStore((s) => s.authInfo?.userId);
   const { mutate } = useCreateParcelRequest();
+
+  const formRef = useRef<HTMLFormElement>(null);
 
   const pos = (v: number | null | undefined) => typeof v === 'number' && v > 0;
   const nonNeg = (v: number | null | undefined) => typeof v === 'number' && v >= 0;
@@ -167,7 +169,7 @@ const CreateRequest = () => {
     mutate(
       {
         userId: userId!,
-        companyId: (selectedCompany)?._id,
+        companyId: selectedCompany?._id,
         shippingType: shippingType as ShippingType,
         parcel: {
           weightKg: n(weightKg),
@@ -209,16 +211,18 @@ const CreateRequest = () => {
         onError: () => {
           setParcelErr(true);
           setStep(5);
+          
         },
         onSuccess: () => {
           setParcelErr(false);
-          setStep(5);
+          setStep(5); 
         },
       },
     );
   };
-  const showSeeRequest = step === 5 && !parcelErr;
+
   const isSubmitStep = step === steps.length - 1;
+
   return (
     <>
       <ClientHeader />
@@ -265,223 +269,248 @@ const CreateRequest = () => {
 
             <Stepper steps={steps} current={step} />
 
-            <form onSubmit={handleSubmit} className="flex min-h-28 flex-col justify-center rounded-xl border p-4">
-              <ParcelForm
-                step={step}
-                selectedCompany={selectedCompany}
-                shippingType={shippingType}
-                setShippingType={(v) => {
-                  setShippingType(v);
-                  clearError('shippingType');
-                }}
-                kind={kind}
-                setKind={(v) => {
-                  setKind(v);
-                  clearError('kind');
-                }}
-                weightKg={weightKg}
-                setWeightKg={(v) => {
-                  setWeightKg(v);
-                  clearError('weightKg');
-                }}
-                volumetricData={volumetricData}
-                setVolumetricData={(v) => {
-                  setVolumetricData(v);
-                  clearError('width');
-                  clearError('height');
-                  clearError('length');
-                }}
-                declaredValue={declaredValue}
-                setDeclaredValue={(v) => {
-                  setDeclaredValue(v);
-                  clearError('declaredValue');
-                }}
-                fromLocation={fromLocation}
-                setFromLocation={(u) => {
-                  setFromLocation(u);
-                  clearError('originCountry');
-                  clearError('originCity');
-                  clearError('pickupCountry');
-                  clearError('pickupCity');
-                  clearError('pickupLine1');
-                  clearError('pickupPostal');
-                }}
-                toLocation={toLocation}
-                setToLocation={(u) => {
-                  setToLocation(u);
-                  clearError('destCountry');
-                  clearError('destCity');
-                  clearError('deliveryCountry');
-                  clearError('deliveryCity');
-                  clearError('deliveryLine1');
-                  clearError('deliveryPostal');
-                }}
-                errors={errors}
-              />
-
-              <div style={{ display: step === 3 ? 'block' : 'none' }}>
-                <Calculator
-                  volumetricData={volumetricData}
-                  weightKg={weightKg}
-                  declaredValue={declaredValue}
-                  shippingType={shippingType}
-                  selectedCompany={selectedCompany}
-                  fromLocation={fromLocation}
-                  toLocation={toLocation}
-                  onChange={(c) => {
-                    setCalc(c);
-                    if (c && c.total > 0) clearError('calc');
-                  }}
-                />
-                {help(errors.calc)}
-              </div>
-
-              {step === 4 && (
-                <div className="flex h-[50vh] min-h-28 flex-col gap-4 overflow-y-scroll rounded-xl border bg-white p-4">
-                  <h2 className="text-xl font-semibold">Summary & Submit</h2>
-
-                  <div className="grid grid-cols-1 gap-4 bg-white md:grid-cols-2">
-                    <div className="rounded-lg border bg-white p-4">
-                      <h3 className="mb-2 font-semibold">Company & Shipping</h3>
-                      <p>
-                        <span className="text-gray-500">Company:</span> {selectedCompany?.name ?? '—'}
-                      </p>
-                      <p>
-                        <span className="text-gray-500">Shipping type:</span> {shippingType || '—'}
-                      </p>
-                      <p>
-                        <span className="text-gray-500">Type multiplier:</span> {(calc?.typeMultiplier ?? 1).toFixed(2)}
-                        x
-                      </p>
-                      <p>
-                        <span className="text-gray-500">Distance factor:</span> {(calc?.distanceFactor ?? 1).toFixed(2)}
-                        x
-                      </p>
-                    </div>
-
-                    <div className="rounded-lg border bg-white p-4">
-                      <h3 className="mb-2 font-semibold">Parcel</h3>
-                      <p>
-                        <span className="text-gray-500">Kind:</span> {String(kind) || '—'}
-                      </p>
-                      <p>
-                        <span className="text-gray-500">Weight:</span> {weightKg ?? '—'} kg
-                      </p>
-                      <p>
-                        <span className="text-gray-500">Size (W×H×L):</span> {volumetricData.width ?? '—'}×
-                        {volumetricData.height ?? '—'}×{volumetricData.length ?? '—'} cm
-                      </p>
-                      <p>
-                        <span className="text-gray-500">Declared value:</span> ${declaredValue ?? '—'}
-                      </p>
-                      <p>
-                        <span className="text-gray-500">Volumetric weight:</span>{' '}
-                        {(calc?.volumetricWeight ?? 0).toFixed(2)} kg
-                      </p>
-                      <p>
-                        <span className="text-gray-500">Chargeable weight:</span>{' '}
-                        {(calc?.chargableWeight ?? 0).toFixed(2)} kg
-                      </p>
-                    </div>
-
-                    <div className="rounded-lg border bg-white p-4">
-                      <h3 className="mb-2 font-semibold">Route</h3>
-                      <p className="text-sm">
-                        <span className="text-gray-500">Origin:</span> {fromLocation.origin.country},{' '}
-                        {fromLocation.origin.city}
-                      </p>
-                      <p className="text-sm">
-                        <span className="text-gray-500">Destination:</span> {toLocation.destination.country},{' '}
-                        {toLocation.destination.city}
-                      </p>
-
-                      <div className="mt-3">
-                        <p className="text-sm text-gray-500">Pickup address</p>
-                        <p className="text-sm">
-                          {fromLocation.pickUp.country}, {fromLocation.pickUp.city}
-                        </p>
-                        <p className="text-sm">
-                          {fromLocation.pickUp.line1}
-                          {fromLocation.pickUp.postalcode ? `, ${fromLocation.pickUp.postalcode}` : ''}
-                        </p>
-                      </div>
-
-                      <div className="mt-3">
-                        <p className="text-sm text-gray-500">Delivery address</p>
-                        <p className="text-sm">
-                          {toLocation.deliveryAddress.country}, {toLocation.deliveryAddress.city}
-                        </p>
-                        <p className="text-sm">
-                          {toLocation.deliveryAddress.line1}
-                          {toLocation.deliveryAddress.postalcode ? `, ${toLocation.deliveryAddress.postalcode}` : ''}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="rounded-lg border bg-white p-4">
-                      <h3 className="mb-2 font-semibold">Pricing breakdown</h3>
-                      <p>
-                        <span className="text-gray-500">Base:</span> ${Number(calc?.base ?? 0).toFixed(2)}
-                      </p>
-                      <p>
-                        <span className="text-gray-500">Fuel surcharge:</span> $
-                        {Number(calc?.fuelSurcharge ?? 0).toFixed(2)}
-                      </p>
-                      <p>
-                        <span className="text-gray-500">Remote surcharge:</span> $
-                        {Number(calc?.remoteSurcharge ?? 0).toFixed(2)}
-                      </p>
-                      <p>
-                        <span className="text-gray-500">Insurance:</span> ${Number(calc?.insurance ?? 0).toFixed(2)}
-                      </p>
-                      <p>
-                        <span className="text-gray-500">Surcharges total:</span> $
-                        {Number(calc?.surcharges ?? 0).toFixed(2)}
-                      </p>
-                    </div>
+            {step === 5 ? (
+              !parcelErr ? (
+                <div className="flex min-h-max flex-col items-center justify-center gap-4 rounded-xl border bg-white p-14">
+                  <div className="flex flex-col items-center gap-4">
+                    <h1 className="text-xl text-green-500">
+                      Congratulations! Your request was created successfully.
+                    </h1>
+                    <p className="text-sm text-green-500">✓ payment success ✓</p>
                   </div>
-
-                  <div className="border-t pt-4 text-right text-2xl font-semibold">
-                    Total: ${Number(calc?.total ?? 0).toFixed(2)}
+                  <div className="mt-6">
+                    <Button type="button" onClick={() => navigate('/client/requests')}>
+                      see request
+                    </Button>
                   </div>
                 </div>
-              )}
+              ) : (
+                <div className="flex min-h-max flex-col items-center justify-center gap-4 rounded-xl border bg-white p-14">
+                  <h1 className="text-xl font-semibold text-red-500">Failed to create request</h1>
+                  <div className="mt-6 flex gap-3">
+                    <Button type="button" onClick={() => setStep(0)}>
+                      start over
+                    </Button>
+                    <Button type="button" onClick={() => navigate('/client/requests')}>
+                      go to requests
+                    </Button>
+                  </div>
+                </div>
+              )
+            ) : (
+              <form
+                ref={formRef}
+                onSubmit={handleSubmit}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && !isSubmitStep) e.preventDefault();
+                }}
+                className="flex min-h-28 flex-col justify-center rounded-xl border p-4"
+              >
+                <ParcelForm
+                  step={step}
+                  selectedCompany={selectedCompany}
+                  shippingType={shippingType}
+                  setShippingType={(v) => {
+                    setShippingType(v);
+                    clearError('shippingType');
+                  }}
+                  kind={kind}
+                  setKind={(v) => {
+                    setKind(v);
+                    clearError('kind');
+                  }}
+                  weightKg={weightKg}
+                  setWeightKg={(v) => {
+                    setWeightKg(v);
+                    clearError('weightKg');
+                  }}
+                  volumetricData={volumetricData}
+                  setVolumetricData={(v) => {
+                    setVolumetricData(v);
+                    clearError('width');
+                    clearError('height');
+                    clearError('length');
+                  }}
+                  declaredValue={declaredValue}
+                  setDeclaredValue={(v) => {
+                    setDeclaredValue(v);
+                    clearError('declaredValue');
+                  }}
+                  fromLocation={fromLocation}
+                  setFromLocation={(u) => {
+                    setFromLocation(u);
+                    clearError('originCountry');
+                    clearError('originCity');
+                    clearError('pickupCountry');
+                    clearError('pickupCity');
+                    clearError('pickupLine1');
+                    clearError('pickupPostal');
+                  }}
+                  toLocation={toLocation}
+                  setToLocation={(u) => {
+                    setToLocation(u);
+                    clearError('destCountry');
+                    clearError('destCity');
+                    clearError('deliveryCountry');
+                    clearError('deliveryCity');
+                    clearError('deliveryLine1');
+                    clearError('deliveryPostal');
+                  }}
+                  errors={errors}
+                />
 
-              {step === 5 &&
-                (!parcelErr ? (
-                  <div className="flex min-h-max flex-col items-center justify-center gap-4 overflow-y-scroll rounded-xl border bg-white p-14">
-                    <div className="flex flex-col items-center gap-4">
-                      <div className="flex items-center gap-3">
-                        <h1 className="text-xl text-green-500">
-                          Congratulations! Your request was created successfully.
-                        </h1>
+                <div style={{ display: step === 3 ? 'block' : 'none' }}>
+                  <Calculator
+                    volumetricData={volumetricData}
+                    weightKg={weightKg}
+                    declaredValue={declaredValue}
+                    shippingType={shippingType}
+                    selectedCompany={selectedCompany}
+                    fromLocation={fromLocation}
+                    toLocation={toLocation}
+                    onChange={(c) => {
+                      setCalc(c);
+                      if (c && c.total > 0) clearError('calc');
+                    }}
+                  />
+                  {help(errors.calc)}
+                </div>
+
+                {step === 4 && (
+                  <div className="flex h-[50vh] min-h-28 flex-col gap-4 overflow-y-scroll rounded-xl border bg-white p-4">
+                    <h2 className="text-xl font-semibold">Summary & Submit</h2>
+
+                    <div className="grid grid-cols-1 gap-4 bg-white md:grid-cols-2">
+                      <div className="rounded-lg border bg-white p-4">
+                        <h3 className="mb-2 font-semibold">Company & Shipping</h3>
+                        <p>
+                          <span className="text-gray-500">Company:</span> {selectedCompany?.name ?? '—'}
+                        </p>
+                        <p>
+                          <span className="text-gray-500">Shipping type:</span> {shippingType || '—'}
+                        </p>
+                        <p>
+                          <span className="text-gray-500">Type multiplier:</span>{' '}
+                          {(calc?.typeMultiplier ?? 1).toFixed(2)}x
+                        </p>
+                        <p>
+                          <span className="text-gray-500">Distance factor:</span>{' '}
+                          {(calc?.distanceFactor ?? 1).toFixed(2)}x
+                        </p>
                       </div>
-                      <p className="text-sm text-green-500">✓ payment success ✓</p>
+
+                      <div className="rounded-lg border bg-white p-4">
+                        <h3 className="mb-2 font-semibold">Parcel</h3>
+                        <p>
+                          <span className="text-gray-500">Kind:</span> {String(kind) || '—'}
+                        </p>
+                        <p>
+                          <span className="text-gray-500">Weight:</span> {weightKg ?? '—'} kg
+                        </p>
+                        <p>
+                          <span className="text-gray-500">Size (W×H×L):</span> {volumetricData.width ?? '—'}×
+                          {volumetricData.height ?? '—'}×{volumetricData.length ?? '—'} cm
+                        </p>
+                        <p>
+                          <span className="text-gray-500">Declared value:</span> ${declaredValue ?? '—'}
+                        </p>
+                        <p>
+                          <span className="text-gray-500">Volumetric weight:</span>{' '}
+                          {(calc?.volumetricWeight ?? 0).toFixed(2)} kg
+                        </p>
+                        <p>
+                          <span className="text-gray-500">Chargeable weight:</span>{' '}
+                          {(calc?.chargableWeight ?? 0).toFixed(2)} kg
+                        </p>
+                      </div>
+
+                      <div className="rounded-lg border bg-white p-4">
+                        <h3 className="mb-2 font-semibold">Route</h3>
+                        <p className="text-sm">
+                          <span className="text-gray-500">Origin:</span> {fromLocation.origin.country},{' '}
+                          {fromLocation.origin.city}
+                        </p>
+                        <p className="text-sm">
+                          <span className="text-gray-500">Destination:</span> {toLocation.destination.country},{' '}
+                          {toLocation.destination.city}
+                        </p>
+
+                        <div className="mt-3">
+                          <p className="text-sm text-gray-500">Pickup address</p>
+                          <p className="text-sm">
+                            {fromLocation.pickUp.country}, {fromLocation.pickUp.city}
+                          </p>
+                          <p className="text-sm">
+                            {fromLocation.pickUp.line1}
+                            {fromLocation.pickUp.postalcode ? `, ${fromLocation.pickUp.postalcode}` : ''}
+                          </p>
+                        </div>
+
+                        <div className="mt-3">
+                          <p className="text-sm text-gray-500">Delivery address</p>
+                          <p className="text-sm">
+                            {toLocation.deliveryAddress.country}, {toLocation.deliveryAddress.city}
+                          </p>
+                          <p className="text-sm">
+                            {toLocation.deliveryAddress.line1}
+                            {toLocation.deliveryAddress.postalcode ? `, ${toLocation.deliveryAddress.postalcode}` : ''}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="rounded-lg border bg-white p-4">
+                        <h3 className="mb-2 font-semibold">Pricing breakdown</h3>
+                        <p>
+                          <span className="text-gray-500">Base:</span> ${Number(calc?.base ?? 0).toFixed(2)}
+                        </p>
+                        <p>
+                          <span className="text-gray-500">Fuel surcharge:</span> $
+                          {Number(calc?.fuelSurcharge ?? 0).toFixed(2)}
+                        </p>
+                        <p>
+                          <span className="text-gray-500">Remote surcharge:</span> $
+                          {Number(calc?.remoteSurcharge ?? 0).toFixed(2)}
+                        </p>
+                        <p>
+                          <span className="text-gray-500">Insurance:</span> ${Number(calc?.insurance ?? 0).toFixed(2)}
+                        </p>
+                        <p>
+                          <span className="text-gray-500">Surcharges total:</span> $
+                          {Number(calc?.surcharges ?? 0).toFixed(2)}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="border-t pt-4 text-right text-2xl font-semibold">
+                      Total: ${Number(calc?.total ?? 0).toFixed(2)}
                     </div>
                   </div>
-                ) : (
-                  <div className="flex min-h-max items-center justify-center gap-4 overflow-y-scroll rounded-xl border bg-white p-14">
-                    <h1 className="text-xl font-semibold text-red-500">Failed to create request</h1>
-                  </div>
-                ))}
+                )}
 
-              <div className="mt-6 flex justify-between">
-                <Button
-                  onClick={back}
-                  disabled={step === 0 || (step === 5 && !parcelErr)}
-                  type="button"
-                  className="rounded bg-gray-200 px-4 py-2 disabled:opacity-50"
-                >
-                  back
-                </Button>
-                <Button
-                  onClick={showSeeRequest ? () => navigate('/client/requests') : isSubmitStep ? undefined : handleNext}
-                  type={showSeeRequest ? 'button' : isSubmitStep ? 'submit' : 'button'}
-                >
-                  {showSeeRequest ? 'see request' : isSubmitStep ? 'Submit' : 'next'}
-                </Button>
-              </div>
-            </form>
+                <div className="mt-6 flex justify-between">
+                  <Button
+                    type="button"
+                    onClick={back}
+                    disabled={step === 0}
+                    className="rounded bg-gray-200 px-4 py-2 disabled:opacity-50"
+                  >
+                    back
+                  </Button>
+
+                  
+                  <Button
+                    type="button"
+                    onClick={
+                      isSubmitStep
+                        ? () => formRef.current?.requestSubmit()
+                        : handleNext
+                    }
+                  >
+                    {isSubmitStep ? 'Submit' : 'next'}
+                  </Button>
+                </div>
+              </form>
+            )}
           </>
         )}
       </div>
