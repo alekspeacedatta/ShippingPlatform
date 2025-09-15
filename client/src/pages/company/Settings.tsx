@@ -29,7 +29,7 @@ const Settings = () => {
   const userId = useAuthStore((s) => s.authInfo?.userId) ?? '';
   const { data, isLoading, isError, error } = useGetCompany(companyId ?? '');
 
-  const { mutate, isPending } = useCompanyDataUpdate?.() ?? ({ mutate: () => {}, isPending: false } as any);
+  const { mutate, isPending } = useCompanyDataUpdate?.() ?? ({ mutate: () => {}, isPending: false });
 
   const [banner, setBanner] = useState<Banner>(null);
   const [errors, setErrors] = useState<FieldErrors>({});
@@ -79,7 +79,7 @@ const Settings = () => {
 
   const isDirty = useMemo(() => {
     const keys: (keyof typeof initialData)[] = ['userId', 'companyId', 'name', 'contactEmail', 'phone', 'logoUrl'];
-    const changed = keys.some((k) => (companyData as any)[k] !== (initialData as any)[k]) || wantsPasswordChange;
+    const changed = keys.some((k) => (companyData)[k] !== (initialData)[k]) || wantsPasswordChange;
     return changed;
   }, [companyData, initialData, wantsPasswordChange]);
 
@@ -184,17 +184,19 @@ const Settings = () => {
 
           setBanner({ type: 'success', text: 'Company information updated successfully.' });
         },
-        onError: (err: any) => {
+        onError: (err) => {
+          // @ts-expect-error
           const fieldErrors: Record<string, string> | undefined = err?.response?.data?.errors;
           if (fieldErrors && typeof fieldErrors === 'object') {
             const mapped: FieldErrors = {};
             (Object.keys(fieldErrors) as (keyof CompanyForm)[]).forEach((k) => {
-              mapped[k] = fieldErrors[k] as any;
+              mapped[k] = fieldErrors[k];
             });
             setErrors(mapped);
           }
 
           const msg =
+          // @ts-expect-error
             (err?.response?.data?.message as string) || (err?.message as string) || 'Update failed. Please try again.';
           setBanner({ type: 'error', text: msg });
         },

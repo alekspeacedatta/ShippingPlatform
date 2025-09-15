@@ -167,7 +167,7 @@ const CreateRequest = () => {
     mutate(
       {
         userId: userId!,
-        companyId: (selectedCompany as any)?._id,
+        companyId: (selectedCompany)?._id,
         shippingType: shippingType as ShippingType,
         parcel: {
           weightKg: n(weightKg),

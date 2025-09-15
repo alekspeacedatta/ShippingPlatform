@@ -13,7 +13,7 @@ const RequestDetailPanel = () => {
   const { data, isLoading, isError, error } = useGetRequest(parcelId!);
   const { mutate: updateStatus, isPending } = useUpdateParcelStatus();
 
-  const raw = data as any;
+  const raw = data;
   const parcel: ParcelRequest | undefined = raw?.parcel ?? raw;
   const company: Company | undefined = raw?.company;
 

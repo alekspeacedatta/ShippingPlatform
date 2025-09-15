@@ -26,7 +26,7 @@ export const usePricingUpdate = () => {
       qc.invalidateQueries({ queryKey: ['companies'] });
       console.log('Pricing updated successfully');
     },
-    onError: (err: any) => {
+    onError: (err) => {
       console.error('Failed to update pricing:', err?.message ?? err);
     },
   });

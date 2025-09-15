@@ -119,7 +119,7 @@ const RequestDetail = () => {
                   const color = statusColors[t.status];
                   const label = t.status.replace(/_/g, ' ');
                   const when =
-                    // @ts-ignore
+                    // @ts-expect-error
                     typeof t.at === 'string' || t.at instanceof Date ? new Date(t.at).toLocaleString() : String(t.at);
 
                   return (

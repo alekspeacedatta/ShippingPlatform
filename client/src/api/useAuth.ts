@@ -32,9 +32,9 @@ export const useLogin = () => {
         navigate('/client/dashboard', { replace: true });
       } else {
         setCompanyInfo({
-          // @ts-ignore
+          // @ts-expect-error
           companyId: data.company?._id,
-          // @ts-ignore
+          // @ts-expect-error
           email: data.company?.contactEmail,
         });
         navigate('/company/dashboard', { replace: true });

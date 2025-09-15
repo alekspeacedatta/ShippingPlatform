@@ -89,8 +89,9 @@ const PricingForm = ({ onResult }: Props) => {
 
   const setField = <K extends keyof Pricing>(key: K, value: Pricing[K]) => {
     setUpdatedPricing((prev) => ({ ...prev, [key]: value }));
-    setErrors((e) => ({ ...e, [key as any]: undefined }));
-    onResult?.(null as any);
+    setErrors((e) => ({ ...e, [key]: undefined }));
+    // @ts-expect-error
+    onResult?.(null);
   };
 
   const setMultiplier = (key: keyof Pricing['typeMultipliers'], value: number) => {
@@ -99,7 +100,8 @@ const PricingForm = ({ onResult }: Props) => {
       typeMultipliers: { ...prev.typeMultipliers, [key]: value },
     }));
     setErrors((e) => ({ ...e, [key]: undefined }));
-    onResult?.(null as any);
+    // @ts-expect-error
+    onResult?.(null);
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -130,7 +132,8 @@ const PricingForm = ({ onResult }: Props) => {
           setErrors({});
           onResult?.({ type: 'success', text: 'Pricing updated successfully.' });
         },
-        onError: (err: any) => {
+        onError: (err) => {
+          // @ts-expect-error
           const serverErrors: Record<string, string> | undefined = err?.response?.data?.errors;
           if (serverErrors && typeof serverErrors === 'object') {
             const next: FieldErrors = {};
@@ -148,7 +151,7 @@ const PricingForm = ({ onResult }: Props) => {
             });
             if (Object.keys(next).length) setErrors(next);
           }
-
+          // @ts-expect-error
           const msg = err?.response?.data?.message || err?.message || 'Failed to update pricing. Please try again.';
           onResult?.({ type: 'error', text: msg });
         },

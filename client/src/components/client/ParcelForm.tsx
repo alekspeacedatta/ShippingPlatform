@@ -366,7 +366,8 @@ export default function ParcelForm({
                     <section className="flex items-center gap-2">
                       <h3 className="text-lg">{t}</h3>
                       <input
-                        onChange={(e) => setShippingType(e.target.value as any)}
+                        // @ts-expect-error
+                        onChange={(e) => setShippingType(e.target.value)}
                         checked={shippingType === t}
                         type="radio"
                         name="shippingType"

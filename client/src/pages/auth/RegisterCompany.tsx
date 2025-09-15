@@ -52,7 +52,6 @@ const RegisterCompany = () => {
   });
   const handelCompanyRegister = (e: React.FormEvent) => {
     e.preventDefault();
-    // @ts-ignore
     mutate({ ...companyInfo, regions, supportedTypes: shippingType });
   };
   return (
