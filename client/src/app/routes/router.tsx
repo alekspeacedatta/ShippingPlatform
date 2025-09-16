@@ -55,5 +55,4 @@ export const router = createHashRouter(
 
     { path: '*', element: <Navigate to="/login" replace /> },
   ],
-  { basename: '/ShippingPlatform' }
 );
