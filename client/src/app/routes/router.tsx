@@ -1,59 +1,82 @@
 // routes/router.tsx
 import { createHashRouter, Outlet, Navigate } from 'react-router-dom';
-import { lazy, Suspense, type JSX } from 'react';
-
-const Login = lazy(() => import('../../pages/auth/Login'));
-const RegisterUser = lazy(() => import('../../pages/auth/RegisterUser'));
-const RegisterCompany = lazy(() => import('../../pages/auth/RegisterCompany'));
-
-const ClientDashboard = lazy(() => import('../../pages/client/Dashboard'));
-const CreateRequest = lazy(() => import('../../pages/client/CreateRequest'));
-const RequestList = lazy(() => import('../../components/client/RequestList'));
-const RequestDetail = lazy(() => import('../../components/client/RequestDetail'));
-
-const CompanyDashboard = lazy(() => import('../../pages/company/Dashboard'));
-const Requests = lazy(() => import('../../pages/company/Requsests'));
-const RequestDetailPanel = lazy(() => import('../../components/company/RequestDetailPanel'));
-const Pricing = lazy(() => import('../../pages/company/Pricing'));
-const Settings = lazy(() => import('../../pages/company/Settings'));
-
+import Login from '../../pages/auth/Login';
+import RegisterUser from '../../pages/auth/RegisterUser';
+import RegisterCompany from '../../pages/auth/RegisterCompany';
 import ProtectedRoute from './ProtectedRoute';
 import PublicOnlyRoute from './PublicOnlyRoutes';
 
-const wrap = (el: JSX.Element) => <Suspense fallback={<div className="p-6">Loading…</div>}>{el}</Suspense>;
+import ClientDashboard from '../../pages/client/Dashboard';
+import CompanyDashboard from '../../pages/company/Dashboard';
+import CreateRequest from '../../pages/client/CreateRequest';
+import RequestList from '../../components/client/RequestList';
+import RequestDetail from '../../components/client/RequestDetail';
+import RequestDetailPanel from '../../components/company/RequestDetailPanel';
+import Requsests from '../../pages/company/Requsests';
+import Pricing from '../../pages/company/Pricing';
+import Settings from '../../pages/company/Settings';
 
-export const router = createHashRouter(
-  [
-    { path: '/', element: <Navigate to="/login" replace /> },
-    { path: '/login', element: wrap(<PublicOnlyRoute><Login /></PublicOnlyRoute>) },
-    { path: '/register/user', element: wrap(<PublicOnlyRoute><RegisterUser /></PublicOnlyRoute>) },
-    { path: '/register/company', element: wrap(<PublicOnlyRoute><RegisterCompany /></PublicOnlyRoute>) },
+export const router = createHashRouter([
+  { path: '/', element: <Navigate to="/login" replace /> },
 
-    {
-      path: '/client',
-      element: <ProtectedRoute allowed={['USER']}><Outlet /></ProtectedRoute>,
-      children: [
-        { path: 'dashboard', element: wrap(<ClientDashboard />) },
-        { path: 'create-request', element: wrap(<CreateRequest />) },
-        { path: 'requests', element: wrap(<RequestList />) },
-        { path: 'requests/:parcelId', element: wrap(<RequestDetail />) },
-        { path: 'track', element: wrap(<h1>client Track Parcel</h1>) },
-      ],
-    },
+  {
+    path: '/login',
+    element: (
+      <PublicOnlyRoute>
+        <Login />
+      </PublicOnlyRoute>
+    ),
+  },
+  {
+    path: '/register/user',
+    element: (
+      <PublicOnlyRoute>
+        <RegisterUser />
+      </PublicOnlyRoute>
+    ),
+  },
+  {
+    path: '/register/company',
+    element: (
+      <PublicOnlyRoute>
+        <RegisterCompany />
+      </PublicOnlyRoute>
+    ),
+  },
 
-    {
-      path: '/company',
-      element: <ProtectedRoute allowed={['COMPANY_ADMIN']}><Outlet /></ProtectedRoute>,
-      children: [
-        { path: 'dashboard', element: wrap(<CompanyDashboard />) },
-        { path: 'requests', element: wrap(<Requests />) },
-        { path: 'requests/:parcelId', element: wrap(<RequestDetailPanel />) },
-        { path: 'pricing', element: wrap(<Pricing />) },
-        { path: 'settings', element: wrap(<Settings />) },
-      ],
-    },
+  {
+    path: '/client',
+    element: (
+      <ProtectedRoute allowed={['USER']}>
+        <Outlet />
+      </ProtectedRoute>
+    ),
+    children: [
+      { index: true, element: <Navigate to="dashboard" replace /> }, 
+      { path: 'dashboard', element: <ClientDashboard /> },
+      { path: 'create-request', element: <CreateRequest /> },
+      { path: 'requests', element: <RequestList /> },
+      { path: 'requests/:parcelId', element: <RequestDetail /> },
+      { path: 'track', element: <h1>client Track Parcel</h1> },
+    ],
+  },
 
-    { path: '*', element: <Navigate to="/login" replace /> },
-  ],
-  { basename: '/ShippingPlatform' }
-);
+  {
+    path: '/company',
+    element: (
+      <ProtectedRoute allowed={['COMPANY_ADMIN']}>
+        <Outlet />
+      </ProtectedRoute>
+    ),
+    children: [
+      { index: true, element: <Navigate to="dashboard" replace /> },
+      { path: 'dashboard', element: <CompanyDashboard /> },
+      { path: 'requests', element: <Requsests /> },
+      { path: 'requests/:parcelId', element: <RequestDetailPanel /> },
+      { path: 'pricing', element: <Pricing /> },
+      { path: 'settings', element: <Settings /> },
+    ],
+  },
+
+  { path: '*', element: <Navigate to="/login" replace /> },
+]);
