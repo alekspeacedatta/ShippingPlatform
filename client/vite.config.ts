@@ -4,6 +4,6 @@ import WindiCSS from 'vite-plugin-windicss';
 
 export default defineConfig(({ command }) => ({
   base: command === 'build' ? '/ShippingPlatform/' : '/',
-  server: { open: '/login' },
+  server: { open: '/#/login' },
   plugins: [react(), WindiCSS()],
 }));
