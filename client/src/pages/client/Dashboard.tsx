@@ -18,7 +18,7 @@ const Dashboard = () => {
               tabIndex={0}
               aria-label="Create Request"
               onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && go('/client/create-request')}
-              className="group relative h-44 cursor-pointer overflow-hidden rounded-2xl border border-black/10 bg-white/90 backdrop-blur shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md dark:border-white/10 dark:bg-slate-900/70 md:col-span-2 focus:outline-none focus-visible:ring-4 focus-visible:ring-indigo-400/40"
+              className="  h-44 cursor-pointer overflow-hidden rounded-2xl border border-indigo-300 bg-white/90 backdrop-blur shadow-sm transition-all duration-300 hover:-translate-y-3  hover:shadow-md dark:border-white/10 dark:bg-slate-900/70 md:col-span-2 focus:outline-none focus-visible:ring-4 focus-visible:ring-indigo-400/40"
             >
               <div className="flex items-start gap-4 p-5">
                 <div className="grid h-12 w-12 shrink-0 place-items-center rounded-xl ring-1 ring-indigo-500/20 bg-gradient-to-br from-indigo-500/15">
