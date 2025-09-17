@@ -39,8 +39,8 @@ const DashboardHeader = () => {
   const inactiveLink = 'text-gray-700 hover:text-indigo-600 hover:bg-black/5 dark:text-gray-200 dark:hover:bg-white/5';
 
   return (
-    <header className="sticky top-0 z-10 backdrop-blur bg-white/70 dark:bg-dark-600/70 border-b border-black/5 dark:border-white/10">
-      <div className="mx-auto max-w-6xl px-4 py-4 flex items-center justify-between">
+    <header className="sticky top-0 z-10 backdrop-blur bg-white/70 dark:bg-dark-600/70 border-b border-black/5 dark:border-white/10">      
+      <div className="relative mx-auto max-w-6xl px-4 py-4 flex items-center justify-between">
         <div onClick={() => go('/company/dashboard')} className="cursor-pointer select-none">
           <h1 className="text-xl md:text-2xl font-semibold tracking-tight">{admin?.fullName}</h1>
           <p className="text-sm text-gray-600 dark:text-gray-300">Admin Dashboard</p>
@@ -84,6 +84,7 @@ const DashboardHeader = () => {
           className="md:hidden inline-flex items-center justify-center rounded-lg p-2 ring-1 ring-black/10 dark:ring-white/10"
           aria-label="Toggle menu"
           aria-expanded={open}
+          aria-controls="company-mobile-menu"
           onClick={() => setOpen((v) => !v)}
         >
           <svg
@@ -100,38 +101,36 @@ const DashboardHeader = () => {
             )}
           </svg>
         </button>
-      </div>
+        <div
+          id="company-mobile-menu"
+          className={['md:hidden absolute left-0 right-0 top-full z-20', open ? 'block' : 'hidden'].join(' ')}
+        >
+          <div className="mx-auto max-w-6xl px-4 pb-4 pt-3 bg-white/95 dark:bg-dark-600/95 backdrop-blur border-b border-black/5 dark:border-white/10 rounded-b-xl shadow-sm grid gap-1">
+            {items.map((it) => (
+              <NavLink
+                key={it.to}
+                to={it.to}
+                onClick={() => setOpen(false)}
+                className={({ isActive }) =>
+                  [
+                    'block w-full rounded-lg px-3 py-2 text-sm transition',
+                    isActive
+                      ? 'text-indigo-600 bg-black/5 dark:bg-white/5'
+                      : 'text-gray-800 hover:bg-black/5 dark:text-gray-200 dark:hover:bg-white/5',
+                  ].join(' ')
+                }
+              >
+                {it.label}
+              </NavLink>
+            ))}
 
-      <div
-        className={`md:hidden transition-all duration-200 origin-top ${
-          open ? 'scale-y-100 opacity-100' : 'scale-y-0 opacity-0 pointer-events-none'
-        }`}
-      >
-        <div className="mx-auto max-w-6xl px-4 pb-4 grid gap-1">
-          {items.map((it) => (
-            <NavLink
-              key={it.to}
-              to={it.to}
-              onClick={() => setOpen(false)}
-              className={({ isActive }) =>
-                [
-                  'block w-full rounded-lg px-3 py-2 text-sm transition',
-                  isActive
-                    ? 'text-indigo-600 bg-black/5 dark:bg-white/5'
-                    : 'text-gray-800 hover:bg-black/5 dark:text-gray-200 dark:hover:bg-white/5',
-                ].join(' ')
-              }
+            <button
+              onClick={handleLogout}
+              className="mt-1 w-full rounded-lg px-3 py-2 text-sm text-left text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20 transition"
             >
-              {it.label}
-            </NavLink>
-          ))}
-
-          <button
-            onClick={handleLogout}
-            className="mt-1 w-full rounded-lg px-3 py-2 text-sm text-left text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20 transition"
-          >
-            Logout
-          </button>
+              Logout
+            </button>
+          </div>
         </div>
       </div>
     </header>
