@@ -11,6 +11,7 @@ import type { CompanyCreate, ShippingType } from '../../types/Types';
 import { Select, Option } from '../../components/commons/Select';
 import { n } from '../../utils/utils';
 import ClientHeader from '../../components/client/ClientHeader';
+import CompanyPicker from '../../components/client/CompanyPicker';
 
 const steps = ['Parcel Details', 'Route', 'Shipping Type', 'Calculator', 'Summary & Submit'];
 
@@ -247,22 +248,20 @@ const CreateRequest = () => {
             {/* Company select */}
             <div className="my-2 flex flex-col gap-2">
               <h1 className="text-xl sm:text-2xl font-semibold">Select company for transfer</h1>
-              <Select
-                value={selectedCompany?.name ?? ''}
-                onChange={(e) => {
-                  const found = companies.find((c: CompanyCreate) => c.name === e.target.value) || null;
-                  setSelectedCompany(found);
+
+              <CompanyPicker
+                companies={companies as CompanyCreate[]}
+                value={selectedCompany}
+                onChange={(c) => {
+                  setSelectedCompany(c);
                   clearError('company');
                 }}
-                className={companyInvalid ? errorClass : ''}
-              >
-                {!selectedCompany && <option value="">select company</option>}
-                {companies.map((c: CompanyCreate) => (
-                  <Option key={c.contactEmail} value={c.name}>
-                    {c.name}
-                  </Option>
-                ))}
-              </Select>
+                shippingType={shippingType}
+                weightKg={weightKg}
+                size={{ w: volumetricData.width ?? undefined, h: volumetricData.height ?? undefined, l: volumetricData.length ?? undefined }}
+                declaredValue={declaredValue}
+              />
+
               {help(errors.company)}
             </div>
 
