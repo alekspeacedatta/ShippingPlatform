@@ -124,7 +124,7 @@ const RegisterCompany = () => {
                     />
                   </div>
 
-                  <div className="sm:col-span-2 h-[14vh] flex flex-col gap-2">
+                  <div className="sm:col-span-2 flex flex-col gap-2">
                     <label className="text-sm font-medium">Regions</label>
                     <div className="h-40 md:h-56 overflow-y-auto rounded-md border-2 border-indigo-200 bg-white p-2 flex flex-wrap gap-1">
                       <label className="flex cursor-pointer select-none items-center">
