@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGetCompanies } from '../../api/useCompany';
 import { useCreateParcelRequest } from '../../api/useParcel';
@@ -8,7 +8,6 @@ import ParcelForm from '../../components/client/ParcelForm';
 import Calculator, { type CalcResult } from '../../components/client/Calculator';
 import { Button } from '../../components/commons/Button';
 import type { CompanyCreate, ShippingType } from '../../types/Types';
-import { Select, Option } from '../../components/commons/Select';
 import { n } from '../../utils/utils';
 import ClientHeader from '../../components/client/ClientHeader';
 import CompanyPicker from '../../components/client/CompanyPicker';
@@ -39,7 +38,7 @@ type FieldErrors = Partial<{
   calc: string;
 }>;
 
-const errorClass = 'ring-2 ring-red-300 border-red-300';
+
 const help = (m?: string) => (m ? <p className="mt-1 text-xs sm:text-sm text-red-600">{m}</p> : null);
 
 const CreateRequest = () => {
@@ -150,7 +149,6 @@ const CreateRequest = () => {
     setStep((s) => Math.min(steps.length - 1, s + 1));
   };
 
-  const companyInvalid = useMemo(() => !!errors.company, [errors.company]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
