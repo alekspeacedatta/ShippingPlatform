@@ -7,17 +7,19 @@ type Props = {
   companies: CompanyCreate[];
   value: CompanyCreate | null;
   onChange: (c: CompanyCreate | null) => void;
+
+ 
   shippingType?: ShippingType | string;
   weightKg?: number | null;
   size?: { w?: number | null; h?: number | null; l?: number | null };
   declaredValue?: number | null;
-
-  fromCountry?: string;   
-  toCountry?: string;     
+  fromCountry?: string;
+  toCountry?: string;
 };
 
+
 const money = (n: number) => `$${n.toFixed(2)}`;
-const asPct = (v: number) => (v > 1 ? v / 100 : v);
+const asPct = (v: number) => (v > 1 ? v / 100 : v); 
 const pctStr = (v: number) => `${(asPct(v) * 100).toFixed(0)}%`;
 const nearEq = (a: number, b: number) => Math.abs(a - b) < 1e-9;
 
@@ -31,36 +33,50 @@ function estimatePrice(
     declaredValue?: number | null;
     fromCountry?: string;
     toCountry?: string;
-  }
+  },
 ) {
   const { shippingType, weightKg, size, declaredValue, fromCountry = '', toCountry = '' } = opts;
 
-  const w   = typeof weightKg === 'number' && weightKg > 0 ? weightKg : 1;
-  const vol = size?.w && size?.h && size?.l ? PricingService.volumetricWeight({
-    width: Number(size.w), height: Number(size.h), length: Number(size.l)
-  }) : 0;
-  const chW = PricingService.chargableWeight({ weight: w, volumetricWeight: vol });
+  const weight = typeof weightKg === 'number' && weightKg > 0 ? weightKg : 1;
+  const volumetric =
+    size?.w && size?.h && size?.l
+      ? PricingService.volumetricWeight({
+          width: Number(size.w),
+          height: Number(size.h),
+          length: Number(size.l),
+        })
+      : 0;
 
-  const base = PricingService.base(c.pricing.basePrice, c.pricing.pricePerKg, chW);
+  const chargeable = PricingService.chargableWeight({ weight, volumetricWeight: volumetric });
+
+  const base = PricingService.base(c.pricing.basePrice, c.pricing.pricePerKg, chargeable);
   const fuel = PricingService.fuelSurcharge(base, c.pricing.fuelPct);
   const remote = PricingService.remoteSurcharge(base, c.pricing.remoteAreaPct);
   const surcharges = fuel + remote;
-  const df = PricingService.distanceFactor(fromCountry, toCountry);
+  const distance = PricingService.distanceFactor(fromCountry, toCountry);
   const insurance = PricingService.insurance(Number(declaredValue ?? 0), c.pricing.insurancePct);
 
   const totalFor = (t: ShippingType) =>
-    Number((base * (c.pricing.typeMultipliers[t] || 1) * df + surcharges + insurance).toFixed(2));
+    Number((base * (c.pricing.typeMultipliers[t] || 1) * distance + surcharges + insurance).toFixed(2));
 
   if (shippingType && c.supportedTypes.includes(shippingType as ShippingType)) {
     return { total: totalFor(shippingType as ShippingType), usedType: shippingType as ShippingType };
   }
 
-  let best = { total: Number.POSITIVE_INFINITY, usedType: null as ShippingType | null };
+  
+  let best: { total: number; usedType: ShippingType | null } = {
+    total: Number.POSITIVE_INFINITY,
+    usedType: null,
+  };
+
   (c.supportedTypes as ShippingType[]).forEach((t) => {
     const val = totalFor(t);
     if (val < best.total) best = { total: val, usedType: t };
   });
+
+  
   if (!best.usedType) best = { total: Number((base + surcharges + insurance).toFixed(2)), usedType: null };
+
   return best;
 }
 
@@ -72,22 +88,31 @@ export default function CompanyPicker({
   weightKg,
   size,
   declaredValue,
+  fromCountry,
+  toCountry,
 }: Props) {
   const [open, setOpen] = useState(false);
   const btnRef = useRef<HTMLButtonElement | null>(null);
   const popRef = useRef<HTMLDivElement | null>(null);
 
-  // Precompute estimates and sort (cheapest first)
-  const enriched = useMemo(() => {
-    const rows = companies.map((c) => {
-      const est = estimatePrice(c, { shippingType, weightKg, size, declaredValue });
+  
+  const rows = useMemo(() => {
+    const r = companies.map((c) => {
+      const est = estimatePrice(c, {
+        shippingType,
+        weightKg,
+        size,
+        declaredValue,
+        fromCountry,
+        toCountry,
+      });
       return { company: c, estimate: est.total, usedType: est.usedType };
     });
-    rows.sort((a, b) => a.estimate - b.estimate);
-    return rows;
-  }, [companies, shippingType, weightKg, size?.w, size?.h, size?.l, declaredValue]);
+    r.sort((a, b) => a.estimate - b.estimate);
+    return r;
+  }, [companies, shippingType, weightKg, size?.w, size?.h, size?.l, declaredValue, fromCountry, toCountry]);
 
-  // Min values across companies for green highlighting
+  
   const mins = useMemo(() => {
     const m = {
       basePrice: Number.POSITIVE_INFINITY,
@@ -100,6 +125,7 @@ export default function CompanyPicker({
       RAILWAY: Number.POSITIVE_INFINITY,
       AIR: Number.POSITIVE_INFINITY,
     };
+
     companies.forEach((c) => {
       const p = c.pricing;
       m.basePrice = Math.min(m.basePrice, p.basePrice);
@@ -107,15 +133,16 @@ export default function CompanyPicker({
       m.fuelPct = Math.min(m.fuelPct, p.fuelPct);
       m.insurancePct = Math.min(m.insurancePct, p.insurancePct);
       m.remoteAreaPct = Math.min(m.remoteAreaPct, p.remoteAreaPct);
-      m.SEA = Math.min(m.SEA, p.typeMultipliers.SEA ?? Number.POSITIVE_INFINITY);
-      m.ROAD = Math.min(m.ROAD, p.typeMultipliers.ROAD ?? Number.POSITIVE_INFINITY);
-      m.RAILWAY = Math.min(m.RAILWAY, p.typeMultipliers.RAILWAY ?? Number.POSITIVE_INFINITY);
-      m.AIR = Math.min(m.AIR, p.typeMultipliers.AIR ?? Number.POSITIVE_INFINITY);
+      m.SEA = Math.min(m.SEA, p.typeMultipliers.SEA ?? m.SEA);
+      m.ROAD = Math.min(m.ROAD, p.typeMultipliers.ROAD ?? m.ROAD);
+      m.RAILWAY = Math.min(m.RAILWAY, p.typeMultipliers.RAILWAY ?? m.RAILWAY);
+      m.AIR = Math.min(m.AIR, p.typeMultipliers.AIR ?? m.AIR);
     });
+
     return m;
   }, [companies]);
 
-  // Close on outside click
+  
   useEffect(() => {
     const onDoc = (e: MouseEvent) => {
       if (!open) return;
@@ -128,17 +155,15 @@ export default function CompanyPicker({
     return () => document.removeEventListener('mousedown', onDoc);
   }, [open]);
 
-  const selected = value ? enriched.find((r) => r.company._id === value._id) ?? null : null;
+  const selected = value ? rows.find((r) => r.company._id === value._id) ?? null : null;
 
   return (
     <div className="relative w-full">
+      {/* Trigger */}
       <button
         ref={btnRef}
         type="button"
-        className={cn(
-          'w-full rounded-md border bg-white px-3 py-2 text-left shadow-sm',
-          'flex items-center justify-between gap-3',
-        )}
+        className={cn('w-full rounded-md border bg-white px-3 py-2 text-left shadow-sm', 'flex items-center justify-between gap-3')}
         aria-haspopup="listbox"
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
@@ -152,17 +177,12 @@ export default function CompanyPicker({
           </div>
         </div>
 
-        <svg
-          className={cn('h-5 w-5 shrink-0 transition-transform', open ? 'rotate-180' : '')}
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-        >
+        <svg className={cn('h-5 w-5 shrink-0 transition-transform', open ? 'rotate-180' : '')} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <path strokeLinecap="round" strokeLinejoin="round" d="M6 9l6 6 6-6" />
         </svg>
       </button>
 
+      {/* Dropdown */}
       {open && (
         <div
           ref={popRef}
@@ -170,9 +190,9 @@ export default function CompanyPicker({
           role="listbox"
           tabIndex={-1}
         >
-          {enriched.length === 0 && <div className="px-3 py-2 text-sm text-gray-500">No companies</div>}
+          {rows.length === 0 && <div className="px-3 py-2 text-sm text-gray-500">No companies</div>}
 
-          {enriched.map(({ company, estimate, usedType }) => {
+          {rows.map(({ company, estimate, usedType }) => {
             const p = company.pricing;
             const active = value?._id === company._id;
 
@@ -192,9 +212,7 @@ export default function CompanyPicker({
               <div
                 className={cn(
                   'rounded-md border px-2 py-1 text-[11px] sm:text-xs',
-                  green
-                    ? 'border-green-200 bg-green-50 text-green-700'
-                    : 'border-gray-200 bg-gray-50 text-gray-700',
+                  green ? 'border-green-200 bg-green-50 text-green-700' : 'border-gray-200 bg-gray-50 text-gray-700',
                 )}
               >
                 <span className="mr-1 opacity-70">{label}</span>
@@ -237,7 +255,7 @@ export default function CompanyPicker({
                   <div className="min-w-0">
                     <div className="truncate font-medium">{company.name}</div>
                     {company.contactEmail && (
-                      <div className="mt-0.5 text-[11px] text-gray-500 truncate">{company.contactEmail}</div>
+                      <div className="mt-0.5 truncate text-[11px] text-gray-500">{company.contactEmail}</div>
                     )}
                   </div>
                   <div className="shrink-0 text-right">
@@ -253,8 +271,8 @@ export default function CompanyPicker({
                   )}
                 </div>
 
-                {/* Pricing object */}
-                <div className="mt-2 grid grid-cols-2 sm:grid-cols-3 gap-2">
+                {/* Full pricing object */}
+                <div className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-3">
                   {badge('Base', money(p.basePrice), isMin.basePrice)}
                   {badge('Per Kg', money(p.pricePerKg), isMin.pricePerKg)}
                   {badge('Fuel', pctStr(p.fuelPct), isMin.fuelPct)}
