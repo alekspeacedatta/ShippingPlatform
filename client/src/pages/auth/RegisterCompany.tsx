@@ -65,7 +65,6 @@ const RegisterCompany = () => {
 
   return (
     <div className="min-h-screen grid grid-cols-1 md:grid-cols-2 bg-gray-50">
-      
       <div className="flex items-center justify-center px-4 py-8 sm:px-6 md:px-8">
         <section
           ref={formRef}
@@ -75,9 +74,7 @@ const RegisterCompany = () => {
             <h1 className="mb-1 text-2xl sm:text-3xl font-semibold">Company Registration</h1>
             {isError && <p className="text-sm sm:text-base text-red-700">{error.message}</p>}
 
-            
             <section className="max-h-[65vh] overflow-y-auto pr-1 sm:pr-2">
-              
               <section className="flex flex-col gap-3 rounded-md">
                 <h2 className="text-lg sm:text-xl">Main info</h2>
 
@@ -127,8 +124,7 @@ const RegisterCompany = () => {
                     />
                   </div>
 
-                  
-                  <div className="sm:col-span-2 flex flex-col gap-2">
+                  <div className="sm:col-span-2 h-[14vh] flex flex-col gap-2">
                     <label className="text-sm font-medium">Regions</label>
                     <div className="h-40 md:h-56 overflow-y-auto rounded-md border-2 border-indigo-200 bg-white p-2 flex flex-wrap gap-1">
                       <label className="flex cursor-pointer select-none items-center">
@@ -154,7 +150,6 @@ const RegisterCompany = () => {
                     </div>
                   </div>
 
-                  
                   <div className="sm:col-span-2 flex flex-col gap-2">
                     <label className="text-sm font-medium">Shipping types</label>
                     <div className="flex flex-wrap gap-2 rounded-md border-2 border-indigo-200 bg-white p-2">
@@ -171,7 +166,6 @@ const RegisterCompany = () => {
                 </section>
               </section>
 
-              
               <section className="mt-5 flex flex-col gap-3 rounded-md">
                 <h2 className="text-lg sm:text-xl">Headquarter address</h2>
                 <section className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -230,7 +224,6 @@ const RegisterCompany = () => {
                 </section>
               </section>
 
-              
               <section className="mt-5 flex flex-col gap-3 rounded-md">
                 <h2 className="text-lg sm:text-xl">Pricing</h2>
 
@@ -306,7 +299,6 @@ const RegisterCompany = () => {
                   </div>
                 </section>
 
-                
                 <section className="mt-2">
                   <h3 className="text-base sm:text-lg mb-2">Type Multipliers</h3>
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -382,7 +374,6 @@ const RegisterCompany = () => {
               </section>
             </section>
 
-            
             <div className="mt-3 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
               <Button type="submit" className="w-full sm:w-[30%]">Register</Button>
               <div className="text-sm text-center sm:text-left">
@@ -396,7 +387,6 @@ const RegisterCompany = () => {
         </section>
       </div>
 
-      
       <aside className="hidden md:flex items-center justify-start bg-blue-600 text-white">
         <div className="mx-8 md:mx-10 lg:mx-16 flex flex-col items-start gap-5 md:gap-7">
           <h1 className="text-4xl lg:text-6xl leading-tight">International</h1>
