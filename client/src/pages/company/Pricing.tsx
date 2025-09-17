@@ -10,41 +10,45 @@ const Pricing = () => {
   return (
     <>
       <DashboardHeader />
-      <div className="flex min-h-[90vh] flex-col items-center justify-center gap-4">
-        <div className="flex w/full max-w-3xl flex-col gap-4">
-          <div className="flex items-center gap-2">
-            <p
-              className="cursor-pointer hover:font-semibold hover:underline hover:underline-offset-4"
+
+      <main className="min-h-[90vh]">
+        <div className="mx-auto w-full max-w-4xl px-4 sm:px-6 lg:px-8 py-4 sm:py-6 md:py-10 flex flex-col gap-4 sm:gap-6">
+          
+          <div className="flex flex-wrap items-center gap-2 text-sm">
+            <button
               onClick={() => navigate('/company/dashboard')}
+              className="hover:font-semibold hover:underline underline-offset-4"
             >
               Dashboard
-            </p>
-            <span>→</span>
-            <p className="cursor-pointer font-semibold text-indigo-500 underline underline-offset-4 transition-all duration-200">
-              Pricing
-            </p>
+            </button>
+            <span className="text-gray-400">→</span>
+            <span className="font-semibold text-indigo-500 underline underline-offset-4">Pricing</span>
           </div>
 
-          <div className="flex flex-col gap-3">
-            <h1 className="text-2xl font-semibold">Company Pricing form that you can edit</h1>
+          
+          <h1 className="text-xl sm:text-2xl font-semibold">
+            Company Pricing form that you can edit
+          </h1>
 
-            {banner && (
-              <div
-                role="status"
-                className={`rounded-lg p-3 text-sm ring-1 ${
-                  banner.type === 'success'
-                    ? 'bg-green-50 text-green-700 ring-green-200'
-                    : 'bg-red-50 text-red-700 ring-red-200'
-                }`}
-              >
-                {banner.text}
-              </div>
-            )}
+          
+          {banner && (
+            <div
+              role="status"
+              aria-live="polite"
+              className={`rounded-lg p-3 text-sm ring-1 ${
+                banner.type === 'success'
+                  ? 'bg-green-50 text-green-700 ring-green-200'
+                  : 'bg-red-50 text-red-700 ring-red-200'
+              }`}
+            >
+              {banner.text}
+            </div>
+          )}
 
-            <PricingForm onResult={setBanner} />
-          </div>
+          
+          <PricingForm onResult={setBanner} />
         </div>
-      </div>
+      </main>
     </>
   );
 };

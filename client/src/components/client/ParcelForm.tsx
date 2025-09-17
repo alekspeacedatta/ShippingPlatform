@@ -39,7 +39,7 @@ type FieldErrors = Partial<{
 }>;
 
 const errorClass = 'ring-2 ring-red-300 border-red-300';
-const help = (m?: string) => (m ? <p className="mt-1 text-sm text-red-600">{m}</p> : null);
+const help = (m?: string) => (m ? <p className="mt-1 text-xs sm:text-sm text-red-600">{m}</p> : null);
 
 export default function ParcelForm({
   step,
@@ -105,12 +105,13 @@ export default function ParcelForm({
   return (
     <div ref={secRef} key={step} className="w-full">
       {step === 0 && (
-        <section className="mx-auto flex min-h-28 flex-col justify-center gap-3 rounded-xl bg-white px-5 py-10">
-          <h2 className="text-2xl font-semibold">Details:</h2>
+        <section className="mx-auto flex min-h-28 flex-col justify-center gap-4 rounded-xl bg-white p-4 sm:p-5">
+          <h2 className="text-xl sm:text-2xl font-semibold">Details</h2>
 
-          <section className="grid grid-cols-2 gap-2">
-            <section className="flex flex-col gap-2">
-              <label>Parcel Weight</label>
+          {/* weight + kind */}
+          <section className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="flex flex-col gap-2 min-w-0">
+              <label className="text-sm font-medium">Parcel Weight</label>
               <Input
                 value={weightKg ?? ''}
                 onChange={(e) => setWeightKg(toNumOrNull(e.target.value))}
@@ -120,21 +121,22 @@ export default function ParcelForm({
                 aria-invalid={!!errors.weightKg}
               />
               {help(errors.weightKg)}
-            </section>
-            <section className="flex flex-col gap-2">
-              <label>Parcel Type</label>
+            </div>
+            <div className="flex flex-col gap-2 min-w-0">
+              <label className="text-sm font-medium">Parcel Type</label>
               <Select value={kind} onChange={(e) => setKind(e.target.value)}>
                 {kind === '' && <option value="">select parcel kind</option>}
                 <Option value="DOCUMENTS">DOCUMENTS</Option>
                 <Option value="GOODS">GOODS</Option>
               </Select>
               {help(errors.kind)}
-            </section>
+            </div>
           </section>
 
-          <section className="grid grid-cols-2 gap-2">
-            <section className="col-span-2 flex flex-col gap-2">
-              <label>Width in cm:</label>
+          {/* volumetric */}
+          <section className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="col-span-1 sm:col-span-2 flex flex-col gap-2 min-w-0">
+              <label className="text-sm font-medium">Width (cm)</label>
               <Input
                 value={volumetricData.width ?? ''}
                 onChange={(e) => setVolumetricData({ ...volumetricData, width: toNumOrNull(e.target.value) })}
@@ -144,9 +146,9 @@ export default function ParcelForm({
                 aria-invalid={!!errors.width}
               />
               {help(errors.width)}
-            </section>
-            <section className="flex flex-col gap-2">
-              <label>Height in cm:</label>
+            </div>
+            <div className="flex flex-col gap-2 min-w-0">
+              <label className="text-sm font-medium">Height (cm)</label>
               <Input
                 value={volumetricData.height ?? ''}
                 onChange={(e) => setVolumetricData({ ...volumetricData, height: toNumOrNull(e.target.value) })}
@@ -156,9 +158,9 @@ export default function ParcelForm({
                 aria-invalid={!!errors.height}
               />
               {help(errors.height)}
-            </section>
-            <section className="flex flex-col gap-2">
-              <label>Length in cm:</label>
+            </div>
+            <div className="flex flex-col gap-2 min-w-0">
+              <label className="text-sm font-medium">Length (cm)</label>
               <Input
                 value={volumetricData.length ?? ''}
                 onChange={(e) => setVolumetricData({ ...volumetricData, length: toNumOrNull(e.target.value) })}
@@ -168,11 +170,11 @@ export default function ParcelForm({
                 aria-invalid={!!errors.length}
               />
               {help(errors.length)}
-            </section>
+            </div>
           </section>
 
-          <section className="flex flex-col">
-            <label>Declared Value</label>
+          <section className="flex flex-col min-w-0">
+            <label className="text-sm font-medium">Declared Value</label>
             <Input
               value={declaredValue ?? ''}
               onChange={(e) => setDeclaredValue(toNumOrNull(e.target.value))}
@@ -187,12 +189,13 @@ export default function ParcelForm({
       )}
 
       {step === 1 && (
-        <section className="mx-auto flex min-h-28 flex-col justify-center gap-3 rounded-xl border bg-white px-5 py-10">
-          <h2 className="text-2xl font-semibold">Route:</h2>
+        <section className="mx-auto flex min-h-28 flex-col justify-center gap-4 rounded-xl border bg-white p-4 sm:p-5">
+          <h2 className="text-xl sm:text-2xl font-semibold">Route</h2>
 
-          <section className="grid grid-cols-2 items-center gap-2">
-            <section className="flex flex-col gap-2">
-              <label className="text-lg font-semibold">Origin</label>
+          {/* origin + pickup */}
+          <section className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="flex flex-col gap-2">
+              <label className="text-sm sm:text-base font-semibold">Origin</label>
               <Select
                 value={fromLocation.origin.country}
                 onChange={(e) => setFromLocation((p) => ({ ...p, origin: { ...p.origin, country: e.target.value } }))}
@@ -215,11 +218,11 @@ export default function ParcelForm({
                 aria-invalid={!!errors.originCity}
               />
               {help(errors.originCity)}
-            </section>
+            </div>
 
-            <section className="flex flex-col gap-2">
-              <label className="text-lg">Pickup address</label>
-              <section className="grid grid-cols-2 gap-3">
+            <div className="flex flex-col gap-2">
+              <label className="text-sm sm:text-base font-medium">Pickup address</label>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <Select
                   value={fromLocation.pickUp.country}
                   onChange={(e) => setFromLocation((p) => ({ ...p, pickUp: { ...p.pickUp, country: e.target.value } }))}
@@ -260,18 +263,17 @@ export default function ParcelForm({
                   aria-invalid={!!errors.pickupPostal}
                 />
                 {help(errors.pickupPostal)}
-              </section>
-            </section>
+              </div>
+            </div>
           </section>
 
-          <section className="grid grid-cols-2 items-center gap-2">
-            <section className="flex flex-col gap-2">
-              <label className="text-lg font-semibold">Destination</label>
+          {/* destination + delivery */}
+          <section className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="flex flex-col gap-2">
+              <label className="text-sm sm:text-base font-semibold">Destination</label>
               <Select
                 value={toLocation.destination.country}
-                onChange={(e) =>
-                  setToLocation((p) => ({ ...p, destination: { ...p.destination, country: e.target.value } }))
-                }
+                onChange={(e) => setToLocation((p) => ({ ...p, destination: { ...p.destination, country: e.target.value } }))}
                 className={errors.destCountry ? errorClass : ''}
                 aria-invalid={!!errors.destCountry}
               >
@@ -285,19 +287,17 @@ export default function ParcelForm({
               {help(errors.destCountry)}
               <Input
                 value={toLocation.destination.city}
-                onChange={(e) =>
-                  setToLocation((p) => ({ ...p, destination: { ...p.destination, city: e.target.value } }))
-                }
+                onChange={(e) => setToLocation((p) => ({ ...p, destination: { ...p.destination, city: e.target.value } }))}
                 placeholder="city"
                 className={errors.destCity ? errorClass : ''}
                 aria-invalid={!!errors.destCity}
               />
               {help(errors.destCity)}
-            </section>
+            </div>
 
-            <section className="flex flex-col gap-2">
-              <label className="text-lg">Delivery address</label>
-              <section className="grid grid-cols-2 gap-3">
+            <div className="flex flex-col gap-2">
+              <label className="text-sm sm:text-base font-medium">Delivery address</label>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <Select
                   value={toLocation.deliveryAddress.country}
                   onChange={(e) =>
@@ -347,53 +347,43 @@ export default function ParcelForm({
                   aria-invalid={!!errors.deliveryPostal}
                 />
                 {help(errors.deliveryPostal)}
-              </section>
-            </section>
+              </div>
+            </div>
           </section>
         </section>
       )}
 
       {step === 2 && (
-        <section className="mx-auto flex min-h-28 flex-col justify-center gap-6 rounded-xl bg-white px-5 py-10">
-          <h2 className="text-2xl font-semibold">Shipping Type</h2>
+        <section className="mx-auto flex min-h-28 flex-col justify-center gap-4 rounded-xl bg-white p-4 sm:p-5">
+          <h2 className="text-xl sm:text-2xl font-semibold">Shipping Type</h2>
 
-          {(['SEA', 'ROAD', 'RAILWAY', 'AIR'] as const).map((t) => {
-            const supported = selectedCompany?.supportedTypes.includes(t);
-            return (
-              <section key={t} className="flex justify-between">
-                {supported ? (
-                  <>
-                    <section className="flex items-center gap-2">
-                      <h3 className="text-lg">{t}</h3>
-                      <input
-                        // @ts-expect-error
-                        onChange={(e) => setShippingType(e.target.value)}
-                        checked={shippingType === t}
-                        type="radio"
-                        name="shippingType"
-                        value={t}
-                      />
-                    </section>
-                    <section className="flex items-center gap-2">
-                      <h3 className="">type multiplier:</h3>
-                      <p>{selectedCompany?.pricing.typeMultipliers[t]}x</p>
-                    </section>
-                  </>
-                ) : (
-                  <>
-                    <section className="flex items-center gap-2">
-                      <h3 className="text-xl opacity-50">{t}</h3>
-                      <input type="radio" name="shippingType" value={t} disabled />
-                    </section>
-                    <section className="flex items-center gap-2">
-                      <h3 className="">type multiplier:</h3>
-                      <p>none</p>
-                    </section>
-                  </>
-                )}
-              </section>
-            );
-          })}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {(['SEA', 'ROAD', 'RAILWAY', 'AIR'] as const).map((t) => {
+              const supported = selectedCompany?.supportedTypes.includes(t);
+              return (
+                <div
+                  key={t}
+                  className={`flex items-center justify-between rounded-lg border p-3 ${supported ? '' : 'opacity-60'}`}
+                >
+                  <div className="flex items-center gap-2">
+                    <h3 className="text-base sm:text-lg">{t}</h3>
+                    <input
+                      onChange={(e) => setShippingType(e.target.value as ShippingType)}
+                      checked={shippingType === t}
+                      type="radio"
+                      name="shippingType"
+                      value={t}
+                      disabled={!supported}
+                    />
+                  </div>
+                  <div className="flex items-center gap-2 text-sm sm:text-base">
+                    <span>type multiplier:</span>
+                    <p>{supported ? `${selectedCompany?.pricing.typeMultipliers[t]}x` : 'none'}</p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
           {help(errors.shippingType)}
         </section>
       )}

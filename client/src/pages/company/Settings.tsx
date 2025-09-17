@@ -79,8 +79,7 @@ const Settings = () => {
 
   const isDirty = useMemo(() => {
     const keys: (keyof typeof initialData)[] = ['userId', 'companyId', 'name', 'contactEmail', 'phone', 'logoUrl'];
-    const changed = keys.some((k) => (companyData)[k] !== (initialData)[k]) || wantsPasswordChange;
-    return changed;
+    return keys.some((k) => companyData[k] !== initialData[k]) || wantsPasswordChange;
   }, [companyData, initialData, wantsPasswordChange]);
 
   if (isLoading) return <p>Loading...</p>;
@@ -93,20 +92,12 @@ const Settings = () => {
     setBanner(null);
     setErrors({});
 
-    if (!isDirty) {
-      return;
-    }
+    if (!isDirty) return;
 
     if (wantsPasswordChange) {
-      if (!companyData.currentPassword) {
-        setErrors((e) => ({ ...e, currentPassword: 'Required.' }));
-      }
-      if (!companyData.newPassword) {
-        setErrors((e) => ({ ...e, newPassword: 'Required.' }));
-      }
-      if (!companyData.confirmPassword) {
-        setErrors((e) => ({ ...e, confirmPassword: 'Required.' }));
-      }
+      if (!companyData.currentPassword) setErrors((e) => ({ ...e, currentPassword: 'Required.' }));
+      if (!companyData.newPassword) setErrors((e) => ({ ...e, newPassword: 'Required.' }));
+      if (!companyData.confirmPassword) setErrors((e) => ({ ...e, confirmPassword: 'Required.' }));
       if (
         companyData.newPassword &&
         companyData.confirmPassword &&
@@ -121,8 +112,6 @@ const Settings = () => {
       if (companyData.newPassword && companyData.newPassword.length < 6) {
         setErrors((e) => ({ ...e, newPassword: 'Must be at least 6 characters.' }));
       }
-
-      const anyPwdError = !!errors.currentPassword || !!errors.newPassword || !!errors.confirmPassword;
 
       const computedPwdErrors = {
         currentPassword: (!companyData.currentPassword && 'Required.') || undefined,
@@ -143,13 +132,9 @@ const Settings = () => {
           companyData.newPassword !== companyData.confirmPassword
             ? 'Passwords do not match.'
             : undefined),
-      };
-      if (
-        computedPwdErrors.currentPassword ||
-        computedPwdErrors.newPassword ||
-        computedPwdErrors.confirmPassword ||
-        anyPwdError
-      ) {
+      } as FieldErrors;
+
+      if (computedPwdErrors.currentPassword || computedPwdErrors.newPassword || computedPwdErrors.confirmPassword) {
         setErrors((e) => ({ ...e, ...computedPwdErrors }));
         return;
       }
@@ -196,7 +181,7 @@ const Settings = () => {
           }
 
           const msg =
-          // @ts-expect-error
+            // @ts-expect-error
             (err?.response?.data?.message as string) || (err?.message as string) || 'Update failed. Please try again.';
           setBanner({ type: 'error', text: msg });
         },
@@ -205,47 +190,51 @@ const Settings = () => {
   };
 
   const errorClass = 'ring-2 ring-red-300 border-red-300';
-  const help = (msg?: string) => (msg ? <p className="mt-1 text-sm text-red-600">{msg}</p> : null);
+  const help = (msg?: string) => (msg ? <p className="mt-1 text-xs sm:text-sm text-red-600">{msg}</p> : null);
 
   return (
     <>
       <DashboardHeader />
-      <div className="flex min-h-[90vh] items-center justify-center">
-        <div className="flex w-full max-w-3xl flex-col justify-end gap-4">
-          <div className="flex items-center gap-2">
-            <p
-              className="cursor-pointer hover:font-semibold hover:underline hover:underline-offset-4"
+
+      <main className="min-h-[90vh]">
+        <div className="mx-auto w-full max-w-4xl px-4 sm:px-6 lg:px-8 py-4 sm:py-6 md:py-10 flex flex-col gap-4 sm:gap-6">
+          {/* Breadcrumb */}
+          <div className="flex flex-wrap items-center gap-2 text-sm">
+            <button
               onClick={() => navigate('/company/dashboard')}
+              className="hover:font-semibold hover:underline underline-offset-4"
             >
               Dashboard
-            </p>
-            <span>→</span>
-            <p className="cursor-pointer font-semibold text-indigo-500 underline underline-offset-4 transition-all duration-200">
-              Settings
-            </p>
+            </button>
+            <span className="text-gray-400">→</span>
+            <span className="font-semibold text-indigo-500 underline underline-offset-4">Settings</span>
           </div>
 
-          <form onSubmit={handleDataUpdate} className="flex flex-col gap-7 rounded border bg-white p-4">
-            <div className="space-y-3">
-              <h1 className="text-2xl font-bold">Edit company information</h1>
+          {/* Title + Banner */}
+          <div className="space-y-3">
+            <h1 className="text-xl sm:text-2xl font-bold">Edit company information</h1>
 
-              {banner && (
-                <div
-                  role="status"
-                  className={`rounded-lg p-3 text-sm ring-1 ${
-                    banner.type === 'success'
-                      ? 'bg-green-50 text-green-700 ring-green-200'
-                      : 'bg-red-50 text-red-700 ring-red-200'
-                  }`}
-                >
-                  {banner.text}
-                </div>
-              )}
-            </div>
+            {banner && (
+              <div
+                role="status"
+                aria-live="polite"
+                className={`rounded-lg p-3 text-sm ring-1 ${
+                  banner.type === 'success'
+                    ? 'bg-green-50 text-green-700 ring-green-200'
+                    : 'bg-red-50 text-red-700 ring-red-200'
+                }`}
+              >
+                {banner.text}
+              </div>
+            )}
+          </div>
 
-            <div className="grid grid-cols-1 gap-7 md:grid-cols-2">
-              <section className="flex flex-col">
-                <label>Company Email</label>
+          {/* Form */}
+          <form onSubmit={handleDataUpdate} className="flex flex-col gap-6 rounded border bg-white p-4 sm:p-5">
+            {/* Company fields */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <section className="flex flex-col min-w-0">
+                <label className="text-sm font-medium">Company Email</label>
                 <Input
                   value={companyData.contactEmail}
                   onChange={(e) => {
@@ -253,14 +242,14 @@ const Settings = () => {
                     clearFieldError('contactEmail');
                     setBanner(null);
                   }}
-                  className={errors.contactEmail ? errorClass : ''}
+                  className={`w-full ${errors.contactEmail ? errorClass : ''}`}
                   aria-invalid={!!errors.contactEmail}
                 />
                 {help(errors.contactEmail)}
               </section>
 
-              <section className="flex flex-col">
-                <label>Company Name</label>
+              <section className="flex flex-col min-w-0">
+                <label className="text-sm font-medium">Company Name</label>
                 <Input
                   value={companyData.name}
                   onChange={(e) => {
@@ -268,14 +257,14 @@ const Settings = () => {
                     clearFieldError('name');
                     setBanner(null);
                   }}
-                  className={errors.name ? errorClass : ''}
+                  className={`w-full ${errors.name ? errorClass : ''}`}
                   aria-invalid={!!errors.name}
                 />
                 {help(errors.name)}
               </section>
 
-              <section className="flex flex-col md:col-span-2">
-                <label>Phone</label>
+              <section className="flex flex-col md:col-span-2 min-w-0">
+                <label className="text-sm font-medium">Phone</label>
                 <Input
                   value={companyData.phone}
                   onChange={(e) => {
@@ -283,14 +272,14 @@ const Settings = () => {
                     clearFieldError('phone');
                     setBanner(null);
                   }}
-                  className={errors.phone ? errorClass : ''}
+                  className={`w-full ${errors.phone ? errorClass : ''}`}
                   aria-invalid={!!errors.phone}
                 />
                 {help(errors.phone)}
               </section>
 
-              <section className="flex flex-col md:col-span-2">
-                <label>Logo URL</label>
+              <section className="flex flex-col md:col-span-2 min-w-0">
+                <label className="text-sm font-medium">Logo URL</label>
                 <Input
                   value={companyData.logoUrl}
                   onChange={(e) => {
@@ -298,16 +287,17 @@ const Settings = () => {
                     clearFieldError('logoUrl');
                     setBanner(null);
                   }}
-                  className={errors.logoUrl ? errorClass : ''}
+                  className={`w-full ${errors.logoUrl ? errorClass : ''}`}
                   aria-invalid={!!errors.logoUrl}
                 />
                 {help(errors.logoUrl)}
               </section>
             </div>
 
-            <div className="grid grid-cols-1 gap-7 md:grid-cols-3">
-              <section className="flex flex-col">
-                <label>Current password</label>
+            {/* Password fields */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+              <section className="flex flex-col min-w-0">
+                <label className="text-sm font-medium">Current password</label>
                 <Input
                   type="password"
                   placeholder="Current password"
@@ -317,14 +307,14 @@ const Settings = () => {
                     clearFieldError('currentPassword');
                     setBanner(null);
                   }}
-                  className={errors.currentPassword ? errorClass : ''}
+                  className={`w-full ${errors.currentPassword ? errorClass : ''}`}
                   aria-invalid={!!errors.currentPassword}
                 />
                 {help(errors.currentPassword)}
               </section>
 
-              <section className="flex flex-col">
-                <label>New password</label>
+              <section className="flex flex-col min-w-0">
+                <label className="text-sm font-medium">New password</label>
                 <Input
                   type="password"
                   placeholder="New password"
@@ -334,14 +324,14 @@ const Settings = () => {
                     clearFieldError('newPassword');
                     setBanner(null);
                   }}
-                  className={errors.newPassword ? errorClass : ''}
+                  className={`w-full ${errors.newPassword ? errorClass : ''}`}
                   aria-invalid={!!errors.newPassword}
                 />
                 {help(errors.newPassword)}
               </section>
 
-              <section className="flex flex-col">
-                <label>Confirm new password</label>
+              <section className="flex flex-col min-w-0">
+                <label className="text-sm font-medium">Confirm new password</label>
                 <Input
                   type="password"
                   placeholder="Confirm new password"
@@ -351,19 +341,19 @@ const Settings = () => {
                     clearFieldError('confirmPassword');
                     setBanner(null);
                   }}
-                  className={errors.confirmPassword ? errorClass : ''}
+                  className={`w-full ${errors.confirmPassword ? errorClass : ''}`}
                   aria-invalid={!!errors.confirmPassword}
                 />
                 {help(errors.confirmPassword)}
               </section>
             </div>
 
-            <Button type="submit" disabled={isPending || !isDirty}>
+            <Button type="submit" disabled={isPending || !isDirty} className="w-full sm:w-auto">
               {isPending ? 'Saving…' : 'Save'}
             </Button>
           </form>
         </div>
-      </div>
+      </main>
     </>
   );
 };

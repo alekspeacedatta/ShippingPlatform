@@ -39,7 +39,7 @@ type FieldErrors = Partial<{
 }>;
 
 const errorClass = 'ring-2 ring-red-300 border-red-300';
-const help = (m?: string) => (m ? <p className="mt-1 text-sm text-red-600">{m}</p> : null);
+const help = (m?: string) => (m ? <p className="mt-1 text-xs sm:text-sm text-red-600">{m}</p> : null);
 
 const CreateRequest = () => {
   const navigate = useNavigate();
@@ -211,11 +211,10 @@ const CreateRequest = () => {
         onError: () => {
           setParcelErr(true);
           setStep(5);
-          
         },
         onSuccess: () => {
           setParcelErr(false);
-          setStep(5); 
+          setStep(5);
         },
       },
     );
@@ -226,18 +225,17 @@ const CreateRequest = () => {
   return (
     <>
       <ClientHeader />
-      <div className="mx-auto flex min-h-[40vh] max-w-3xl flex-col justify-center gap-5 p-6 md:max-w-5xl">
-        <div className="flex items-center gap-2">
-          <p
-            className="cursor-pointer hover:font-semibold hover:underline hover:underline-offset-4"
+      <div className="mx-auto w-full max-w-3xl md:max-w-5xl px-4 sm:px-6 lg:px-8 py-4 sm:py-6 flex flex-col justify-center gap-5">
+        {/* Breadcrumb */}
+        <div className="flex flex-wrap items-center gap-2 text-sm">
+          <button
+            className="hover:font-semibold hover:underline underline-offset-4"
             onClick={() => navigate('/client/dashboard')}
           >
             Dashboard
-          </p>
-          <span>→</span>
-          <p className="cursor-pointer font-semibold text-indigo-500 underline underline-offset-4 transition-all duration-200">
-            Create Request
-          </p>
+          </button>
+          <span className="text-gray-400">→</span>
+          <span className="font-semibold text-indigo-500 underline underline-offset-4">Create Request</span>
         </div>
 
         {isLoading ? (
@@ -246,8 +244,9 @@ const CreateRequest = () => {
           <p>Error: {error?.message}</p>
         ) : (
           <>
-            <div className="my-4 flex flex-col gap-2">
-              <h1 className="text-2xl font-semibold">Select company for transfer</h1>
+            {/* Company select */}
+            <div className="my-2 flex flex-col gap-2">
+              <h1 className="text-xl sm:text-2xl font-semibold">Select company for transfer</h1>
               <Select
                 value={selectedCompany?.name ?? ''}
                 onChange={(e) => {
@@ -271,27 +270,27 @@ const CreateRequest = () => {
 
             {step === 5 ? (
               !parcelErr ? (
-                <div className="flex min-h-max flex-col items-center justify-center gap-4 rounded-xl border bg-white p-14">
-                  <div className="flex flex-col items-center gap-4">
-                    <h1 className="text-xl text-green-500">
+                <div className="flex min-h-max flex-col items-center justify-center gap-4 rounded-xl border bg-white p-8 sm:p-12">
+                  <div className="flex flex-col items-center gap-3">
+                    <h1 className="text-lg sm:text-xl text-green-500">
                       Congratulations! Your request was created successfully.
                     </h1>
                     <p className="text-sm text-green-500">✓ payment success ✓</p>
                   </div>
-                  <div className="mt-6">
-                    <Button type="button" onClick={() => navigate('/client/requests')}>
+                  <div className="mt-4">
+                    <Button type="button" onClick={() => navigate('/client/requests')} className="w-full sm:w-auto">
                       see request
                     </Button>
                   </div>
                 </div>
               ) : (
-                <div className="flex min-h-max flex-col items-center justify-center gap-4 rounded-xl border bg-white p-14">
-                  <h1 className="text-xl font-semibold text-red-500">Failed to create request</h1>
-                  <div className="mt-6 flex gap-3">
-                    <Button type="button" onClick={() => setStep(0)}>
+                <div className="flex min-h-max flex-col items-center justify-center gap-4 rounded-xl border bg-white p-8 sm:p-12">
+                  <h1 className="text-lg sm:text-xl font-semibold text-red-500">Failed to create request</h1>
+                  <div className="mt-4 flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+                    <Button type="button" onClick={() => setStep(0)} className="w-full sm:w-auto">
                       start over
                     </Button>
-                    <Button type="button" onClick={() => navigate('/client/requests')}>
+                    <Button type="button" onClick={() => navigate('/client/requests')} className="w-full sm:w-auto">
                       go to requests
                     </Button>
                   </div>
@@ -304,7 +303,7 @@ const CreateRequest = () => {
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' && !isSubmitStep) e.preventDefault();
                 }}
-                className="flex min-h-28 flex-col justify-center rounded-xl border p-4"
+                className="flex min-h-28 flex-col justify-center rounded-xl border bg-white p-4 sm:p-5"
               >
                 <ParcelForm
                   step={step}
@@ -359,6 +358,7 @@ const CreateRequest = () => {
                   errors={errors}
                 />
 
+                {/* Calculator step */}
                 <div style={{ display: step === 3 ? 'block' : 'none' }}>
                   <Calculator
                     volumetricData={volumetricData}
@@ -376,70 +376,38 @@ const CreateRequest = () => {
                   {help(errors.calc)}
                 </div>
 
+                {/* Summary */}
                 {step === 4 && (
-                  <div className="flex h-[50vh] min-h-28 flex-col gap-4 overflow-y-scroll rounded-xl border bg-white p-4">
-                    <h2 className="text-xl font-semibold">Summary & Submit</h2>
+                  <div className="flex h-[55vh] min-h-28 flex-col gap-4 overflow-y-auto rounded-xl border bg-white p-4">
+                    <h2 className="text-lg sm:text-xl font-semibold">Summary & Submit</h2>
 
-                    <div className="grid grid-cols-1 gap-4 bg-white md:grid-cols-2">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="rounded-lg border bg-white p-4">
                         <h3 className="mb-2 font-semibold">Company & Shipping</h3>
-                        <p>
-                          <span className="text-gray-500">Company:</span> {selectedCompany?.name ?? '—'}
-                        </p>
-                        <p>
-                          <span className="text-gray-500">Shipping type:</span> {shippingType || '—'}
-                        </p>
-                        <p>
-                          <span className="text-gray-500">Type multiplier:</span>{' '}
-                          {(calc?.typeMultiplier ?? 1).toFixed(2)}x
-                        </p>
-                        <p>
-                          <span className="text-gray-500">Distance factor:</span>{' '}
-                          {(calc?.distanceFactor ?? 1).toFixed(2)}x
-                        </p>
+                        <p><span className="text-gray-500">Company:</span> {selectedCompany?.name ?? '—'}</p>
+                        <p><span className="text-gray-500">Shipping type:</span> {shippingType || '—'}</p>
+                        <p><span className="text-gray-500">Type multiplier:</span> {(calc?.typeMultiplier ?? 1).toFixed(2)}x</p>
+                        <p><span className="text-gray-500">Distance factor:</span> {(calc?.distanceFactor ?? 1).toFixed(2)}x</p>
                       </div>
 
                       <div className="rounded-lg border bg-white p-4">
                         <h3 className="mb-2 font-semibold">Parcel</h3>
-                        <p>
-                          <span className="text-gray-500">Kind:</span> {String(kind) || '—'}
-                        </p>
-                        <p>
-                          <span className="text-gray-500">Weight:</span> {weightKg ?? '—'} kg
-                        </p>
-                        <p>
-                          <span className="text-gray-500">Size (W×H×L):</span> {volumetricData.width ?? '—'}×
-                          {volumetricData.height ?? '—'}×{volumetricData.length ?? '—'} cm
-                        </p>
-                        <p>
-                          <span className="text-gray-500">Declared value:</span> ${declaredValue ?? '—'}
-                        </p>
-                        <p>
-                          <span className="text-gray-500">Volumetric weight:</span>{' '}
-                          {(calc?.volumetricWeight ?? 0).toFixed(2)} kg
-                        </p>
-                        <p>
-                          <span className="text-gray-500">Chargeable weight:</span>{' '}
-                          {(calc?.chargableWeight ?? 0).toFixed(2)} kg
-                        </p>
+                        <p><span className="text-gray-500">Kind:</span> {String(kind) || '—'}</p>
+                        <p><span className="text-gray-500">Weight:</span> {weightKg ?? '—'} kg</p>
+                        <p><span className="text-gray-500">Size (W×H×L):</span> {volumetricData.width ?? '—'}×{volumetricData.height ?? '—'}×{volumetricData.length ?? '—'} cm</p>
+                        <p><span className="text-gray-500">Declared value:</span> ${declaredValue ?? '—'}</p>
+                        <p><span className="text-gray-500">Volumetric weight:</span> {(calc?.volumetricWeight ?? 0).toFixed(2)} kg</p>
+                        <p><span className="text-gray-500">Chargeable weight:</span> {(calc?.chargableWeight ?? 0).toFixed(2)} kg</p>
                       </div>
 
                       <div className="rounded-lg border bg-white p-4">
                         <h3 className="mb-2 font-semibold">Route</h3>
-                        <p className="text-sm">
-                          <span className="text-gray-500">Origin:</span> {fromLocation.origin.country},{' '}
-                          {fromLocation.origin.city}
-                        </p>
-                        <p className="text-sm">
-                          <span className="text-gray-500">Destination:</span> {toLocation.destination.country},{' '}
-                          {toLocation.destination.city}
-                        </p>
+                        <p className="text-sm"><span className="text-gray-500">Origin:</span> {fromLocation.origin.country}, {fromLocation.origin.city}</p>
+                        <p className="text-sm"><span className="text-gray-500">Destination:</span> {toLocation.destination.country}, {toLocation.destination.city}</p>
 
                         <div className="mt-3">
                           <p className="text-sm text-gray-500">Pickup address</p>
-                          <p className="text-sm">
-                            {fromLocation.pickUp.country}, {fromLocation.pickUp.city}
-                          </p>
+                          <p className="text-sm">{fromLocation.pickUp.country}, {fromLocation.pickUp.city}</p>
                           <p className="text-sm">
                             {fromLocation.pickUp.line1}
                             {fromLocation.pickUp.postalcode ? `, ${fromLocation.pickUp.postalcode}` : ''}
@@ -448,9 +416,7 @@ const CreateRequest = () => {
 
                         <div className="mt-3">
                           <p className="text-sm text-gray-500">Delivery address</p>
-                          <p className="text-sm">
-                            {toLocation.deliveryAddress.country}, {toLocation.deliveryAddress.city}
-                          </p>
+                          <p className="text-sm">{toLocation.deliveryAddress.country}, {toLocation.deliveryAddress.city}</p>
                           <p className="text-sm">
                             {toLocation.deliveryAddress.line1}
                             {toLocation.deliveryAddress.postalcode ? `, ${toLocation.deliveryAddress.postalcode}` : ''}
@@ -460,51 +426,35 @@ const CreateRequest = () => {
 
                       <div className="rounded-lg border bg-white p-4">
                         <h3 className="mb-2 font-semibold">Pricing breakdown</h3>
-                        <p>
-                          <span className="text-gray-500">Base:</span> ${Number(calc?.base ?? 0).toFixed(2)}
-                        </p>
-                        <p>
-                          <span className="text-gray-500">Fuel surcharge:</span> $
-                          {Number(calc?.fuelSurcharge ?? 0).toFixed(2)}
-                        </p>
-                        <p>
-                          <span className="text-gray-500">Remote surcharge:</span> $
-                          {Number(calc?.remoteSurcharge ?? 0).toFixed(2)}
-                        </p>
-                        <p>
-                          <span className="text-gray-500">Insurance:</span> ${Number(calc?.insurance ?? 0).toFixed(2)}
-                        </p>
-                        <p>
-                          <span className="text-gray-500">Surcharges total:</span> $
-                          {Number(calc?.surcharges ?? 0).toFixed(2)}
-                        </p>
+                        <p><span className="text-gray-500">Base:</span> ${Number(calc?.base ?? 0).toFixed(2)}</p>
+                        <p><span className="text-gray-500">Fuel surcharge:</span> ${Number(calc?.fuelSurcharge ?? 0).toFixed(2)}</p>
+                        <p><span className="text-gray-500">Remote surcharge:</span> ${Number(calc?.remoteSurcharge ?? 0).toFixed(2)}</p>
+                        <p><span className="text-gray-500">Insurance:</span> ${Number(calc?.insurance ?? 0).toFixed(2)}</p>
+                        <p><span className="text-gray-500">Surcharges total:</span> ${Number(calc?.surcharges ?? 0).toFixed(2)}</p>
                       </div>
                     </div>
 
-                    <div className="border-t pt-4 text-right text-2xl font-semibold">
+                    <div className="border-t pt-4 text-right text-xl sm:text-2xl font-semibold">
                       Total: ${Number(calc?.total ?? 0).toFixed(2)}
                     </div>
                   </div>
                 )}
 
-                <div className="mt-6 flex justify-between">
+                {/* Nav buttons */}
+                <div className="mt-6 flex flex-col sm:flex-row gap-3 sm:justify-between">
                   <Button
                     type="button"
                     onClick={back}
                     disabled={step === 0}
-                    className="rounded bg-gray-200 px-4 py-2 disabled:opacity-50"
+                    className="w-full sm:w-auto rounded bg-gray-200 px-4 py-2 disabled:opacity-50"
                   >
                     back
                   </Button>
 
-                  
                   <Button
                     type="button"
-                    onClick={
-                      isSubmitStep
-                        ? () => formRef.current?.requestSubmit()
-                        : handleNext
-                    }
+                    className="w-full sm:w-auto"
+                    onClick={isSubmitStep ? () => formRef.current?.requestSubmit() : handleNext}
                   >
                     {isSubmitStep ? 'Submit' : 'next'}
                   </Button>

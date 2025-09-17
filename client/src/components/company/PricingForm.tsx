@@ -16,9 +16,7 @@ const EMPTY_PRICING: Pricing = {
 
 export type Banner = { type: 'success' | 'error'; text: string };
 
-type Props = {
-  onResult?: (b: Banner) => void;
-};
+type Props = { onResult?: (b: Banner | null) => void };
 
 type FieldErrors = Partial<{
   basePrice: string;
@@ -51,8 +49,7 @@ const PricingForm = ({ onResult }: Props) => {
   }, [data]);
 
   const isDirty = useMemo(() => {
-    const p = updatedPricing;
-    const i = initialPricing;
+    const p = updatedPricing, i = initialPricing;
     return (
       p.basePrice !== i.basePrice ||
       p.pricePerKg !== i.pricePerKg ||
@@ -69,28 +66,23 @@ const PricingForm = ({ onResult }: Props) => {
   const validate = (p: Pricing): FieldErrors => {
     const e: FieldErrors = {};
     const isFiniteNum = (n: number) => Number.isFinite(n);
-
     if (!isFiniteNum(p.basePrice) || p.basePrice < 0) e.basePrice = 'Must be ≥ 0';
     if (!isFiniteNum(p.pricePerKg) || p.pricePerKg <= 0) e.pricePerKg = 'Must be > 0';
-
-    const pctRule = (v: number) => !isFiniteNum(v) || v < 0 || v > 100;
-    if (pctRule(p.fuelPct)) e.fuelPct = '0–100';
-    if (pctRule(p.insurancePct)) e.insurancePct = '0–100';
-    if (pctRule(p.remoteAreaPct)) e.remoteAreaPct = '0–100';
-
-    const multRule = (v: number) => !isFiniteNum(v) || v <= 0;
-    if (multRule(p.typeMultipliers.SEA)) e.SEA = 'Must be > 0';
-    if (multRule(p.typeMultipliers.AIR)) e.AIR = 'Must be > 0';
-    if (multRule(p.typeMultipliers.RAILWAY)) e.RAILWAY = 'Must be > 0';
-    if (multRule(p.typeMultipliers.ROAD)) e.ROAD = 'Must be > 0';
-
+    const pctBad = (v: number) => !isFiniteNum(v) || v < 0 || v > 100;
+    if (pctBad(p.fuelPct)) e.fuelPct = '0–100';
+    if (pctBad(p.insurancePct)) e.insurancePct = '0–100';
+    if (pctBad(p.remoteAreaPct)) e.remoteAreaPct = '0–100';
+    const multBad = (v: number) => !isFiniteNum(v) || v <= 0;
+    if (multBad(p.typeMultipliers.SEA)) e.SEA = 'Must be > 0';
+    if (multBad(p.typeMultipliers.AIR)) e.AIR = 'Must be > 0';
+    if (multBad(p.typeMultipliers.RAILWAY)) e.RAILWAY = 'Must be > 0';
+    if (multBad(p.typeMultipliers.ROAD)) e.ROAD = 'Must be > 0';
     return e;
   };
 
   const setField = <K extends keyof Pricing>(key: K, value: Pricing[K]) => {
     setUpdatedPricing((prev) => ({ ...prev, [key]: value }));
     setErrors((e) => ({ ...e, [key]: undefined }));
-    // @ts-expect-error
     onResult?.(null);
   };
 
@@ -100,25 +92,19 @@ const PricingForm = ({ onResult }: Props) => {
       typeMultipliers: { ...prev.typeMultipliers, [key]: value },
     }));
     setErrors((e) => ({ ...e, [key]: undefined }));
-    // @ts-expect-error
     onResult?.(null);
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     if (!isDirty) return;
 
     const v = validate(updatedPricing);
     if (Object.keys(v).length) {
       setErrors(v);
-      onResult?.({
-        type: 'error',
-        text: 'Please fix the highlighted fields.',
-      });
+      onResult?.({ type: 'error', text: 'Please fix the highlighted fields.' });
       return;
     }
-
     if (!companyId) {
       onResult?.({ type: 'error', text: 'Company not found.' });
       return;
@@ -137,7 +123,6 @@ const PricingForm = ({ onResult }: Props) => {
           const serverErrors: Record<string, string> | undefined = err?.response?.data?.errors;
           if (serverErrors && typeof serverErrors === 'object') {
             const next: FieldErrors = {};
-
             Object.entries(serverErrors).forEach(([k, msg]) => {
               if (k.endsWith('basePrice')) next.basePrice = String(msg);
               else if (k.endsWith('pricePerKg')) next.pricePerKg = String(msg);
@@ -164,41 +149,46 @@ const PricingForm = ({ onResult }: Props) => {
   if (!data) return <p>Company not found.</p>;
 
   const errorClass = 'ring-2 ring-red-300 border-red-300';
-  const help = (m?: string) => (m ? <p className="mt-1 text-sm text-red-600">{m}</p> : null);
+  const help = (m?: string) => (m ? <p className="mt-1 text-xs sm:text-sm text-red-600">{m}</p> : null);
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-3 rounded-lg border bg-white p-4">
-      <section className="grid grid-cols-2 gap-2">
-        <div className="flex flex-col">
-          <label>Base Price</label>
+    <form
+      onSubmit={handleSubmit}
+      className="flex flex-col gap-4 rounded-lg border bg-white p-4 sm:p-5"
+    >
+      
+      <section className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="flex flex-col min-w-0">
+          <label className="text-sm font-medium">Base Price</label>
           <Input
             type="number"
             min={0}
             step="0.01"
             value={String(updatedPricing.basePrice)}
             onChange={(e) => setField('basePrice', Number(e.target.value))}
-            className={errors.basePrice ? errorClass : ''}
+            className={`w-full ${errors.basePrice ? errorClass : ''}`}
             aria-invalid={!!errors.basePrice}
           />
           {help(errors.basePrice)}
         </div>
-        <div className="flex flex-col">
-          <label>Price per Kg</label>
+        <div className="flex flex-col min-w-0">
+          <label className="text-sm font-medium">Price per Kg</label>
           <Input
             type="number"
             min={0}
             step="0.01"
             value={String(updatedPricing.pricePerKg)}
             onChange={(e) => setField('pricePerKg', Number(e.target.value))}
-            className={errors.pricePerKg ? errorClass : ''}
+            className={`w-full ${errors.pricePerKg ? errorClass : ''}`}
             aria-invalid={!!errors.pricePerKg}
           />
           {help(errors.pricePerKg)}
         </div>
       </section>
 
-      <div className="flex flex-col">
-        <label>Fuel %</label>
+      
+      <div className="flex flex-col min-w-0">
+        <label className="text-sm font-medium">Fuel %</label>
         <Input
           type="number"
           min={0}
@@ -206,70 +196,35 @@ const PricingForm = ({ onResult }: Props) => {
           step="0.01"
           value={String(updatedPricing.fuelPct)}
           onChange={(e) => setField('fuelPct', Number(e.target.value))}
-          className={errors.fuelPct ? errorClass : ''}
+          className={`w-full ${errors.fuelPct ? errorClass : ''}`}
           aria-invalid={!!errors.fuelPct}
         />
         {help(errors.fuelPct)}
       </div>
 
-      <h2 className="text-xl font-semibold">Type multipliers</h2>
-      <section className="grid grid-cols-2 gap-2">
-        <div className="flex flex-col">
-          <label>SEA</label>
-          <Input
-            type="number"
-            min={0}
-            step="0.01"
-            value={String(updatedPricing.typeMultipliers.SEA)}
-            onChange={(e) => setMultiplier('SEA', Number(e.target.value))}
-            className={errors.SEA ? errorClass : ''}
-            aria-invalid={!!errors.SEA}
-          />
-          {help(errors.SEA)}
-        </div>
-        <div className="flex flex-col">
-          <label>AIR</label>
-          <Input
-            type="number"
-            min={0}
-            step="0.01"
-            value={String(updatedPricing.typeMultipliers.AIR)}
-            onChange={(e) => setMultiplier('AIR', Number(e.target.value))}
-            className={errors.AIR ? errorClass : ''}
-            aria-invalid={!!errors.AIR}
-          />
-          {help(errors.AIR)}
-        </div>
-        <div className="flex flex-col">
-          <label>RAILWAY</label>
-          <Input
-            type="number"
-            min={0}
-            step="0.01"
-            value={String(updatedPricing.typeMultipliers.RAILWAY)}
-            onChange={(e) => setMultiplier('RAILWAY', Number(e.target.value))}
-            className={errors.RAILWAY ? errorClass : ''}
-            aria-invalid={!!errors.RAILWAY}
-          />
-          {help(errors.RAILWAY)}
-        </div>
-        <div className="flex flex-col">
-          <label>ROAD</label>
-          <Input
-            type="number"
-            min={0}
-            step="0.01"
-            value={String(updatedPricing.typeMultipliers.ROAD)}
-            onChange={(e) => setMultiplier('ROAD', Number(e.target.value))}
-            className={errors.ROAD ? errorClass : ''}
-            aria-invalid={!!errors.ROAD}
-          />
-          {help(errors.ROAD)}
-        </div>
+      
+      <h2 className="text-lg sm:text-xl font-semibold">Type multipliers</h2>
+      <section className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        {(['SEA', 'AIR', 'RAILWAY', 'ROAD'] as const).map((key) => (
+          <div key={key} className="flex flex-col min-w-0">
+            <label className="text-sm font-medium">{key}</label>
+            <Input
+              type="number"
+              min={0}
+              step="0.01"
+              value={String(updatedPricing.typeMultipliers[key])}
+              onChange={(e) => setMultiplier(key, Number(e.target.value))}
+              className={`w-full ${errors[key] ? errorClass : ''}`}
+              aria-invalid={!!errors[key]}
+            />
+            {help(errors[key])}
+          </div>
+        ))}
       </section>
 
-      <div className="flex flex-col">
-        <label>Insurance %</label>
+      
+      <div className="flex flex-col min-w-0">
+        <label className="text-sm font-medium">Insurance %</label>
         <Input
           type="number"
           min={0}
@@ -277,14 +232,15 @@ const PricingForm = ({ onResult }: Props) => {
           step="0.01"
           value={String(updatedPricing.insurancePct)}
           onChange={(e) => setField('insurancePct', Number(e.target.value))}
-          className={errors.insurancePct ? errorClass : ''}
+          className={`w-full ${errors.insurancePct ? errorClass : ''}`}
           aria-invalid={!!errors.insurancePct}
         />
         {help(errors.insurancePct)}
       </div>
 
-      <div className="flex flex-col">
-        <label>Remote area %</label>
+      
+      <div className="flex flex-col min-w-0">
+        <label className="text-sm font-medium">Remote area %</label>
         <Input
           type="number"
           min={0}
@@ -292,13 +248,13 @@ const PricingForm = ({ onResult }: Props) => {
           step="0.01"
           value={String(updatedPricing.remoteAreaPct)}
           onChange={(e) => setField('remoteAreaPct', Number(e.target.value))}
-          className={errors.remoteAreaPct ? errorClass : ''}
+          className={`w-full ${errors.remoteAreaPct ? errorClass : ''}`}
           aria-invalid={!!errors.remoteAreaPct}
         />
         {help(errors.remoteAreaPct)}
       </div>
 
-      <Button className="mt-3" type="submit" disabled={isPending || !isDirty}>
+      <Button className="mt-2 w-full sm:w-auto" type="submit" disabled={isPending || !isDirty}>
         {isPending ? 'Saving…' : 'Save'}
       </Button>
     </form>
