@@ -54,7 +54,6 @@ const ClientHeader = () => {
 
   return (
     <header className="sticky top-0 z-10 backdrop-blur bg-white dark:bg-dark-600/70 border-b border-black/5 dark:border-white/10">
-      {/* make this relative so the absolute dropdown anchors to it */}
       <div className="relative mx-auto max-w-6xl px-4 py-4 flex items-center justify-between">
         <div onClick={() => go('/client/dashboard')} className="cursor-pointer select-none">
           <h1 className="text-xl md:text-2xl font-semibold tracking-tight">{client?.fullName}</h1>
@@ -96,7 +95,6 @@ const ClientHeader = () => {
           </svg>
         </button>
 
-        {/* MOBILE DROPDOWN: absolute, not in normal flow */}
         <div
           id="mobile-menu"
           className={[
