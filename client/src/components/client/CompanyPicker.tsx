@@ -239,7 +239,7 @@ export default function CompanyPicker({
               </div>
             );
 
-            const isBestPrice = nearEq(estimate, bestEstimate); // <-- highlight this
+            const isBestPrice = nearEq(estimate, bestEstimate); 
 
             return (
               <button
