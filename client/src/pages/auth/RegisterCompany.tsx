@@ -64,7 +64,7 @@ const RegisterCompany = () => {
   };
 
   return (
-    <div className="min-h-screen grid grid-cols-1 md:grid-cols-2 bg-gray-50">
+    <div className="min-h-screen overflow-hidden grid grid-cols-1 md:grid-cols-2 bg-gray-50">
       <div className="flex items-center justify-center px-4 py-8 sm:px-6 md:px-8">
         <section
           ref={formRef}
