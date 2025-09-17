@@ -33,7 +33,7 @@ const RequestDetailPanel = () => {
   return (
     <div className="min-h-screen">
       <div className="mx-auto w-full max-w-5xl px-4 sm:px-6 lg:px-8 py-4 sm:py-6 md:py-10 flex flex-col gap-4 sm:gap-6">
-        {/* Breadcrumb */}
+        
         <div className="flex flex-wrap items-center gap-2 text-sm">
           <button
             onClick={() => navigate(-1)}
@@ -47,7 +47,7 @@ const RequestDetailPanel = () => {
           </span>
         </div>
 
-        {/* Title + status control */}
+        
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
           <h1 className="text-xl sm:text-2xl font-semibold">Your parcel details</h1>
 
@@ -77,9 +77,9 @@ const RequestDetailPanel = () => {
           </div>
         </div>
 
-        {/* Details grid */}
+        
         <div className="grid gap-3 sm:gap-4 rounded border bg-white p-3 sm:p-4 md:p-5 md:grid-cols-3">
-          {/* Route */}
+        
           <section className="flex flex-col gap-2">
             <h2 className="text-base sm:text-lg font-semibold">
               {parcel.route.origin.country} → {parcel.route.destination.country}
@@ -106,10 +106,10 @@ const RequestDetailPanel = () => {
             </div>
           </section>
 
-          {/* Divider on md+ */}
+          
           <div className="hidden md:block md:h-full md:w-px md:bg-black/5 mx-auto" />
 
-          {/* Parcel */}
+          
           <section className="flex flex-col gap-2 md:px-4">
             <h2 className="text-base sm:text-lg font-semibold">Parcel details</h2>
             <div className="space-y-1">
@@ -136,7 +136,7 @@ const RequestDetailPanel = () => {
             </div>
           </section>
 
-          {/* Company */}
+          
           {company && (
             <section className="flex flex-col gap-2">
               <h2 className="text-base sm:text-lg font-semibold">Company & shipping</h2>
@@ -156,7 +156,7 @@ const RequestDetailPanel = () => {
           )}
         </div>
 
-        {/* Total */}
+        
         <div className="pt-1 sm:pt-2">
           <h2 className="text-xl sm:text-2xl font-semibold">
             Total price <span className="font-bold text-green-500">{parcel.priceEstimate}$</span>
