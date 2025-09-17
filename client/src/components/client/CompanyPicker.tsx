@@ -1,22 +1,26 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { CompanyCreate, ShippingType } from '../../types/Types';
 import { cn } from '../../utils/utils';
+import { PricingService } from '../../services/PricingService';
 
 type Props = {
   companies: CompanyCreate[];
   value: CompanyCreate | null;
   onChange: (c: CompanyCreate | null) => void;
-
   shippingType?: ShippingType | string;
   weightKg?: number | null;
   size?: { w?: number | null; h?: number | null; l?: number | null };
   declaredValue?: number | null;
+
+  fromCountry?: string;   
+  toCountry?: string;     
 };
 
 const money = (n: number) => `$${n.toFixed(2)}`;
 const asPct = (v: number) => (v > 1 ? v / 100 : v);
 const pctStr = (v: number) => `${(asPct(v) * 100).toFixed(0)}%`;
 const nearEq = (a: number, b: number) => Math.abs(a - b) < 1e-9;
+
 
 function estimatePrice(
   c: CompanyCreate,
@@ -25,34 +29,38 @@ function estimatePrice(
     weightKg?: number | null;
     size?: { w?: number | null; h?: number | null; l?: number | null };
     declaredValue?: number | null;
-  },
+    fromCountry?: string;
+    toCountry?: string;
+  }
 ) {
-  const { shippingType, weightKg, size, declaredValue } = opts;
-  const { basePrice, pricePerKg, fuelPct, insurancePct, remoteAreaPct } = c.pricing;
+  const { shippingType, weightKg, size, declaredValue, fromCountry = '', toCountry = '' } = opts;
 
-  const w = typeof weightKg === 'number' && weightKg > 0 ? weightKg : 1;
-  const vol = size?.w && size?.h && size?.l ? (Number(size.w) * Number(size.h) * Number(size.l)) / 5000 : 0;
-  const chargeable = Math.max(w, vol || 0);
+  const w   = typeof weightKg === 'number' && weightKg > 0 ? weightKg : 1;
+  const vol = size?.w && size?.h && size?.l ? PricingService.volumetricWeight({
+    width: Number(size.w), height: Number(size.h), length: Number(size.l)
+  }) : 0;
+  const chW = PricingService.chargableWeight({ weight: w, volumetricWeight: vol });
 
-  const base = basePrice + pricePerKg * chargeable;
-  const fuel = base * asPct(fuelPct);
-  const remote = base * asPct(remoteAreaPct);
-  const ins = (declaredValue ?? 0) * asPct(insurancePct);
-  const subtotal = base + fuel + remote + ins;
+  const base = PricingService.base(c.pricing.basePrice, c.pricing.pricePerKg, chW);
+  const fuel = PricingService.fuelSurcharge(base, c.pricing.fuelPct);
+  const remote = PricingService.remoteSurcharge(base, c.pricing.remoteAreaPct);
+  const surcharges = fuel + remote;
+  const df = PricingService.distanceFactor(fromCountry, toCountry);
+  const insurance = PricingService.insurance(Number(declaredValue ?? 0), c.pricing.insurancePct);
 
-  const applyType = (t: ShippingType) => subtotal * (c.pricing.typeMultipliers[t] || 1);
+  const totalFor = (t: ShippingType) =>
+    Number((base * (c.pricing.typeMultipliers[t] || 1) * df + surcharges + insurance).toFixed(2));
 
   if (shippingType && c.supportedTypes.includes(shippingType as ShippingType)) {
-    return { total: applyType(shippingType as ShippingType), usedType: shippingType as ShippingType };
+    return { total: totalFor(shippingType as ShippingType), usedType: shippingType as ShippingType };
   }
 
-  let best: { total: number; usedType: ShippingType | null } = { total: Number.POSITIVE_INFINITY, usedType: null };
+  let best = { total: Number.POSITIVE_INFINITY, usedType: null as ShippingType | null };
   (c.supportedTypes as ShippingType[]).forEach((t) => {
-    const tTotal = applyType(t);
-    if (tTotal < best.total) best = { total: tTotal, usedType: t };
+    const val = totalFor(t);
+    if (val < best.total) best = { total: val, usedType: t };
   });
-  if (!best.usedType) best = { total: subtotal, usedType: null };
-
+  if (!best.usedType) best = { total: Number((base + surcharges + insurance).toFixed(2)), usedType: null };
   return best;
 }
 

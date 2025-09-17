@@ -246,20 +246,17 @@ const CreateRequest = () => {
             {/* Company select */}
             <div className="my-2 flex flex-col gap-2">
               <h1 className="text-xl sm:text-2xl font-semibold">Select company for transfer</h1>
-
               <CompanyPicker
-                companies={companies as CompanyCreate[]}
+                companies={companies}
                 value={selectedCompany}
-                onChange={(c) => {
-                  setSelectedCompany(c);
-                  clearError('company');
-                }}
+                onChange={setSelectedCompany}
                 shippingType={shippingType}
                 weightKg={weightKg}
-                size={{ w: volumetricData.width ?? undefined, h: volumetricData.height ?? undefined, l: volumetricData.length ?? undefined }}
+                size={{ w: volumetricData.width, h: volumetricData.height, l: volumetricData.length }}
                 declaredValue={declaredValue}
+                fromCountry={fromLocation.origin.country}
+                toCountry={toLocation.destination.country}
               />
-
               {help(errors.company)}
             </div>
 
