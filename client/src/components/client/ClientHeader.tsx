@@ -54,7 +54,8 @@ const ClientHeader = () => {
 
   return (
     <header className="sticky top-0 z-10 backdrop-blur bg-white dark:bg-dark-600/70 border-b border-black/5 dark:border-white/10">
-      <div className="mx-auto max-w-6xl px-4 py-4 flex items-center justify-between">
+      {/* make this relative so the absolute dropdown anchors to it */}
+      <div className="relative mx-auto max-w-6xl px-4 py-4 flex items-center justify-between">
         <div onClick={() => go('/client/dashboard')} className="cursor-pointer select-none">
           <h1 className="text-xl md:text-2xl font-semibold tracking-tight">{client?.fullName}</h1>
           <p className="text-sm text-gray-600 dark:text-gray-300">Client Dashboard</p>
@@ -64,7 +65,6 @@ const ClientHeader = () => {
           <DeskNavItem to="/client/create-request" label="Create Request" />
           <DeskNavItem to="/client/requests" label="Requests" />
           <DeskNavItem to="/client/profile" label="Profile" />
-
           <button
             onClick={handleLogout}
             className="ml-2 px-3 py-2 text-sm font-medium text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-md transition"
@@ -78,6 +78,7 @@ const ClientHeader = () => {
           className="md:hidden inline-flex items-center justify-center rounded-lg p-2 ring-1 ring-black/10 dark:ring-white/10"
           aria-label="Toggle menu"
           aria-expanded={open}
+          aria-controls="mobile-menu"
           onClick={() => setOpen((v) => !v)}
         >
           <svg
@@ -94,63 +95,66 @@ const ClientHeader = () => {
             )}
           </svg>
         </button>
-      </div>
 
-      <div
-        className={`md:hidden transition-all duration-200 origin-top ${
-          open ? 'scale-y-100 opacity-100' : 'scale-y-0 opacity-0 pointer-events-none'
-        }`}
-      >
-        <div className="mx-auto max-w-6xl px-4 pb-4 grid gap-1">
-          <NavLink
-            to="/client/create-request"
-            onClick={() => setOpen(false)}
-            className={({ isActive }) =>
-              [
-                'block w-full rounded-lg px-3 py-2 text-sm transition',
-                isActive
-                  ? 'text-indigo-600 bg-black/5 dark:bg-white/5'
-                  : 'text-gray-800 hover:bg-black/5 dark:text-gray-200 dark:hover:bg-white/5',
-              ].join(' ')
-            }
-          >
-            Create Request
-          </NavLink>
-          <NavLink
-            to="/client/requests"
-            onClick={() => setOpen(false)}
-            className={({ isActive }) =>
-              [
-                'block w-full rounded-lg px-3 py-2 text-sm transition',
-                isActive
-                  ? 'text-indigo-600 bg-black/5 dark:bg-white/5'
-                  : 'text-gray-800 hover:bg-black/5 dark:text-gray-200 dark:hover:bg-white/5',
-              ].join(' ')
-            }
-          >
-            Requests
-          </NavLink>
-          <NavLink
-            to="/client/profile"
-            onClick={() => setOpen(false)}
-            className={({ isActive }) =>
-              [
-                'block w-full rounded-lg px-3 py-2 text-sm transition',
-                isActive
-                  ? 'text-indigo-600 bg-black/5 dark:bg-white/5'
-                  : 'text-gray-800 hover:bg-black/5 dark:text-gray-200 dark:hover:bg-white/5',
-              ].join(' ')
-            }
-          >
-            Profile
-          </NavLink>
+        {/* MOBILE DROPDOWN: absolute, not in normal flow */}
+        <div
+          id="mobile-menu"
+          className={[
+            'md:hidden absolute left-0 right-0 top-full z-20',
+            open ? 'block' : 'hidden',
+          ].join(' ')}
+        >
+          <div className="mx-auto max-w-6xl px-4 pb-4 pt-3 bg-white/95 dark:bg-dark-600/95 backdrop-blur border-b border-black/5 dark:border-white/10 rounded-b-xl shadow-sm">
+            <NavLink
+              to="/client/create-request"
+              onClick={() => setOpen(false)}
+              className={({ isActive }) =>
+                [
+                  'block w-full rounded-lg px-3 py-2 text-sm transition',
+                  isActive
+                    ? 'text-indigo-600 bg-black/5 dark:bg-white/5'
+                    : 'text-gray-800 hover:bg-black/5 dark:text-gray-200 dark:hover:bg-white/5',
+                ].join(' ')
+              }
+            >
+              Create Request
+            </NavLink>
+            <NavLink
+              to="/client/requests"
+              onClick={() => setOpen(false)}
+              className={({ isActive }) =>
+                [
+                  'block w-full rounded-lg px-3 py-2 text-sm transition',
+                  isActive
+                    ? 'text-indigo-600 bg-black/5 dark:bg-white/5'
+                    : 'text-gray-800 hover:bg-black/5 dark:text-gray-200 dark:hover:bg-white/5',
+                ].join(' ')
+              }
+            >
+              Requests
+            </NavLink>
+            <NavLink
+              to="/client/profile"
+              onClick={() => setOpen(false)}
+              className={({ isActive }) =>
+                [
+                  'block w-full rounded-lg px-3 py-2 text-sm transition',
+                  isActive
+                    ? 'text-indigo-600 bg-black/5 dark:bg-white/5'
+                    : 'text-gray-800 hover:bg-black/5 dark:text-gray-200 dark:hover:bg-white/5',
+                ].join(' ')
+              }
+            >
+              Profile
+            </NavLink>
 
-          <button
-            onClick={handleLogout}
-            className="mt-1 w-full rounded-lg px-3 py-2 text-left text-sm text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20 transition"
-          >
-            Logout
-          </button>
+            <button
+              onClick={handleLogout}
+              className="mt-1 w-full rounded-lg px-3 py-2 text-left text-sm text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20 transition"
+            >
+              Logout
+            </button>
+          </div>
         </div>
       </div>
     </header>
