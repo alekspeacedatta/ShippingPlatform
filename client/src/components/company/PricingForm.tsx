@@ -49,7 +49,8 @@ const PricingForm = ({ onResult }: Props) => {
   }, [data]);
 
   const isDirty = useMemo(() => {
-    const p = updatedPricing, i = initialPricing;
+    const p = updatedPricing,
+      i = initialPricing;
     return (
       p.basePrice !== i.basePrice ||
       p.pricePerKg !== i.pricePerKg ||
@@ -152,11 +153,7 @@ const PricingForm = ({ onResult }: Props) => {
   const help = (m?: string) => (m ? <p className="mt-1 text-xs sm:text-sm text-red-600">{m}</p> : null);
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="flex flex-col gap-4 rounded-lg border bg-white p-4 sm:p-5"
-    >
-      
+    <form onSubmit={handleSubmit} className="flex flex-col gap-4 rounded-lg border bg-white p-4 sm:p-5">
       <section className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div className="flex flex-col min-w-0">
           <label className="text-sm font-medium">Base Price</label>
@@ -186,7 +183,6 @@ const PricingForm = ({ onResult }: Props) => {
         </div>
       </section>
 
-      
       <div className="flex flex-col min-w-0">
         <label className="text-sm font-medium">Fuel %</label>
         <Input
@@ -202,7 +198,6 @@ const PricingForm = ({ onResult }: Props) => {
         {help(errors.fuelPct)}
       </div>
 
-      
       <h2 className="text-lg sm:text-xl font-semibold">Type multipliers</h2>
       <section className="grid grid-cols-2 md:grid-cols-4 gap-3">
         {(['SEA', 'AIR', 'RAILWAY', 'ROAD'] as const).map((key) => (
@@ -222,7 +217,6 @@ const PricingForm = ({ onResult }: Props) => {
         ))}
       </section>
 
-      
       <div className="flex flex-col min-w-0">
         <label className="text-sm font-medium">Insurance %</label>
         <Input
@@ -238,7 +232,6 @@ const PricingForm = ({ onResult }: Props) => {
         {help(errors.insurancePct)}
       </div>
 
-      
       <div className="flex flex-col min-w-0">
         <label className="text-sm font-medium">Remote area %</label>
         <Input

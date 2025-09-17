@@ -29,7 +29,7 @@ const Settings = () => {
   const userId = useAuthStore((s) => s.authInfo?.userId) ?? '';
   const { data, isLoading, isError, error } = useGetCompany(companyId ?? '');
 
-  const { mutate, isPending } = useCompanyDataUpdate?.() ?? ({ mutate: () => {}, isPending: false });
+  const { mutate, isPending } = useCompanyDataUpdate?.() ?? { mutate: () => {}, isPending: false };
 
   const [banner, setBanner] = useState<Banner>(null);
   const [errors, setErrors] = useState<FieldErrors>({});

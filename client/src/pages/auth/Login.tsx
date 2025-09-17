@@ -29,7 +29,6 @@ export default function Login() {
 
   return (
     <div className="min-h-screen grid grid-cols-1 md:grid-cols-2 bg-gray-50">
-    
       <div className="flex items-center justify-center px-4 py-8 sm:px-6 md:px-8">
         <Card ref={formRef} className="w-full max-w-sm sm:max-w-md md:max-w-lg">
           <form className="flex flex-col gap-4" onSubmit={handleLogin}>
@@ -82,7 +81,6 @@ export default function Login() {
         </Card>
       </div>
 
-      
       <aside className="hidden md:flex items-center justify-start bg-blue-600 text-white">
         <div className="mx-8 md:mx-10 lg:mx-16 flex flex-col gap-3 md:gap-4">
           <h1 className="text-4xl lg:text-6xl leading-tight">International</h1>

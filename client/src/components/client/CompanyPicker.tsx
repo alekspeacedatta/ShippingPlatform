@@ -153,7 +153,7 @@ export default function CompanyPicker({
     return () => document.removeEventListener('mousedown', onDoc);
   }, [open]);
 
-  const selected = value ? rows.find((r) => r.company._id === value._id) ?? null : null;
+  const selected = value ? (rows.find((r) => r.company._id === value._id) ?? null) : null;
 
   return (
     <div className="relative w-full">
@@ -169,9 +169,7 @@ export default function CompanyPicker({
         onClick={() => setOpen((v) => !v)}
       >
         <div className="min-w-0">
-          <div className="truncate font-medium">
-            {selected ? selected.company.name : 'Select company'}
-          </div>
+          <div className="truncate font-medium">{selected ? selected.company.name : 'Select company'}</div>
           <div className="truncate text-xs text-gray-500">
             {selected
               ? `Cheapest est: ${money(selected.estimate)}${selected.usedType ? ` · ${selected.usedType}` : ''}`

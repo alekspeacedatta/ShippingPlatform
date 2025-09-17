@@ -273,7 +273,9 @@ export default function ParcelForm({
               <label className="text-sm sm:text-base font-semibold">Destination</label>
               <Select
                 value={toLocation.destination.country}
-                onChange={(e) => setToLocation((p) => ({ ...p, destination: { ...p.destination, country: e.target.value } }))}
+                onChange={(e) =>
+                  setToLocation((p) => ({ ...p, destination: { ...p.destination, country: e.target.value } }))
+                }
                 className={errors.destCountry ? errorClass : ''}
                 aria-invalid={!!errors.destCountry}
               >
@@ -287,7 +289,9 @@ export default function ParcelForm({
               {help(errors.destCountry)}
               <Input
                 value={toLocation.destination.city}
-                onChange={(e) => setToLocation((p) => ({ ...p, destination: { ...p.destination, city: e.target.value } }))}
+                onChange={(e) =>
+                  setToLocation((p) => ({ ...p, destination: { ...p.destination, city: e.target.value } }))
+                }
                 placeholder="city"
                 className={errors.destCity ? errorClass : ''}
                 aria-invalid={!!errors.destCity}

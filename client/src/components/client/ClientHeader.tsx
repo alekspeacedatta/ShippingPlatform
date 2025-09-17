@@ -97,10 +97,7 @@ const ClientHeader = () => {
 
         <div
           id="mobile-menu"
-          className={[
-            'md:hidden absolute left-0 right-0 top-full z-20',
-            open ? 'block' : 'hidden',
-          ].join(' ')}
+          className={['md:hidden absolute left-0 right-0 top-full z-20', open ? 'block' : 'hidden'].join(' ')}
         >
           <div className="mx-auto max-w-6xl px-4 pb-4 pt-3 bg-white/95 dark:bg-dark-600/95 backdrop-blur border-b border-black/5 dark:border-white/10 rounded-b-xl shadow-sm">
             <NavLink

@@ -38,7 +38,6 @@ type FieldErrors = Partial<{
   calc: string;
 }>;
 
-
 const help = (m?: string) => (m ? <p className="mt-1 text-xs sm:text-sm text-red-600">{m}</p> : null);
 
 const CreateRequest = () => {
@@ -148,7 +147,6 @@ const CreateRequest = () => {
     if (!validateCurrentStep(step)) return;
     setStep((s) => Math.min(steps.length - 1, s + 1));
   };
-
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -379,30 +377,63 @@ const CreateRequest = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="rounded-lg border bg-white p-4">
                         <h3 className="mb-2 font-semibold">Company & Shipping</h3>
-                        <p><span className="text-gray-500">Company:</span> {selectedCompany?.name ?? '—'}</p>
-                        <p><span className="text-gray-500">Shipping type:</span> {shippingType || '—'}</p>
-                        <p><span className="text-gray-500">Type multiplier:</span> {(calc?.typeMultiplier ?? 1).toFixed(2)}x</p>
-                        <p><span className="text-gray-500">Distance factor:</span> {(calc?.distanceFactor ?? 1).toFixed(2)}x</p>
+                        <p>
+                          <span className="text-gray-500">Company:</span> {selectedCompany?.name ?? '—'}
+                        </p>
+                        <p>
+                          <span className="text-gray-500">Shipping type:</span> {shippingType || '—'}
+                        </p>
+                        <p>
+                          <span className="text-gray-500">Type multiplier:</span>{' '}
+                          {(calc?.typeMultiplier ?? 1).toFixed(2)}x
+                        </p>
+                        <p>
+                          <span className="text-gray-500">Distance factor:</span>{' '}
+                          {(calc?.distanceFactor ?? 1).toFixed(2)}x
+                        </p>
                       </div>
 
                       <div className="rounded-lg border bg-white p-4">
                         <h3 className="mb-2 font-semibold">Parcel</h3>
-                        <p><span className="text-gray-500">Kind:</span> {String(kind) || '—'}</p>
-                        <p><span className="text-gray-500">Weight:</span> {weightKg ?? '—'} kg</p>
-                        <p><span className="text-gray-500">Size (W×H×L):</span> {volumetricData.width ?? '—'}×{volumetricData.height ?? '—'}×{volumetricData.length ?? '—'} cm</p>
-                        <p><span className="text-gray-500">Declared value:</span> ${declaredValue ?? '—'}</p>
-                        <p><span className="text-gray-500">Volumetric weight:</span> {(calc?.volumetricWeight ?? 0).toFixed(2)} kg</p>
-                        <p><span className="text-gray-500">Chargeable weight:</span> {(calc?.chargableWeight ?? 0).toFixed(2)} kg</p>
+                        <p>
+                          <span className="text-gray-500">Kind:</span> {String(kind) || '—'}
+                        </p>
+                        <p>
+                          <span className="text-gray-500">Weight:</span> {weightKg ?? '—'} kg
+                        </p>
+                        <p>
+                          <span className="text-gray-500">Size (W×H×L):</span> {volumetricData.width ?? '—'}×
+                          {volumetricData.height ?? '—'}×{volumetricData.length ?? '—'} cm
+                        </p>
+                        <p>
+                          <span className="text-gray-500">Declared value:</span> ${declaredValue ?? '—'}
+                        </p>
+                        <p>
+                          <span className="text-gray-500">Volumetric weight:</span>{' '}
+                          {(calc?.volumetricWeight ?? 0).toFixed(2)} kg
+                        </p>
+                        <p>
+                          <span className="text-gray-500">Chargeable weight:</span>{' '}
+                          {(calc?.chargableWeight ?? 0).toFixed(2)} kg
+                        </p>
                       </div>
 
                       <div className="rounded-lg border bg-white p-4">
                         <h3 className="mb-2 font-semibold">Route</h3>
-                        <p className="text-sm"><span className="text-gray-500">Origin:</span> {fromLocation.origin.country}, {fromLocation.origin.city}</p>
-                        <p className="text-sm"><span className="text-gray-500">Destination:</span> {toLocation.destination.country}, {toLocation.destination.city}</p>
+                        <p className="text-sm">
+                          <span className="text-gray-500">Origin:</span> {fromLocation.origin.country},{' '}
+                          {fromLocation.origin.city}
+                        </p>
+                        <p className="text-sm">
+                          <span className="text-gray-500">Destination:</span> {toLocation.destination.country},{' '}
+                          {toLocation.destination.city}
+                        </p>
 
                         <div className="mt-3">
                           <p className="text-sm text-gray-500">Pickup address</p>
-                          <p className="text-sm">{fromLocation.pickUp.country}, {fromLocation.pickUp.city}</p>
+                          <p className="text-sm">
+                            {fromLocation.pickUp.country}, {fromLocation.pickUp.city}
+                          </p>
                           <p className="text-sm">
                             {fromLocation.pickUp.line1}
                             {fromLocation.pickUp.postalcode ? `, ${fromLocation.pickUp.postalcode}` : ''}
@@ -411,7 +442,9 @@ const CreateRequest = () => {
 
                         <div className="mt-3">
                           <p className="text-sm text-gray-500">Delivery address</p>
-                          <p className="text-sm">{toLocation.deliveryAddress.country}, {toLocation.deliveryAddress.city}</p>
+                          <p className="text-sm">
+                            {toLocation.deliveryAddress.country}, {toLocation.deliveryAddress.city}
+                          </p>
                           <p className="text-sm">
                             {toLocation.deliveryAddress.line1}
                             {toLocation.deliveryAddress.postalcode ? `, ${toLocation.deliveryAddress.postalcode}` : ''}
@@ -421,11 +454,24 @@ const CreateRequest = () => {
 
                       <div className="rounded-lg border bg-white p-4">
                         <h3 className="mb-2 font-semibold">Pricing breakdown</h3>
-                        <p><span className="text-gray-500">Base:</span> ${Number(calc?.base ?? 0).toFixed(2)}</p>
-                        <p><span className="text-gray-500">Fuel surcharge:</span> ${Number(calc?.fuelSurcharge ?? 0).toFixed(2)}</p>
-                        <p><span className="text-gray-500">Remote surcharge:</span> ${Number(calc?.remoteSurcharge ?? 0).toFixed(2)}</p>
-                        <p><span className="text-gray-500">Insurance:</span> ${Number(calc?.insurance ?? 0).toFixed(2)}</p>
-                        <p><span className="text-gray-500">Surcharges total:</span> ${Number(calc?.surcharges ?? 0).toFixed(2)}</p>
+                        <p>
+                          <span className="text-gray-500">Base:</span> ${Number(calc?.base ?? 0).toFixed(2)}
+                        </p>
+                        <p>
+                          <span className="text-gray-500">Fuel surcharge:</span> $
+                          {Number(calc?.fuelSurcharge ?? 0).toFixed(2)}
+                        </p>
+                        <p>
+                          <span className="text-gray-500">Remote surcharge:</span> $
+                          {Number(calc?.remoteSurcharge ?? 0).toFixed(2)}
+                        </p>
+                        <p>
+                          <span className="text-gray-500">Insurance:</span> ${Number(calc?.insurance ?? 0).toFixed(2)}
+                        </p>
+                        <p>
+                          <span className="text-gray-500">Surcharges total:</span> $
+                          {Number(calc?.surcharges ?? 0).toFixed(2)}
+                        </p>
                       </div>
                     </div>
 

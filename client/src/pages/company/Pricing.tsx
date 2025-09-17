@@ -13,7 +13,6 @@ const Pricing = () => {
 
       <main className="min-h-[90vh]">
         <div className="mx-auto w-full max-w-4xl px-4 sm:px-6 lg:px-8 py-4 sm:py-6 md:py-10 flex flex-col gap-4 sm:gap-6">
-          
           <div className="flex flex-wrap items-center gap-2 text-sm">
             <button
               onClick={() => navigate('/company/dashboard')}
@@ -25,12 +24,8 @@ const Pricing = () => {
             <span className="font-semibold text-indigo-500 underline underline-offset-4">Pricing</span>
           </div>
 
-          
-          <h1 className="text-xl sm:text-2xl font-semibold">
-            Company Pricing form that you can edit
-          </h1>
+          <h1 className="text-xl sm:text-2xl font-semibold">Company Pricing form that you can edit</h1>
 
-          
           {banner && (
             <div
               role="status"
@@ -45,7 +40,6 @@ const Pricing = () => {
             </div>
           )}
 
-          
           <PricingForm onResult={setBanner} />
         </div>
       </main>

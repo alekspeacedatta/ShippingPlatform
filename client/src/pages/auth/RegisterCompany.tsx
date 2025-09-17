@@ -375,11 +375,15 @@ const RegisterCompany = () => {
             </section>
 
             <div className="mt-3 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
-              <Button type="submit" className="w-full sm:w-[30%]">Register</Button>
+              <Button type="submit" className="w-full sm:w-[30%]">
+                Register
+              </Button>
               <div className="text-sm text-center sm:text-left">
                 <span>
                   Already have an account?{' '}
-                  <Link to="/login" className="text-indigo-600 underline">Login</Link>
+                  <Link to="/login" className="text-indigo-600 underline">
+                    Login
+                  </Link>
                 </span>
               </div>
             </div>

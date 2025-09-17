@@ -38,7 +38,6 @@ export default function RegisterUser() {
 
   return (
     <div className="min-h-screen grid grid-cols-1 md:grid-cols-2 bg-gray-50">
-      
       <div className="flex items-center justify-center px-4 py-8 sm:px-6 md:px-8">
         <div
           ref={formRef}
@@ -53,10 +52,11 @@ export default function RegisterUser() {
               </p>
             )}
 
-            
             <section className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <div className="flex flex-col gap-2">
-                <label htmlFor="fullName" className="text-sm font-medium">Full name</label>
+                <label htmlFor="fullName" className="text-sm font-medium">
+                  Full name
+                </label>
                 <Input
                   id="fullName"
                   type="text"
@@ -72,7 +72,9 @@ export default function RegisterUser() {
               </div>
 
               <div className="flex flex-col gap-2">
-                <label htmlFor="email" className="text-sm font-medium">Email</label>
+                <label htmlFor="email" className="text-sm font-medium">
+                  Email
+                </label>
                 <Input
                   id="email"
                   type="email"
@@ -88,7 +90,9 @@ export default function RegisterUser() {
               </div>
 
               <div className="flex flex-col gap-2">
-                <label htmlFor="password" className="text-sm font-medium">Password</label>
+                <label htmlFor="password" className="text-sm font-medium">
+                  Password
+                </label>
                 <Input
                   id="password"
                   type="password"
@@ -104,7 +108,9 @@ export default function RegisterUser() {
               </div>
 
               <div className="flex flex-col gap-2">
-                <label htmlFor="phone" className="text-sm font-medium">Phone</label>
+                <label htmlFor="phone" className="text-sm font-medium">
+                  Phone
+                </label>
                 <Input
                   id="phone"
                   type="tel"
@@ -119,11 +125,12 @@ export default function RegisterUser() {
               </div>
             </section>
 
-            
             <h2 className="mt-2 text-lg sm:text-xl font-medium">Address</h2>
             <section className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <div className="flex flex-col gap-2">
-                <label htmlFor="country" className="text-sm font-medium">Country</label>
+                <label htmlFor="country" className="text-sm font-medium">
+                  Country
+                </label>
                 <Input
                   id="country"
                   type="text"
@@ -139,7 +146,9 @@ export default function RegisterUser() {
               </div>
 
               <div className="flex flex-col gap-2">
-                <label htmlFor="city" className="text-sm font-medium">City</label>
+                <label htmlFor="city" className="text-sm font-medium">
+                  City
+                </label>
                 <Input
                   id="city"
                   type="text"
@@ -155,7 +164,9 @@ export default function RegisterUser() {
               </div>
 
               <div className="flex flex-col gap-2 md:col-span-2">
-                <label htmlFor="line1" className="text-sm font-medium">Line 1</label>
+                <label htmlFor="line1" className="text-sm font-medium">
+                  Line 1
+                </label>
                 <Input
                   id="line1"
                   type="text"
@@ -171,7 +182,9 @@ export default function RegisterUser() {
               </div>
 
               <div className="flex flex-col gap-2 md:col-span-2">
-                <label htmlFor="postalCode" className="text-sm font-medium">Postal code</label>
+                <label htmlFor="postalCode" className="text-sm font-medium">
+                  Postal code
+                </label>
                 <Input
                   id="postalCode"
                   type="text"
@@ -187,18 +200,23 @@ export default function RegisterUser() {
               </div>
             </section>
 
-            
             <div className="mt-2 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
-              <Button type="submit" className="w-full sm:w-[30%]">Register</Button>
+              <Button type="submit" className="w-full sm:w-[30%]">
+                Register
+              </Button>
 
               <div className="text-sm text-center sm:text-left">
                 <span>
                   Already have an account?{' '}
-                  <Link to="/login" className="text-indigo-600 underline">Login</Link>
+                  <Link to="/login" className="text-indigo-600 underline">
+                    Login
+                  </Link>
                 </span>
                 <span className="block sm:inline sm:ml-3">
                   Are you a company?{' '}
-                  <Link to="/register/company" className="text-indigo-600 underline">Register company</Link>
+                  <Link to="/register/company" className="text-indigo-600 underline">
+                    Register company
+                  </Link>
                 </span>
               </div>
             </div>
@@ -206,7 +224,6 @@ export default function RegisterUser() {
         </div>
       </div>
 
-      
       <aside className="hidden md:flex items-center justify-start bg-blue-600 text-white">
         <div className="mx-8 md:mx-10 lg:mx-16 flex flex-col items-start gap-5 md:gap-7">
           <h1 className="text-4xl lg:text-6xl leading-tight">International</h1>
