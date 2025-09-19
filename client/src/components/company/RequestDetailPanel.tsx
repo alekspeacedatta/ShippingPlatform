@@ -250,4 +250,4 @@ const RequestDetailPanel = () => {
   );
 };
 
-
+export default RequestDetailPanel
