@@ -57,10 +57,10 @@ const RequestDetailPanel = () => {
           <span className="font-semibold text-indigo-500 underline underline-offset-4">request details panel</span>
         </div>
 
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-2 ">
           <h1 className="text-xl font-semibold sm:text-2xl">Your parcel details</h1>
 
-          <div className="flex flex-col items-stretch gap-2 sm:flex-row sm:items-center sm:gap-3">
+          <div className="flex items-stretch gap-2 sm:flex-row sm:items-center sm:gap-3">
             <Badge className={badgeClass}>{prettyStatus(parcel.status)}</Badge>
 
             <label className="inline-flex items-center gap-2">
