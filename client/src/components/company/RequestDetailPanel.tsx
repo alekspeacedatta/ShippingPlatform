@@ -48,7 +48,7 @@ const RequestDetailPanel = () => {
 
   return (
     <div className="min-h-screen">
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-4 px-4 py-4 sm:px-6 sm:py-6 md:gap-6 md:py-10 lg:px-8">
+      <div className="mx-auto w-full max-w-7xl px-4 py-4 sm:px-6 sm:py-6 md:py-10 lg:px-8 flex flex-col gap-4 md:gap-6">
         <div className="flex flex-wrap items-center gap-2 text-sm">
           <button onClick={() => navigate(-1)} className="hover:font-semibold hover:underline underline-offset-4">
             all requests
@@ -57,234 +57,147 @@ const RequestDetailPanel = () => {
           <span className="font-semibold text-indigo-500 underline underline-offset-4">request details panel</span>
         </div>
 
-        <div className="flex flex-col gap-2 ">
-          <h1 className="text-xl font-semibold sm:text-2xl">Your parcel details</h1>
+        <div className="flex flex-col gap-3">
+          <h1 className="text-xl sm:text-2xl font-semibold">Your parcel details</h1>
 
-          <div className="flex items-stretch justify-between gap-2 sm:flex-row sm:items-center sm:gap-3">
+          <div className="flex flex-wrap items-stretch gap-2">
             <Badge className={badgeClass}>{prettyStatus(parcel.status)}</Badge>
 
-            <div className="flex items-center gap-2">
-              <label className="inline-flex items-center gap-2">
-                <span className="sr-only sm:not-sr-only sm:text-sm sm:text-gray-500">Update status:</span>
-                <select
-                  className="w-full rounded border bg-white px-3 py-2 text-sm disabled:opacity-60 sm:w-auto"
-                  value={selectedStatus}
-                  onChange={(e) => setSelectedStatus(e.target.value as RequestStatus)}
-                  disabled={isPending}
-                >
-                  {!currentStatus && (
-                    <option value="" disabled>
-                      Select status…
-                    </option>
-                  )}
-                  {REQUEST_STATUS.map((s) => (
-                    <option key={s} value={s}>
-                      {prettyStatus(s)}
-                    </option>
-                  ))}
-                </select>
-              </label>
-
-              <input
-                type="text"
-                placeholder="Optional note"
-                value={note}
-                onChange={(e) => setNote(e.target.value)}
-                className="w-full rounded border bg-white px-3 py-2 text-sm sm:w-80"
+            <label className="inline-flex w-full sm:w-auto items-center gap-2">
+              <span className="sr-only sm:not-sr-only sm:text-sm sm:text-gray-500">Update status:</span>
+              <select
+                className="w-full sm:w-auto min-w-[160px] rounded border bg-white px-3 py-2 text-sm disabled:opacity-60"
+                value={selectedStatus}
+                onChange={(e) => setSelectedStatus(e.target.value as RequestStatus)}
                 disabled={isPending}
-              />
-
-              <button
-                type="button"
-                onClick={handleStatusUpdate}
-                disabled={isUpdateDisabled}
-                className="rounded bg-[#7c86ff] px-4 py-2 text-sm font-semibold text-white transition
-                         disabled:opacity-60 hover:bg-[#6a73d6ff]"
               >
-                {isPending ? 'Updating…' : 'Update Status'}
-              </button>
-            </div>
+                {!currentStatus && (
+                  <option value="" disabled>
+                    Select status…
+                  </option>
+                )}
+                {REQUEST_STATUS.map((s) => (
+                  <option key={s} value={s}>
+                    {prettyStatus(s)}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            <input
+              type="text"
+              placeholder="Optional note"
+              value={note}
+              onChange={(e) => setNote(e.target.value)}
+              className="w-full sm:w-[320px] rounded border bg-white px-3 py-2 text-sm break-words"
+              disabled={isPending}
+            />
+
+            <button
+              type="button"
+              onClick={handleStatusUpdate}
+              disabled={!selectedStatus || isPending}
+              className="rounded bg-[#7c86ff] px-4 py-2 text-sm font-semibold text-white transition
+                     disabled:opacity-60 hover:bg-[#6a73d6ff]"
+            >
+              {isPending ? 'Updating…' : 'Update Status'}
+            </button>
+          </div>
+
+          {updateError && (
+            <p className="text-sm text-red-600">
+              {(updateError as Error)?.message || 'Failed to update status. Please try again.'}
+            </p>
+          )}
+          {isSuccess && <p className="text-sm text-green-600">Status updated.</p>}
+        </div>
+
+        <div className="rounded border bg-white p-3 sm:p-4 md:p-5">
+          <div className="flex flex-col md:flex-row gap-4">
+            <section className="flex flex-col gap-2 md:basis-1/3 min-w-0">
+              <h2 className="text-base sm:text-lg font-semibold">
+                {parcel.route.origin.country} → {parcel.route.destination.country}
+              </h2>
+
+              <div className="flex flex-col sm:flex-row gap-4 sm:gap-10">
+                <div>
+                  <p className="text-xs sm:text-sm text-gray-500">Pick up address</p>
+                  <p className="text-xs sm:text-sm">
+                    {parcel.route.pickupAddress.country}, {parcel.route.pickupAddress.city}
+                  </p>
+                  <p className="text-xs sm:text-sm">
+                    {parcel.route.pickupAddress.line1}, {parcel.route.pickupAddress.postalCode}
+                  </p>
+                </div>
+
+                <div>
+                  <p className="text-xs sm:text-sm text-gray-500">Delivery address</p>
+                  <p className="text-xs sm:text-sm">
+                    {parcel.route.deliveryAddress.country}, {parcel.route.deliveryAddress.city}
+                  </p>
+                  <p className="text-xs sm:text-sm">
+                    {parcel.route.deliveryAddress.line1}, {parcel.route.deliveryAddress.postalCode}
+                  </p>
+                </div>
+              </div>
+
+              <p className="text-xs sm:text-sm text-gray-500">
+                Tracking ID:{' '}
+                <span className="font-mono text-black truncate inline-block max-w-full align-bottom">{trackingId}</span>
+              </p>
+            </section>
+
+            <section className="flex flex-col gap-2 md:basis-1/3 md:border-x md:border-black/5 md:px-4 min-w-0">
+              <h2 className="text-base sm:text-lg font-semibold">Parcel details</h2>
+              <div className="space-y-1">
+                <p className="text-xs sm:text-sm">
+                  <span className="text-gray-500">width: </span>
+                  {parcel.parcel.widthCm}cm, <span className="text-gray-500">length: </span>
+                  {parcel.parcel.lengthCm}cm
+                </p>
+                <p className="text-xs sm:text-sm">
+                  <span className="text-gray-500">height: </span>
+                  {parcel.parcel.heightCm}cm, <span className="text-gray-500">weight: </span>
+                  {parcel.parcel.weightKg}kg
+                </p>
+                {parcel.parcel.kind && (
+                  <p className="text-xs sm:text-sm">
+                    <span className="text-gray-500">kind: </span>
+                    {parcel.parcel.kind.toLowerCase()}
+                  </p>
+                )}
+                {'declaredValue' in parcel.parcel && (
+                  <p className="text-xs sm:text-sm">
+                    <span className="text-gray-500">declared value: </span>${parcel.parcel.declaredValue}
+                  </p>
+                )}
+              </div>
+            </section>
+
+            {company && (
+              <section className="flex flex-col gap-2 md:basis-1/3 md:pl-4 min-w-0">
+                <h2 className="text-base sm:text-lg font-semibold">Company & shipping</h2>
+                <div className="space-y-1">
+                  <p className="text-xs sm:text-sm">
+                    <span className="text-gray-500">company: </span>
+                    {company.name}
+                  </p>
+                  <p className="text-xs sm:text-sm">
+                    <span className="text-gray-500">shipping type: </span>
+                    {parcel.shippingType}
+                  </p>
+                  <p className="text-xs sm:text-sm">
+                    <span className="text-gray-500">type multiplier: </span>
+                    {company.pricing.typeMultipliers[parcel.shippingType]}x
+                  </p>
+                </div>
+              </section>
+            )}
           </div>
         </div>
 
-        {updateError && (
-          <p className="text-sm text-red-600">
-            {(updateError as Error)?.message || 'Failed to update status. Please try again.'}
-          </p>
-        )}
-        {isSuccess && <p className="text-sm text-green-600">Status updated.</p>}
-
-        <div className="rounded border bg-white p-3 sm:p-4 md:p-5">
-  <div className="flex flex-col gap-4 md:flex-row">
-    {/* Left: route & addresses */}
-    <section className="flex flex-col gap-2 md:w-1/2">
-      <h2 className="text-base font-semibold sm:text-lg">
-        {parcel.route.origin.country} → {parcel.route.destination.country}
-      </h2>
-
-      <div className="flex flex-col gap-4 sm:flex-row sm:gap-10">
-        <div>
-          <p className="text-xs text-gray-500 sm:text-sm">Pick up address</p>
-          <p className="text-xs sm:text-sm">
-            {parcel.route.pickupAddress.country}, {parcel.route.pickupAddress.city}
-          </p>
-          <p className="text-xs sm:text-sm">
-            {parcel.route.pickupAddress.line1}, {parcel.route.pickupAddress.postalCode}
-          </p>
-        </div>
-
-        <div>
-          <p className="text-xs text-gray-500 sm:text-sm">Delivery address</p>
-          <p className="text-xs sm:text-sm">
-            {parcel.route.deliveryAddress.country}, {parcel.route.deliveryAddress.city}
-          </p>
-          <p className="text-xs sm:text-sm">
-            {parcel.route.deliveryAddress.line1}, {parcel.route.deliveryAddress.postalCode}
-          </p>
-        </div>
-      </div>
-
-      <p className="text-xs text-gray-500 sm:text-sm">
-        Tracking ID: <span className="font-mono text-black">{trackingId}</span>
-      </p>
-    </section>
-
-    {/* Middle: parcel details with vertical borders on md+ */}
-    <section className="flex flex-col gap-2 md:w-1/2 md:border-x md:border-black/5 md:px-4">
-      <h2 className="text-base font-semibold sm:text-lg">Parcel details</h2>
-      <div className="space-y-1">
-        <p className="text-xs sm:text-sm">
-          <span className="text-gray-500">width: </span>
-          {parcel.parcel.widthCm}cm, <span className="text-gray-500">length: </span>
-          {parcel.parcel.lengthCm}cm
-        </p>
-        <p className="text-xs sm:text-sm">
-          <span className="text-gray-500">height: </span>
-          {parcel.parcel.heightCm}cm, <span className="text-gray-500">weight: </span>
-          {parcel.parcel.weightKg}kg
-        </p>
-        {parcel.parcel.kind && (
-          <p className="text-xs sm:text-sm">
-            <span className="text-gray-500">kind: </span>
-            {parcel.parcel.kind.toLowerCase()}
-          </p>
-        )}
-        {"declaredValue" in parcel.parcel && (
-          <p className="text-xs sm:text-sm">
-            <span className="text-gray-500">declared value: </span>${parcel.parcel.declaredValue}
-          </p>
-        )}
-      </div>
-    </section>
-
-    {/* Right: company */}
-    {company && (
-      <section className="flex flex-col gap-2 md:w-1/2 md:pl-4">
-        <h2 className="text-base font-semibold sm:text-lg">Company & shipping</h2>
-        <div className="space-y-1">
-          <p className="text-xs sm:text-sm">
-            <span className="text-gray-500">company: </span>
-            {company.name}
-          </p>
-          <p className="text-xs sm:text-sm">
-            <span className="text-gray-500">shipping type: </span>
-            {parcel.shippingType}
-          </p>
-          <p className="text-xs sm:text-sm">
-            <span className="text-gray-500">type multiplier: </span>
-            {company.pricing.typeMultipliers[parcel.shippingType]}x
-          </p>
-        </div>
-      </section>
-    )}
-  </div>
-</div>
-
-        {/* <div className="grid gap-3 rounded border bg-white p-3 sm:gap-4 sm:p-4 md:grid-cols-3 md:p-5">
-          <section className="flex flex-col gap-2">
-            <h2 className="text-base font-semibold sm:text-lg">
-              {parcel.route.origin.country} → {parcel.route.destination.country}
-            </h2>
-
-            <div className="flex flex-col gap-4 sm:flex-row sm:gap-10">
-              <div>
-                <p className="text-xs text-gray-500 sm:text-sm">Pick up address</p>
-                <p className="text-xs sm:text-sm">
-                  {parcel.route.pickupAddress.country}, {parcel.route.pickupAddress.city}
-                </p>
-                <p className="text-xs sm:text-sm">
-                  {parcel.route.pickupAddress.line1}, {parcel.route.pickupAddress.postalCode}
-                </p>
-              </div>
-
-              <div>
-                <p className="text-xs text-gray-500 sm:text-sm">Delivery address</p>
-                <p className="text-xs sm:text-sm">
-                  {parcel.route.deliveryAddress.country}, {parcel.route.deliveryAddress.city}
-                </p>
-                <p className="text-xs sm:text-sm">
-                  {parcel.route.deliveryAddress.line1}, {parcel.route.deliveryAddress.postalCode}
-                </p>
-              </div>
-            </div>
-
-            <p className="text-xs text-gray-500 sm:text-sm">
-              Tracking ID: <span className="font-mono text-black">{trackingId}</span>
-            </p>
-          </section>
-
-          <div className="mx-auto hidden h-full w-px bg-black/5 md:block" />
-
-          <section className="flex flex-col gap-2 md:px-4">
-            <h2 className="text-base font-semibold sm:text-lg">Parcel details</h2>
-            <div className="space-y-1">
-              <p className="text-xs sm:text-sm">
-                <span className="text-gray-500">width: </span>
-                {parcel.parcel.widthCm}cm, <span className="text-gray-500">length: </span>
-                {parcel.parcel.lengthCm}cm
-              </p>
-              <p className="text-xs sm:text-sm">
-                <span className="text-gray-500">height: </span>
-                {parcel.parcel.heightCm}cm, <span className="text-gray-500">weight: </span>
-                {parcel.parcel.weightKg}kg
-              </p>
-              {parcel.parcel.kind && (
-                <p className="text-xs sm:text-sm">
-                  <span className="text-gray-500">kind: </span>
-                  {parcel.parcel.kind.toLowerCase()}
-                </p>
-              )}
-              {'declaredValue' in parcel.parcel && (
-                <p className="text-xs sm:text-sm">
-                  <span className="text-gray-500">declared value: </span>${parcel.parcel.declaredValue}
-                </p>
-              )}
-            </div>
-          </section>
-
-          {company && (
-            <section className="flex flex-col gap-2 md:col-span-3">
-              <h2 className="text-base font-semibold sm:text-lg">Company & shipping</h2>
-              <div className="space-y-1">
-                <p className="text-xs sm:text-sm">
-                  <span className="text-gray-500">company: </span>
-                  {company.name}
-                </p>
-                <p className="text-xs sm:text-sm">
-                  <span className="text-gray-500">shipping type: </span>
-                  {parcel.shippingType}
-                </p>
-                <p className="text-xs sm:text-sm">
-                  <span className="text-gray-500">type multiplier: </span>
-                  {company.pricing.typeMultipliers[parcel.shippingType]}x
-                </p>
-              </div>
-            </section>
-          )}
-        </div> */}
-
-        <div className="max-h-80 overflow-y-auto rounded border bg-white p-3 sm:max-h-96 sm:p-4 md:max-h-[45vh] md:p-5">
-          <h2 className="mb-3 text-lg font-semibold sm:mb-4 sm:text-xl">Timeline</h2>
+        <div className="rounded border bg-white p-3 sm:p-4 md:p-5 max-h-80 sm:max-h-96 md:max-h-[45vh] overflow-y-auto">
+          <h2 className="mb-3 sm:mb-4 text-lg sm:text-xl font-semibold">Timeline</h2>
 
           {parcel.timeline.length === 0 ? (
             <p className="text-sm text-gray-500">No events yet.</p>
@@ -310,13 +223,13 @@ const RequestDetailPanel = () => {
                     </div>
 
                     <div className="flex flex-col gap-1 rounded-lg border bg-gray-50 px-3 py-2">
-                      <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between sm:gap-2">
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-2">
                         <Badge className={color}>{label}</Badge>
-                        <time className="text-xs text-gray-500 sm:text-sm">{when}</time>
+                        <time className="text-xs sm:text-sm text-gray-500">{when}</time>
                       </div>
 
                       {t.note && (
-                        <div className="mt-0.5 rounded border bg-white/70 px-3 py-2 text-xs text-gray-700 sm:text-sm">
+                        <div className="mt-0.5 rounded border bg-white/70 px-3 py-2 text-xs sm:text-sm text-gray-700 break-words">
                           {t.note}
                         </div>
                       )}
@@ -329,7 +242,7 @@ const RequestDetailPanel = () => {
         </div>
 
         <div className="pt-1 sm:pt-2">
-          <h2 className="text-xl font-semibold sm:text-2xl">
+          <h2 className="text-xl sm:text-2xl font-semibold">
             Total price <span className="font-bold text-green-600">${parcel.priceEstimate}</span>
           </h2>
         </div>
