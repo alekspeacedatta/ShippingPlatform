@@ -95,6 +95,7 @@ const RequestDetailPanel = () => {
                 </p>
               </div>
             </div>
+            <p className='text-xs sm:text-sm text-gray-500'>Tracking ID: <span className='text-base text-black'>{parcelId}</span> </p>
           </section>
 
           <div className="hidden md:block md:h-full md:w-px md:bg-black/5 mx-auto" />
