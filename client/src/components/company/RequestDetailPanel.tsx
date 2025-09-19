@@ -58,7 +58,7 @@ const RequestDetailPanel = () => {
         <div className="flex flex-col gap-3">
           <h1 className="text-xl sm:text-2xl font-semibold">Your parcel details</h1>
 
-          <div className="flex flex-wrap items-stretch gap-2">
+          <div className="flex flex-wrap justify-center items-stretch gap-2">
             <Badge className={badgeClass}>{prettyStatus(parcel.status)}</Badge>
 
             <label className="inline-flex w-full sm:w-auto items-center gap-2">
