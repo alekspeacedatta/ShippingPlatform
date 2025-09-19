@@ -13,6 +13,7 @@ Authentication pages
 <img width="330" alt="Screenshot 2025-09-19 154217" src="https://github.com/user-attachments/assets/34a3588c-2579-4728-a4d8-12635c61ac7a" />
 
 Client pages
+
 <img width="330" alt="Screenshot 2025-09-19 154242" src="https://github.com/user-attachments/assets/b141d00f-e858-4ae1-866b-2a7c83093354" />
 <img width="330" alt="Screenshot 2025-09-19 155819" src="https://github.com/user-attachments/assets/e3b3b4cb-ca7d-4551-90c8-f0f12e270a27" />
 <img width="330" alt="Screenshot 2025-09-19 155811" src="https://github.com/user-attachments/assets/f25fefb9-7f79-4687-ad27-a0cf32aad50f" />
