@@ -73,7 +73,7 @@ export default function Login() {
               <p className="text-sm text-center sm:text-left">
                 Don’t have an account?{' '}
                 <Link to="/register/user" className="text-indigo-600 underline">
-                  Register
+                  Register heheheh
                 </Link>
               </p>
             </section>
