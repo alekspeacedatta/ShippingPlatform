@@ -7,7 +7,7 @@ import { useRegister } from '../../api/useAuth';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 
-export default function RegisterUser() {
+const RegisterUser = () => {
   const formRef = useRef<HTMLDivElement | null>(null);
 
   gsap.registerPlugin(useGSAP);
@@ -235,3 +235,5 @@ export default function RegisterUser() {
     </div>
   );
 }
+
+export default RegisterUser

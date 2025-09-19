@@ -7,7 +7,7 @@ import { useState, useRef } from 'react';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 
-export default function Login() {
+const Login = () => {
   const formRef = useRef<HTMLDivElement | null>(null);
 
   gsap.registerPlugin(useGSAP);
@@ -92,3 +92,4 @@ export default function Login() {
     </div>
   );
 }
+export default Login
