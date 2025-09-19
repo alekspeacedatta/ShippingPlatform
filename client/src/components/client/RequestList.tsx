@@ -92,7 +92,7 @@ const RequestList = () => {
                       </p>
                     </section>
                     <p className="text-xs text-gray-600 md:text-sm">
-                        <span className="font-semibold">Tracking ID:</span> {req.trackingId}
+                        <span className="font-semibold">Tracking ID:</span> {req._id}
                       </p>
                   </section>
                   <Badge className={statusColors[req.status]}>

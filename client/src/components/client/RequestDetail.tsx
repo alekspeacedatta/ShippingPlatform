@@ -45,7 +45,7 @@ const RequestDetail = () => {
         </div>
 
         <div className="grid gap-3 sm:gap-4 rounded border bg-white p-3 sm:p-4 md:p-5 md:grid-cols-3">
-          <section className="flex flex-col gap-2 rounded">
+          <section className="flex flex-col gap-2">
             <h2 className="text-base sm:text-lg font-semibold">
               {parcel.route.origin.country} → {parcel.route.destination.country}
             </h2>
@@ -68,10 +68,8 @@ const RequestDetail = () => {
                   {parcel.route.deliveryAddress.line1}, {parcel.route.deliveryAddress.postalCode}
                 </p>
               </div>
-                <p className="text-xs sm:text-sm">
-                  <span className='text-gray-500 text-xs sm:text-sm'></span>  {parcelID}
-                </p>
             </div>
+            <p className='text-xs sm:text-sm text-gray-500'>Tracking ID: <span className=' text-black'>{parcelID}</span> </p>
           </section>
 
           <div className="hidden md:block md:h-full md:w-px md:bg-black/5 mx-auto" />
