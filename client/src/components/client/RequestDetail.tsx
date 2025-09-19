@@ -73,8 +73,8 @@ const RequestDetail = () => {
                 </div>
               </div>
 
-              <p className="text-xs sm:text-sm text-gray-500 flex items-center">
-                Tracking ID: <span className="font-mono text-black truncate inline-block max-w-full">{parcelID}</span>
+              <p className="text-xs sm:text-sm text-gray-500 flex items-end gap-1.5">
+                Tracking ID: <span className="font-semibold truncate inline-block max-w-full">{parcelID}</span>
               </p>
             </section>
 
