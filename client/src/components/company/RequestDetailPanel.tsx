@@ -11,7 +11,7 @@ const RequestDetailPanel = () => {
   const navigate = useNavigate();
   const { parcelId } = useParams<{ parcelId: string }>();
 
-  const [ parcelID, setParcelID ] = useState<string>(parcelId!);
+  const [ parcelID ] = useState<string>(parcelId!);
   const { data, isLoading, isError, error } = useGetRequest(parcelId!);
   const { mutate: updateStatus, isPending } = useUpdateParcelStatus();
 
