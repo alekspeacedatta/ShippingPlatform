@@ -58,30 +58,28 @@ const RequestDetailPanel = () => {
         <div className="flex flex-col gap-3">
           <h1 className="text-xl sm:text-2xl font-semibold">Your parcel details</h1>
 
-          <div className="flex flex-wrap justify-center items-stretch gap-2">
+          <div className="flex flex-wrap justify-between items-stretch gap-2">
             <Badge className={badgeClass}>{prettyStatus(parcel.status)}</Badge>
 
             <label className="inline-flex w-full sm:w-auto items-center gap-2">
-              <div className='flex flex-row items-center gap-2'>
-                <span className="sr-only sm:not-sr-only sm:text-sm sm:text-gray-500">Update status:</span>
-                <select
-                  className="w-full sm:w-auto min-w-[160px] rounded border bg-white px-3 py-2 text-sm disabled:opacity-60"
-                  value={selectedStatus}
-                  onChange={(e) => setSelectedStatus(e.target.value as RequestStatus)}
-                  disabled={isPending}
-                >
-                  {!currentStatus && (
-                    <option value="" disabled>
-                      Select status…
-                    </option>
-                  )}
-                  {REQUEST_STATUS.map((s) => (
-                    <option key={s} value={s}>
-                      {prettyStatus(s)}
-                    </option>
-                  ))}
-                </select>
-              </div>
+              <span className="sr-only sm:not-sr-only sm:text-sm sm:text-gray-500">Update status:</span>
+              <select
+                className="w-full sm:w-auto min-w-[160px] rounded border bg-white px-3 py-2 text-sm disabled:opacity-60"
+                value={selectedStatus}
+                onChange={(e) => setSelectedStatus(e.target.value as RequestStatus)}
+                disabled={isPending}
+              >
+                {!currentStatus && (
+                  <option value="" disabled>
+                    Select status…
+                  </option>
+                )}
+                {REQUEST_STATUS.map((s) => (
+                  <option key={s} value={s}>
+                    {prettyStatus(s)}
+                  </option>
+                ))}
+              </select>
             </label>
 
             <input
