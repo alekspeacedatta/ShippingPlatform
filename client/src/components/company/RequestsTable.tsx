@@ -53,7 +53,7 @@ const RequestsTable = () => {
             filtered.map((req) => (
               <div
                     key={req._id}
-                    onClick={() => navigate(`/client/requests/${req._id}`)}
+                    onClick={() => navigate(`/company/requests/${req._id}`)}
                     className="flex w-full transform cursor-pointer items-center justify-between gap-3 rounded-lg border bg-white p-4 transition-transform duration-200 hover:-translate-y-2 hover:shadow-lg"
                   >
                     <section className="flex min-w-0 flex-col gap-1">
@@ -67,12 +67,15 @@ const RequestsTable = () => {
                         <p className="text-xs text-gray-600 md:text-sm">
                           <span className="font-semibold">Price estimate:</span> {req.priceEstimate}$
                         </p>
+                        <p className="text-xs text-gray-600 md:text-sm">
+                          <span className="font-semibold">Tracking ID:</span> {req._id}
+                        </p>
                       </section>
                     </section>
                     <Badge className={statusColors[req.status]}>
                       <span className="text-xs md:text-sm lg:text-base">{req.status.replace(/_/g, ' ')}</span>
                     </Badge>
-                </div>
+                  </div>
             ))
           )}
         </div>
