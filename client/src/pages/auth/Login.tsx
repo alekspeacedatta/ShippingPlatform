@@ -71,7 +71,7 @@ export default function Login() {
                 Login
               </Button>
               <p className="text-sm text-center sm:text-left">
-                Don’t have an account?{' '}
+                Don't have an account?{' '}
                 <Link to="/register/user" className="text-indigo-600 underline">
                   Register
                 </Link>
