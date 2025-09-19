@@ -36,4 +36,11 @@ export class Parcelservice {
     if (!res.ok) throw new Error(body?.message || 'Error while updating parcel status');
     return body;
   }
+  
+  static async getRequest(parcelId: string) {
+    const res = await fetch(`${BASE_URL}/api/parcel/${parcelId}`);
+    if (!res.ok) throw new Error('Parcel not found');
+    return res.json(); // { parcel, company } or parcel
+  }
+
 }

@@ -16,9 +16,13 @@ const Requests = lazy(() => import('../../pages/company/Requests'));
 const RequestDetailPanel = lazy(() => import('../../components/company/RequestDetailPanel'));
 const Pricing = lazy(() => import('../../pages/company/Pricing'));
 const Settings = lazy(() => import('../../pages/company/Settings'));
+const Track = lazy(() => import('../../pages/client/Track'));
 
 import ProtectedRoute from './ProtectedRoute';
 import PublicOnlyRoute from './PublicOnlyRoutes';
+// in routes/router.tsx
+
+// ...
 
 const wrap = (el: JSX.Element) => <Suspense fallback={<div className="p-6">Loading…</div>}>{el}</Suspense>;
 
@@ -48,7 +52,7 @@ export const router = createHashRouter([
       </PublicOnlyRoute>,
     ),
   },
-
+  
   {
     path: '/client',
     element: (
@@ -61,7 +65,7 @@ export const router = createHashRouter([
       { path: 'create-request', element: wrap(<CreateRequest />) },
       { path: 'requests', element: wrap(<RequestList />) },
       { path: 'requests/:parcelId', element: wrap(<RequestDetail />) },
-      { path: 'track', element: wrap(<h1>client Track Parcel</h1>) },
+      { path: 'track', element: wrap(<Track />) },
     ],
   },
 

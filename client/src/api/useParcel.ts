@@ -41,3 +41,11 @@ export const useUpdateParcelStatus = () => {
     },
   });
 };
+
+export const useTrackParcel = (parcelId: string | null) =>
+  useQuery({
+    queryKey: ['requests', parcelId],
+    queryFn: () => Parcelservice.getRequest(parcelId!), // your existing service method
+    enabled: !!parcelId,          // only run after user submits a valid id
+    staleTime: 60_000,
+});

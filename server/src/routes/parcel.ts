@@ -68,5 +68,20 @@ router.patch('/update-status', async (req: Request, res: Response) => {
     return res.status(500).json({ message: 'Error while updating status' });
   }
 });
+router.get('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const parcel = await ParcelModel.findById(id).lean();
+    if (!parcel) return res.status(404).json({ message: 'Parcel not found' });
 
+    
+    const company = parcel.companyId
+      ? await ComapnyModel.findById(parcel.companyId, { name: 1, pricing: 1 }).lean()
+      : undefined;
+
+    res.json(company ? { parcel, company } : parcel);
+  } catch (e) {
+    res.status(500).json({ message: 'Failed to fetch parcel' });
+  }
+});
 export default router
