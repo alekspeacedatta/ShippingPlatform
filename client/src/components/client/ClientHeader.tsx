@@ -63,7 +63,7 @@ const ClientHeader = () => {
         <nav className="hidden md:flex items-center gap-2">
           <DeskNavItem to="/client/create-request" label="Create Request" />
           <DeskNavItem to="/client/requests" label="Requests" />
-          <DeskNavItem to="/client/profile" label="Profile" />
+          <DeskNavItem to="/client/track" label="Track" />
           <button
             onClick={handleLogout}
             className="ml-2 px-3 py-2 text-sm font-medium text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-md transition"
