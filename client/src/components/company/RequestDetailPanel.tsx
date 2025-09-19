@@ -95,9 +95,15 @@ const RequestDetailPanel = () => {
                 disabled={isPending}
               />
 
-              <Button type="button" onClick={handleStatusUpdate} disabled={isUpdateDisabled}>
+              <button
+                type="button"
+                onClick={handleStatusUpdate}
+                disabled={isUpdateDisabled}
+                className="rounded bg-[#7c86ff] px-4 py-2 text-sm font-semibold text-white transition
+                         disabled:opacity-60 hover:bg-[#6a73d6ff]"
+              >
                 {isPending ? 'Updating…' : 'Update Status'}
-              </Button>
+              </button>
             </div>
           </div>
         </div>
