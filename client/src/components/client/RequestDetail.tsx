@@ -3,12 +3,14 @@ import { useGetRequest } from '../../api/useParcel';
 import { Badge } from '../commons/Badge';
 import type { Company, ParcelRequest } from '../../types/Types';
 import { statusColors } from '../../types/Types';
+import { useState } from 'react';
 
 const RequestDetail = () => {
   const navigate = useNavigate();
   const { parcelId } = useParams<{ parcelId: string }>();
   const { data, isLoading, isError, error } = useGetRequest(parcelId!);
 
+  const [ parcelID ] = useState<string>(parcelId!);
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>Error: {error.message}</p>;
   if (!data) return <p>parcel does not exsist</p>;
@@ -66,6 +68,9 @@ const RequestDetail = () => {
                   {parcel.route.deliveryAddress.line1}, {parcel.route.deliveryAddress.postalCode}
                 </p>
               </div>
+                <p className="text-xs sm:text-sm">
+                  <span className='text-gray-500 text-xs sm:text-sm'></span>  {parcelID}
+                </p>
             </div>
           </section>
 
