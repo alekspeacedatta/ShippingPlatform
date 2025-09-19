@@ -55,31 +55,29 @@ const RequestsTable = () => {
               <div
                 key={req._id}
                 onClick={() => navigate(`/company/requests/${req._id}`)}
-                className="flex w-full cursor-pointer items-center justify-between gap-4 rounded-lg border bg-white p-4 transition-transform duration-200 hover:-translate-y-1.5 hover:shadow-lg"
+                className="flex w-full transform cursor-pointer items-center justify-between gap-3 rounded-lg border bg-white p-4 transition-transform duration-200 hover:-translate-y-2 hover:shadow-lg"
               >
-                <section className="min-w-0 flex-1">
-                  <p className="truncate text-base font-semibold md:text-lg">
+                <section className="flex min-w-0 flex-col gap-1">
+                  <p className="truncate text-sm font-semibold md:text-base lg:text-lg">
                     {req.route.origin.country} → {req.route.destination.country}
                   </p>
-
-                  <div className="mt-1 grid grid-cols-1 gap-1.5 text-xs text-gray-600 md:grid-cols-2 md:text-sm">
-                    <p>
+                  <section className="flex flex-col items-center gap-x-4 gap-y-1">
+                    <p className="text-xs text-gray-600 md:text-sm">
                       <span className="font-semibold">Type:</span> {req.shippingType}
                     </p>
-                    <p>
-                      <span className="font-semibold">Price estimate:</span> ${req.priceEstimate}
+                    <p className="text-xs text-gray-600 md:text-sm">
+                      <span className="font-semibold">Price estimate:</span> {req.priceEstimate}$
                     </p>
-                    <p className="col-span-1 md:col-span-2">
-                      <span className="font-semibold">Tracking ID:</span>{" "}
-                      <span className="font-mono text-[11px] md:text-xs align-middle truncate inline-block max-w-[18ch]">
-                        {req._id}
-                      </span>
+                    <p className="text-xs text-gray-600 md:text-sm">
+                      <span className="font-semibold">Price estimate:</span> {req.priceEstimate}$
                     </p>
-                  </div>
+                    <p className="text-xs text-gray-600 md:text-sm">
+                      <span className="font-semibold">Tracking ID</span> {req._id}
+                    </p>
+                  </section>
                 </section>
-
                 <Badge className={statusColors[req.status]}>
-                  <span className="text-xs md:text-sm">{req.status.replace(/_/g, " ")}</span>
+                  <span className="text-xs md:text-sm lg:text-base">{req.status.replace(/_/g, ' ')}</span>
                 </Badge>
               </div>
             ))
