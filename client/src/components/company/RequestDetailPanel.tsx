@@ -48,7 +48,7 @@ const RequestDetailPanel = () => {
 
   return (
     <div className="min-h-screen">
-      <div className="mx-auto flex w-full max-w-5xl flex-col gap-4 px-4 py-4 sm:px-6 sm:py-6 md:gap-6 md:py-10 lg:px-8">
+      <div className="mx-auto flex w-full max-w-7xl flex-col gap-4 px-4 py-4 sm:px-6 sm:py-6 md:gap-6 md:py-10 lg:px-8">
         <div className="flex flex-wrap items-center gap-2 text-sm">
           <button onClick={() => navigate(-1)} className="hover:font-semibold hover:underline underline-offset-4">
             all requests
