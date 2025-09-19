@@ -95,9 +95,11 @@ const RequestList = () => {
                         </p>
                       </section>
                     </section>
-                    <Badge className={statusColors[req.status]}>
-                      <span className="text-xs md:text-sm lg:text-base">{req.status.replace(/_/g, ' ')}</span>
-                    </Badge>
+                      <Badge className={`${statusColors[req.status]} whitespace-nowrap`}>
+                        <span className="text-xs md:text-sm lg:text-base">
+                          {req.status.replace(/_/g, ' ')}
+                        </span>
+                      </Badge>
                   </div>
                 ))
               )}
