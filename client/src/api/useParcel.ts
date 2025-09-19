@@ -33,15 +33,11 @@ export const useUpdateParcelStatus = () => {
   return useMutation({
     mutationFn: Parcelservice.updateParcelStatus,
     onSuccess: (updated) => {
-      // @ts-ignore
-      qc.setQueryData(['requests', updated._id], (prev) => {
-        // @ts-expect-error
-        if (prev && 'parcel' in prev) {
-          return { ...prev, parcel: updated };
-        }
+      qc.setQueryData(['requests', updated._id], (prev: any) => {
+        if (prev && 'parcel' in prev) return { ...prev, parcel: updated };
         return updated;
       });
-      qc.invalidateQueries({ queryKey: ['requests'], exact: false });
+      qc.invalidateQueries({ queryKey: ['requests'] });
     },
   });
 };

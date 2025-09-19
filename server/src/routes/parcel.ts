@@ -37,31 +37,36 @@ router.get('/get', async (req: Request, res: Response) => {
 })
 router.patch('/update-status', async (req: Request, res: Response) => {
   try {
-    const { parcelId, status } = req.body as { parcelId?: string; status?: RequestStatus }
+    const { parcelId, status, note } = req.body as {
+      parcelId?: string; status?: RequestStatus; note?: string;
+    };
 
     if (!parcelId || !status) {
-      return res.status(400).json({ message: 'parcelId and status are required' })
+      return res.status(400).json({ message: 'parcelId and status are required' });
     }
     if (!REQUEST_STATUS.includes(status)) {
-      return res.status(400).json({ message: 'Invalid status value' })
+      return res.status(400).json({ message: 'Invalid status value' });
     }
+
+    const timelineEntry: any = { status, at: new Date().toISOString() };
+    if (note && note.trim()) timelineEntry.note = note.trim();
 
     const updated = await ParcelModel.findByIdAndUpdate(
       parcelId,
       {
         $set: { status },
-        $push: { timeline: { status, at: new Date().toISOString() } },
+        $push: { timeline: timelineEntry },
       },
       { new: true, runValidators: true },
-    ).lean()
+    ).lean();
 
-    if (!updated) return res.status(404).json({ message: 'Parcel not found' })
+    if (!updated) return res.status(404).json({ message: 'Parcel not found' });
 
-    return res.status(200).json(updated)
+    return res.status(200).json(updated);
   } catch (err) {
-    console.error('update-status error:', err)
-    return res.status(500).json({ message: 'Error while updating status' })
+    console.error('update-status error:', err);
+    return res.status(500).json({ message: 'Error while updating status' });
   }
-})
+});
 
 export default router

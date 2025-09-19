@@ -240,7 +240,6 @@ const CreateRequest = () => {
           <p>Error: {error?.message}</p>
         ) : (
           <>
-
             <div className="my-2 flex flex-col gap-2">
               <h1 className="text-xl sm:text-2xl font-semibold">Select company for transfer</h1>
               <CompanyPicker
@@ -350,7 +349,6 @@ const CreateRequest = () => {
                   errors={errors}
                 />
 
-
                 <div style={{ display: step === 3 ? 'block' : 'none' }}>
                   <Calculator
                     volumetricData={volumetricData}
@@ -368,7 +366,6 @@ const CreateRequest = () => {
                   {help(errors.calc)}
                 </div>
 
-                
                 {step === 4 && (
                   <div className="flex h-[55vh] min-h-28 flex-col gap-4 overflow-y-auto rounded-xl border bg-white p-4">
                     <h2 className="text-lg sm:text-xl font-semibold">Summary & Submit</h2>

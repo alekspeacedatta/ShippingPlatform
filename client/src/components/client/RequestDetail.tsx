@@ -10,7 +10,7 @@ const RequestDetail = () => {
   const { parcelId } = useParams<{ parcelId: string }>();
   const { data, isLoading, isError, error } = useGetRequest(parcelId!);
 
-  const [ parcelID ] = useState<string>(parcelId!);
+  const [parcelID] = useState<string>(parcelId!);
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>Error: {error.message}</p>;
   if (!data) return <p>parcel does not exsist</p>;
@@ -69,7 +69,9 @@ const RequestDetail = () => {
                 </p>
               </div>
             </div>
-            <p className='text-xs sm:text-sm text-gray-500'>Tracking ID: <span className=' text-black'>{parcelID}</span> </p>
+            <p className="text-xs sm:text-sm text-gray-500">
+              Tracking ID: <span className=" text-black">{parcelID}</span>{' '}
+            </p>
           </section>
 
           <div className="hidden md:block md:h-full md:w-px md:bg-black/5 mx-auto" />
@@ -133,7 +135,6 @@ const RequestDetail = () => {
                 const when =
                   // @ts-expect-error
                   typeof t.at === 'string' || t.at instanceof Date ? new Date(t.at).toLocaleString() : String(t.at);
-
                 return (
                   <div key={`${t.at}-${t.status}-${idx}`} className="grid grid-cols-[24px_1fr] gap-3">
                     <div className="relative flex h-full w-6 items-center justify-center">
@@ -146,9 +147,17 @@ const RequestDetail = () => {
                       )}
                     </div>
 
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-2 rounded-lg border bg-gray-50 px-3 py-2">
-                      <Badge className={color}>{label}</Badge>
-                      <time className="text-xs sm:text-sm text-gray-500">{when}</time>
+                    <div className="flex flex-col gap-1 rounded-lg border bg-gray-50 px-3 py-2">
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-2">
+                        <Badge className={color}>{label}</Badge>
+                        <time className="text-xs sm:text-sm text-gray-500">{when}</time>
+                      </div>
+
+                      {t.note && (
+                        <div className="mt-0.5 rounded bg-white/70 px-3 py-2 text-xs sm:text-sm text-gray-700 border">
+                          {t.note}
+                        </div>
+                      )}
                     </div>
                   </div>
                 );

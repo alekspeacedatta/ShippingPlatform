@@ -26,13 +26,14 @@ export class Parcelservice {
     if (!res.ok) throw new Error('Error while fetching selected request');
     return res.json();
   }
-  static async updateParcelStatus(params: { parcelId: string; status: RequestStatus }) {
+  static async updateParcelStatus(params: { parcelId: string; status: RequestStatus; note?: string }) {
     const res = await fetch(`${BASE_URL}/api/parcel/update-status`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(params),
     });
-    if (!res.ok) throw new Error('Error while updating parcel status');
-    return res.json();
+    const body = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(body?.message || 'Error while updating parcel status');
+    return body;
   }
 }
