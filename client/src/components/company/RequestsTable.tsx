@@ -60,12 +60,18 @@ const RequestsTable = () => {
                   <p className="truncate text-sm font-semibold md:text-base lg:text-lg">
                     {req.route.origin.country} → {req.route.destination.country}
                   </p>
-                  <section className="flex flex-wrap items-center gap-x-4 gap-y-1">
+                  <section className="flex flex-col items-center gap-x-4 gap-y-1">
                     <p className="text-xs text-gray-600 md:text-sm">
                       <span className="font-semibold">Type:</span> {req.shippingType}
                     </p>
                     <p className="text-xs text-gray-600 md:text-sm">
                       <span className="font-semibold">Price estimate:</span> {req.priceEstimate}$
+                    </p>
+                    <p className="text-xs text-gray-600 md:text-sm">
+                      <span className="font-semibold">Price estimate:</span> {req.priceEstimate}$
+                    </p>
+                    <p className="text-xs text-gray-600 md:text-sm">
+                      <span className="font-semibold">Tracking ID</span> {req._id}
                     </p>
                   </section>
                 </section>
