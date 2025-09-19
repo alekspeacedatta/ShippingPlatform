@@ -40,7 +40,7 @@ export class Parcelservice {
   static async getRequest(parcelId: string) {
     const res = await fetch(`${BASE_URL}/api/parcel/${parcelId}`);
     if (!res.ok) throw new Error('Parcel not found');
-    return res.json(); // { parcel, company } or parcel
+    return res.json();
   }
 
 }

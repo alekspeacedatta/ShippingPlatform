@@ -129,7 +129,7 @@ const ClientHeader = () => {
               Requests
             </NavLink>
             <NavLink
-              to="/client/profile"
+              to="/client/track"
               onClick={() => setOpen(false)}
               className={({ isActive }) =>
                 [
@@ -140,7 +140,7 @@ const ClientHeader = () => {
                 ].join(' ')
               }
             >
-              Profile
+              Track
             </NavLink>
 
             <button
