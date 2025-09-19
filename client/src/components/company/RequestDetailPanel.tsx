@@ -60,46 +60,47 @@ const RequestDetailPanel = () => {
 
           <div className="flex flex-wrap justify-between items-stretch gap-2">
             <Badge className={badgeClass}>{prettyStatus(parcel.status)}</Badge>
+            <div className='flex items-center gap-2'>
+              <label className="inline-flex w-full sm:w-auto items-center gap-1">
+                <span className="sr-only sm:not-sr-only sm:text-sm sm:text-gray-500">Update status:</span>
+                <select
+                  className="w-full sm:w-auto min-w-[160px] rounded border bg-white px-3 py-2 text-sm disabled:opacity-60"
+                  value={selectedStatus}
+                  onChange={(e) => setSelectedStatus(e.target.value as RequestStatus)}
+                  disabled={isPending}
+                >
+                  {!currentStatus && (
+                    <option value="" disabled>
+                      Select status…
+                    </option>
+                  )}
+                  {REQUEST_STATUS.map((s) => (
+                    <option key={s} value={s}>
+                      {prettyStatus(s)}
+                    </option>
+                  ))}
+                </select>
+              </label>
 
-            <label className="inline-flex w-full sm:w-auto items-center gap-2">
-              <span className="sr-only sm:not-sr-only sm:text-sm sm:text-gray-500">Update status:</span>
-              <select
-                className="w-full sm:w-auto min-w-[160px] rounded border bg-white px-3 py-2 text-sm disabled:opacity-60"
-                value={selectedStatus}
-                onChange={(e) => setSelectedStatus(e.target.value as RequestStatus)}
+              <input
+                type="text"
+                placeholder="Optional note"
+                value={note}
+                onChange={(e) => setNote(e.target.value)}
+                className="w-full sm:w-[320px] rounded border bg-white px-3 py-2 text-sm break-words"
                 disabled={isPending}
+              />
+
+              <button
+                type="button"
+                onClick={handleStatusUpdate}
+                disabled={!selectedStatus || isPending}
+                className="rounded bg-[#7c86ff] px-4 py-2 text-sm font-semibold text-white transition
+                      disabled:opacity-60 hover:bg-[#6a73d6ff]"
               >
-                {!currentStatus && (
-                  <option value="" disabled>
-                    Select status…
-                  </option>
-                )}
-                {REQUEST_STATUS.map((s) => (
-                  <option key={s} value={s}>
-                    {prettyStatus(s)}
-                  </option>
-                ))}
-              </select>
-            </label>
-
-            <input
-              type="text"
-              placeholder="Optional note"
-              value={note}
-              onChange={(e) => setNote(e.target.value)}
-              className="w-full sm:w-[320px] rounded border bg-white px-3 py-2 text-sm break-words"
-              disabled={isPending}
-            />
-
-            <button
-              type="button"
-              onClick={handleStatusUpdate}
-              disabled={!selectedStatus || isPending}
-              className="rounded bg-[#7c86ff] px-4 py-2 text-sm font-semibold text-white transition
-                     disabled:opacity-60 hover:bg-[#6a73d6ff]"
-            >
-              {isPending ? 'Updating…' : 'Update Status'}
-            </button>
+                {isPending ? 'Updating…' : 'Update Status'}
+              </button>
+            </div>
           </div>
 
           {updateError && (
