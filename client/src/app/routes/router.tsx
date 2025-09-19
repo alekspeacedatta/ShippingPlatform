@@ -12,7 +12,7 @@ const RequestList = lazy(() => import('../../components/client/RequestList'));
 const RequestDetail = lazy(() => import('../../components/client/RequestDetail'));
 
 const CompanyDashboard = lazy(() => import('../../pages/company/Dashboard'));
-const Requests = lazy(() => import('../../pages/company/Requsests'));
+const Requests = lazy(() => import('../../pages/company/Requests'));
 const RequestDetailPanel = lazy(() => import('../../components/company/RequestDetailPanel'));
 const Pricing = lazy(() => import('../../pages/company/Pricing'));
 const Settings = lazy(() => import('../../pages/company/Settings'));
