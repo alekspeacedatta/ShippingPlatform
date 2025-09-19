@@ -3,6 +3,7 @@ import { useGetRequest, useUpdateParcelStatus } from '../../api/useParcel';
 import { Badge } from '../commons/Badge';
 import type { Company, ParcelRequest } from '../../types/Types';
 import { REQUEST_STATUS, statusColors, type RequestStatus } from '../../types/Types';
+import { useState } from 'react';
 
 const prettyStatus = (s?: string) => (s ? s.replace(/_/g, ' ') : '—');
 
@@ -10,6 +11,7 @@ const RequestDetailPanel = () => {
   const navigate = useNavigate();
   const { parcelId } = useParams<{ parcelId: string }>();
 
+  const [ parcelID, setParcelID ] = useState<string>(parcelId!);
   const { data, isLoading, isError, error } = useGetRequest(parcelId!);
   const { mutate: updateStatus, isPending } = useUpdateParcelStatus();
 
@@ -95,7 +97,7 @@ const RequestDetailPanel = () => {
                 </p>
               </div>
             </div>
-            <p className='text-xs sm:text-sm text-gray-500'>Tracking ID: <span className=' text-black'>{parcelId}</span> </p>
+            <p className='text-xs sm:text-sm text-gray-500'>Tracking ID: <span className=' text-black'>{parcelID}</span> </p>
           </section>
 
           <div className="hidden md:block md:h-full md:w-px md:bg-black/5 mx-auto" />
