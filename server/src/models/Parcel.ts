@@ -26,7 +26,7 @@ export const ParcelSchema = new mongoose.Schema({
     type: String,
     enum: REQUEST_STATUS,
     required: true,
-    default: 'AWAITING_COMPANY_CONFIRMATION',
+    default: 'PENDING_REVIEW',
   },
   timeline: [
     {

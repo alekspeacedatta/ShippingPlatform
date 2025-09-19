@@ -199,8 +199,8 @@ const CreateRequest = () => {
           },
         },
         priceEstimate: total,
-        status: 'AWAITING_COMPANY_CONFIRMATION',
-        timeline: [{ status: 'AWAITING_COMPANY_CONFIRMATION', at: new Date().toISOString() }],
+        status: 'PENDING_REVIEW',
+        timeline: [{ status: 'PENDING_REVIEW', at: new Date().toISOString() }],
         trackingId: 'dsds',
         messages: [],
       },
@@ -223,7 +223,6 @@ const CreateRequest = () => {
     <>
       <ClientHeader />
       <div className="mx-auto w-full max-w-3xl md:max-w-5xl px-4 sm:px-6 lg:px-8 py-4 sm:py-6 flex flex-col justify-center gap-5">
-        {/* Breadcrumb */}
         <div className="flex flex-wrap items-center gap-2 text-sm">
           <button
             className="hover:font-semibold hover:underline underline-offset-4"
@@ -241,7 +240,7 @@ const CreateRequest = () => {
           <p>Error: {error?.message}</p>
         ) : (
           <>
-            {/* Company select */}
+
             <div className="my-2 flex flex-col gap-2">
               <h1 className="text-xl sm:text-2xl font-semibold">Select company for transfer</h1>
               <CompanyPicker
@@ -351,7 +350,7 @@ const CreateRequest = () => {
                   errors={errors}
                 />
 
-                {/* Calculator step */}
+
                 <div style={{ display: step === 3 ? 'block' : 'none' }}>
                   <Calculator
                     volumetricData={volumetricData}
@@ -369,7 +368,7 @@ const CreateRequest = () => {
                   {help(errors.calc)}
                 </div>
 
-                {/* Summary */}
+                
                 {step === 4 && (
                   <div className="flex h-[55vh] min-h-28 flex-col gap-4 overflow-y-auto rounded-xl border bg-white p-4">
                     <h2 className="text-lg sm:text-xl font-semibold">Summary & Submit</h2>
