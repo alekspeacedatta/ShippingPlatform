@@ -36,7 +36,7 @@ export default function Track() {
       <ClientHeader />
 
       <div className="flex items-start justify-center p-3">
-        <div className="flex w-[80rem] max-w-full flex-col gap-4">
+        <div className="flex w-[70rem] max-w-full flex-col gap-4">
           <div className="flex items-center gap-2 text-sm">
             <button onClick={() => navigate('/client/dashboard')} className="hover:underline underline-offset-4">
               Dashboard
