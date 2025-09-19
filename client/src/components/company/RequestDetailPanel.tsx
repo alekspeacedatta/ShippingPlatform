@@ -24,7 +24,7 @@ const RequestDetailPanel = () => {
   const badgeClass = currentStatus ? statusColors[currentStatus] : 'bg-gray-400';
   const trackingId = parcelId ?? '';
 
-  const isUpdateDisabled = !selectedStatus || isPending;
+  
 
   const handleStatusUpdate = () => {
     if (!parcelId || !selectedStatus) return;
