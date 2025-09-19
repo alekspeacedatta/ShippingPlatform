@@ -90,10 +90,10 @@ const RequestList = () => {
                       <p className="text-xs text-gray-600 md:text-sm">
                         <span className="font-semibold">Price estimate:</span> {req.priceEstimate}$
                       </p>
-                      <p className="text-xs text-gray-600 md:text-sm">
-                          <span className="font-semibold">Tracking ID:</span> {req._id}
-                        </p>
                     </section>
+                    <p className="text-xs text-gray-600 md:text-sm">
+                        <span className="font-semibold">Tracking ID:</span> {req._id}
+                      </p>
                   </section>
                   <Badge className={statusColors[req.status]}>
                     <span className="text-xs md:text-sm lg:text-base">{req.status.replace(/_/g, ' ')}</span>
