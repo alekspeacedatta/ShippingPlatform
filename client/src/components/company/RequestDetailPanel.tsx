@@ -4,6 +4,7 @@ import { useGetRequest, useUpdateParcelStatus } from '../../api/useParcel';
 import type { Company, ParcelRequest } from '../../types/Types';
 import { REQUEST_STATUS, statusColors, type RequestStatus } from '../../types/Types';
 import { Badge } from '../commons/Badge';
+import { Button } from '../commons/Button';
 
 const prettyStatus = (s?: string) => (s ? s.replace(/_/g, ' ') : '—');
 const RequestDetailPanel = () => {
@@ -28,7 +29,7 @@ const RequestDetailPanel = () => {
 
   const handleStatusUpdate = () => {
     if (!parcelId || !selectedStatus) return;
-   
+
     updateStatus(
       {
         parcelId,
@@ -60,48 +61,44 @@ const RequestDetailPanel = () => {
         <div className="flex flex-col gap-2 ">
           <h1 className="text-xl font-semibold sm:text-2xl">Your parcel details</h1>
 
-          <div className="flex items-stretch gap-2 sm:flex-row sm:items-center sm:gap-3">
+          <div className="flex items-stretch justify-between gap-2 sm:flex-row sm:items-center sm:gap-3">
             <Badge className={badgeClass}>{prettyStatus(parcel.status)}</Badge>
 
-            <label className="inline-flex items-center gap-2">
-              <span className="sr-only sm:not-sr-only sm:text-sm sm:text-gray-500">Update status:</span>
-              <select
-                className="w-full rounded border bg-white px-3 py-2 text-sm disabled:opacity-60 sm:w-auto"
-                value={selectedStatus}
-                onChange={(e) => setSelectedStatus(e.target.value as RequestStatus)}
+            <div className="flex items-center gap-2">
+              <label className="inline-flex items-center gap-2">
+                <span className="sr-only sm:not-sr-only sm:text-sm sm:text-gray-500">Update status:</span>
+                <select
+                  className="w-full rounded border bg-white px-3 py-2 text-sm disabled:opacity-60 sm:w-auto"
+                  value={selectedStatus}
+                  onChange={(e) => setSelectedStatus(e.target.value as RequestStatus)}
+                  disabled={isPending}
+                >
+                  {!currentStatus && (
+                    <option value="" disabled>
+                      Select status…
+                    </option>
+                  )}
+                  {REQUEST_STATUS.map((s) => (
+                    <option key={s} value={s}>
+                      {prettyStatus(s)}
+                    </option>
+                  ))}
+                </select>
+              </label>
+
+              <input
+                type="text"
+                placeholder="Optional note (e.g., pickup window 10:00–12:00)"
+                value={note}
+                onChange={(e) => setNote(e.target.value)}
+                className="w-full rounded border bg-white px-3 py-2 text-sm sm:w-80"
                 disabled={isPending}
-              >
-                {!currentStatus && (
-                  <option value="" disabled>
-                    Select status…
-                  </option>
-                )}
-                {REQUEST_STATUS.map((s) => (
-                  <option key={s} value={s}>
-                    {prettyStatus(s)}
-                  </option>
-                ))}
-              </select>
-            </label>
+              />
 
-            <input
-              type="text"
-              placeholder="Optional note (e.g., pickup window 10:00–12:00)"
-              value={note}
-              onChange={(e) => setNote(e.target.value)}
-              className="w-full rounded border bg-white px-3 py-2 text-sm sm:w-80"
-              disabled={isPending}
-            />
-
-            <button
-              type="button"
-              onClick={handleStatusUpdate}
-              disabled={isUpdateDisabled}
-              className="rounded bg-indigo-600 px-4 py-2 text-sm font-semibold text-white transition
-                         disabled:opacity-60 hover:bg-indigo-700"
-            >
-              {isPending ? 'Updating…' : 'Update Status'}
-            </button>
+              <Button type="button" onClick={handleStatusUpdate} disabled={isUpdateDisabled}>
+                {isPending ? 'Updating…' : 'Update Status'}
+              </Button>
+            </div>
           </div>
         </div>
 
@@ -250,4 +247,4 @@ const RequestDetailPanel = () => {
   );
 };
 
-export default RequestDetailPanel
+export default RequestDetailPanel;
