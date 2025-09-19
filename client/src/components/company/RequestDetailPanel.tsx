@@ -4,7 +4,6 @@ import { useGetRequest, useUpdateParcelStatus } from '../../api/useParcel';
 import type { Company, ParcelRequest } from '../../types/Types';
 import { REQUEST_STATUS, statusColors, type RequestStatus } from '../../types/Types';
 import { Badge } from '../commons/Badge';
-import { Button } from '../commons/Button';
 
 const prettyStatus = (s?: string) => (s ? s.replace(/_/g, ' ') : '—');
 const RequestDetailPanel = () => {
