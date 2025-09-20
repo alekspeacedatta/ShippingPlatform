@@ -35,6 +35,21 @@ const RequestList = () => {
       <div className="flex items-start justify-center p-3 overflow-hidden">
         <div className="flex h-[76vh] w-[80rem] max-w-full flex-col gap-3">
           <div className="flex w-full flex-col items-start gap-2 sm:w-auto sm:flex-row sm:items-center sm:justify-end">
+            <div className="flex items-center gap-2">
+              <p
+                className="cursor-pointer hover:font-semibold hover:underline hover:underline-offset-4"
+                onClick={() => navigate(-1)}
+              >
+                Dashboard
+              </p>
+              <span>→</span>
+              <p
+                className="cursor-pointer font-semibold text-indigo-500 underline underline-offset-4 transition-all duration-200"
+                onClick={() => navigate(1)}
+              >
+                All Request
+              </p>
+            </div>
             <p className="font-semibold">filter requests by status</p>
             <span className="hidden font-semibold sm:inline">-</span>
             <div className="relative inline-flex">
