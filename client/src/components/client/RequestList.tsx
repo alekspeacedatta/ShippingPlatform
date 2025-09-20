@@ -84,7 +84,7 @@ const RequestList = () => {
 
                 <svg
                   className={`
-          pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 h-4 w-4
+          pointer-events-none absolute right-2.5 top-[34%] -translate-y-1/2 h-4 w-4
           transition-colors duration-200
           ${isFilterActive ? 'text-indigo-600' : 'text-gray-400'}
         `}
