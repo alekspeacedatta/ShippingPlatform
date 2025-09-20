@@ -20,7 +20,6 @@ const Track = lazy(() => import('../../pages/client/Track'));
 import ProtectedRoute from './ProtectedRoute';
 import PublicOnlyRoute from './PublicOnlyRoutes';
 
-
 const wrap = (el: JSX.Element) => <Suspense fallback={<div className="p-6">Loading…</div>}>{el}</Suspense>;
 
 export const router = createHashRouter([

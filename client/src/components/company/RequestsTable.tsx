@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useGetRequests } from '../../api/useParcel';
 import { Badge } from '../commons/Badge';
-import { ArrowUpDown } from "lucide-react";
+import { ArrowUpDown } from 'lucide-react';
 import { useCompanyStore } from '../../store/useCompanyStore';
 import type { ParcelRequest, RequestStatus } from '../../types/Types';
 import { REQUEST_STATUS, statusColors } from '../../types/Types';
@@ -16,15 +16,13 @@ const RequestsTable = () => {
 
   const { data = [], isLoading, isError, error } = useGetRequests(companyId);
   const [filteredState, setFilteredState] = useState<RequestStatus | 'ALL'>('ALL');
-  const [ reversed, setReversed ] = useState(false);
+  const [reversed, setReversed] = useState(false);
 
   const requests = data as ParcelWithId[];
   const filtered = useMemo(() => {
-      const base = filteredState === 'ALL' ? requests : requests.filter((r) => r.status === filteredState);
-      return reversed ? [...base].reverse() : base
-  },[requests, filteredState, reversed],);
-
-  
+    const base = filteredState === 'ALL' ? requests : requests.filter((r) => r.status === filteredState);
+    return reversed ? [...base].reverse() : base;
+  }, [requests, filteredState, reversed]);
 
   if (!companyId) return <div className="p-4">No company selected.</div>;
   if (isLoading) return <div className="p-4">Loading requests…</div>;
@@ -47,20 +45,31 @@ const RequestsTable = () => {
             </option>
           ))}
         </Select>
-          <button
-            onClick={() => setReversed(p => !p)}
-            aria-pressed={reversed}
-            className="inline-flex items-center justify-center border-0 bg-transparent rounded-md border px-2.5 py-2 font-semibold"
-            title={reversed ? "Oldest → Newest" : "Newest → Oldest"}
-          >
-            <ArrowUpDown
-              size={30}
-              className={`transition-transform duration-200 font-semibold ${
-                reversed ? 'text-indigo-600 rotate-180' : 'text-gray-500'
+        <button
+          onClick={() => setReversed((p) => !p)}
+          aria-pressed={reversed}
+          aria-label={reversed ? 'Sort oldest to newest' : 'Sort newest to oldest'}
+          title={reversed ? 'Oldest → Newest' : 'Newest → Oldest'}
+          className={` inline-flex items-center gap-2 rounded-xl px-3 py-2 shadow-sm backdrop-blur transition-all duration-200 focus-visible:outline-none active:scale-[0.97] ${reversed ? 'border border-indigo-600 bg-indigo-50 hover:bg-indigo-100 focus-visible:ring-2 focus-visible:ring-indigo-500' : 'border border-gray-200/80 bg-white/80 hover:bg-white hover:shadow-md focus-visible:ring-2 focus-visible:ring-indigo-500'}`}
+        >
+          <ArrowUpDown
+            size={18}
+            className={`transition-colors duration-200 ${
+              reversed ? 'text-indigo-600' : 'text-gray-500 group-hover:text-gray-700'
+            }`}
+          />
+
+          <span className="flex items-baseline gap-1">
+            <span className="text-sm font-medium">Sort</span>
+            <span
+              className={`text-xs whitespace-nowrap transition-colors duration-200 ${
+                reversed ? 'text-indigo-700' : 'text-gray-500'
               }`}
-            />
-          </button>
-  
+            >
+              {reversed ? 'oldest → newest' : 'newest → oldest'}
+            </span>
+          </span>
+        </button>
       </div>
 
       <div className="py-1.7 h-[62vh] md:h-[73vh] overflow-y-auto">

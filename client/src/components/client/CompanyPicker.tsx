@@ -106,7 +106,6 @@ export default function CompanyPicker({
     return r;
   }, [companies, shippingType, weightKg, size?.w, size?.h, size?.l, declaredValue, fromCountry, toCountry]);
 
-  
   const bestEstimate = useMemo(
     () => rows.reduce((min, r) => Math.min(min, r.estimate), Number.POSITIVE_INFINITY),
     [rows],
@@ -257,7 +256,6 @@ export default function CompanyPicker({
                   active ? 'ring-1 ring-indigo-300 bg-indigo-50' : '',
                 )}
               >
-                
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
                     <div className="truncate font-medium">{company.name}</div>
@@ -273,14 +271,12 @@ export default function CompanyPicker({
                   </div>
                 </div>
 
-
                 <div className="mt-2 flex flex-wrap gap-1">
                   {(['SEA', 'ROAD', 'RAILWAY', 'AIR'] as const).map((t) =>
                     chip(t, company.supportedTypes.includes(t), isMin[t]),
                   )}
                 </div>
 
-                
                 <div className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-3">
                   {badge('Base', money(p.basePrice), isMin.basePrice)}
                   {badge('Per Kg', money(p.pricePerKg), isMin.pricePerKg)}

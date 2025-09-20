@@ -47,213 +47,213 @@ const RequestDetailPanel = () => {
 
   return (
     <>
-    
       <DashboardHeader />
-    <div className="min-h-screen">
-
-      <div className="mx-auto w-full max-w-7xl px-4 py-4 sm:px-6 sm:py-6 md:py-10 lg:px-8 flex flex-col gap-4 md:gap-6">
-        <div className="flex flex-wrap items-center gap-2 text-sm">
-          <button onClick={() => navigate(-1)} className="hover:font-semibold hover:underline underline-offset-4">
-            all requests
-          </button>
-          <span className="text-gray-400">→</span>
-          <span className="font-semibold text-indigo-500 underline underline-offset-4">request details panel</span>
-        </div>
-
-        <div className="flex flex-col gap-3">
-          <h1 className="text-xl sm:text-2xl font-semibold">Your parcel details</h1>
-
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-stretch sm:justify-between">
-
-            <Badge className={`${badgeClass} w-fit`}>{prettyStatus(parcel.status)}</Badge>
-
-
-            <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center">
-              <label className="inline-flex w-full items-center gap-2 sm:w-auto">
-                <span className="sr-only sm:not-sr-only sm:text-sm sm:text-gray-500">Update status:</span>
-                <select
-                  className="h-10 w-full min-w-0 rounded border bg-white px-3 text-sm disabled:opacity-60 sm:w-48 md:w-56"
-                  value={selectedStatus}
-                  onChange={(e) => setSelectedStatus(e.target.value as RequestStatus)}
-                  disabled={isPending}
-                >
-                  {!currentStatus && (
-                    <option value="" disabled>
-                      Select status…
-                    </option>
-                  )}
-                  {REQUEST_STATUS.map((s) => (
-                    <option key={s} value={s}>
-                      {prettyStatus(s)}
-                    </option>
-                  ))}
-                </select>
-              </label>
-
-              <input
-                type="text"
-                placeholder="Optional note"
-                value={note}
-                onChange={(e) => setNote(e.target.value)}
-                className="h-10 w-full min-w-0 rounded border bg-white px-3 text-sm disabled:opacity-60 sm:flex-1 md:w-80"
-                disabled={isPending}
-              />
-
-              <button
-                type="button"
-                onClick={handleStatusUpdate}
-                disabled={!selectedStatus || isPending}
-                className="h-10 w-full rounded bg-[#7c86ff] px-4 text-sm font-semibold text-white transition hover:bg-[#6a73d6ff] disabled:opacity-60 sm:w-auto"
-              >
-                {isPending ? 'Updating…' : 'Update Status'}
-              </button>
-            </div>
+      <div className="min-h-screen">
+        <div className="mx-auto w-full max-w-7xl px-4 py-4 sm:px-6 sm:py-6 md:py-10 lg:px-8 flex flex-col gap-4 md:gap-6">
+          <div className="flex flex-wrap items-center gap-2 text-sm">
+            <button onClick={() => navigate(-1)} className="hover:font-semibold hover:underline underline-offset-4">
+              all requests
+            </button>
+            <span className="text-gray-400">→</span>
+            <span className="font-semibold text-indigo-500 underline underline-offset-4">request details panel</span>
           </div>
 
-          {updateError && (
-            <p className="text-sm text-red-600">
-              {(updateError as Error)?.message || 'Failed to update status. Please try again.'}
-            </p>
-          )}
-          {isSuccess && <p className="text-sm text-green-600">Status updated.</p>}
-        </div>
+          <div className="flex flex-col gap-3">
+            <h1 className="text-xl sm:text-2xl font-semibold">Your parcel details</h1>
 
-        <div className="rounded border bg-white p-3 sm:p-4 md:p-5">
-          <div className="flex flex-col md:flex-row gap-4">
-            <section className="flex flex-col gap-2 md:basis-1/3 min-w-0">
-              <h2 className="text-base sm:text-lg font-semibold">
-                {parcel.route.origin.country} → {parcel.route.destination.country}
-              </h2>
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-stretch sm:justify-between">
+              <Badge className={`${badgeClass} w-fit`}>{prettyStatus(parcel.status)}</Badge>
 
-              <div className="flex flex-col sm:flex-row gap-4 sm:gap-10">
-                <div>
-                  <p className="text-xs sm:text-sm text-gray-500">Pick up address</p>
-                  <p className="text-xs sm:text-sm">
-                    {parcel.route.pickupAddress.country}, {parcel.route.pickupAddress.city}
-                  </p>
-                  <p className="text-xs sm:text-sm">
-                    {parcel.route.pickupAddress.line1}, {parcel.route.pickupAddress.postalCode}
-                  </p>
-                </div>
+              <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center">
+                <label className="inline-flex w-full items-center gap-2 sm:w-auto">
+                  <span className="sr-only sm:not-sr-only sm:text-sm sm:text-gray-500">Update status:</span>
+                  <select
+                    className="h-10 w-full min-w-0 rounded border bg-white px-3 text-sm disabled:opacity-60 sm:w-48 md:w-56"
+                    value={selectedStatus}
+                    onChange={(e) => setSelectedStatus(e.target.value as RequestStatus)}
+                    disabled={isPending}
+                  >
+                    {!currentStatus && (
+                      <option value="" disabled>
+                        Select status…
+                      </option>
+                    )}
+                    {REQUEST_STATUS.map((s) => (
+                      <option key={s} value={s}>
+                        {prettyStatus(s)}
+                      </option>
+                    ))}
+                  </select>
+                </label>
 
-                <div>
-                  <p className="text-xs sm:text-sm text-gray-500">Delivery address</p>
-                  <p className="text-xs sm:text-sm">
-                    {parcel.route.deliveryAddress.country}, {parcel.route.deliveryAddress.city}
-                  </p>
-                  <p className="text-xs sm:text-sm">
-                    {parcel.route.deliveryAddress.line1}, {parcel.route.deliveryAddress.postalCode}
-                  </p>
-                </div>
+                <input
+                  type="text"
+                  placeholder="Optional note"
+                  value={note}
+                  onChange={(e) => setNote(e.target.value)}
+                  className="h-10 w-full min-w-0 rounded border bg-white px-3 text-sm disabled:opacity-60 sm:flex-1 md:w-80"
+                  disabled={isPending}
+                />
+
+                <button
+                  type="button"
+                  onClick={handleStatusUpdate}
+                  disabled={!selectedStatus || isPending}
+                  className="h-10 w-full rounded bg-[#7c86ff] px-4 text-sm font-semibold text-white transition hover:bg-[#6a73d6ff] disabled:opacity-60 sm:w-auto"
+                >
+                  {isPending ? 'Updating…' : 'Update Status'}
+                </button>
               </div>
+            </div>
 
-              <p className="text-xs sm:text-sm text-gray-500">
-                Tracking ID:{' '}
-                <span className="font-semibold text-gray-500 truncate inline-block max-w-full align-bottom">{trackingId}</span>
+            {updateError && (
+              <p className="text-sm text-red-600">
+                {(updateError as Error)?.message || 'Failed to update status. Please try again.'}
               </p>
-            </section>
+            )}
+            {isSuccess && <p className="text-sm text-green-600">Status updated.</p>}
+          </div>
 
-            <section className="flex flex-col gap-2 md:basis-1/3 md:border-x md:border-black/5 md:px-4 min-w-0">
-              <h2 className="text-base sm:text-lg font-semibold">Parcel details</h2>
-              <div className="space-y-1">
-                <p className="text-xs sm:text-sm">
-                  <span className="text-gray-500">width: </span>
-                  {parcel.parcel.widthCm}cm, <span className="text-gray-500">length: </span>
-                  {parcel.parcel.lengthCm}cm
-                </p>
-                <p className="text-xs sm:text-sm">
-                  <span className="text-gray-500">height: </span>
-                  {parcel.parcel.heightCm}cm, <span className="text-gray-500">weight: </span>
-                  {parcel.parcel.weightKg}kg
-                </p>
-                {parcel.parcel.kind && (
-                  <p className="text-xs sm:text-sm">
-                    <span className="text-gray-500">kind: </span>
-                    {parcel.parcel.kind.toLowerCase()}
-                  </p>
-                )}
-                {'declaredValue' in parcel.parcel && (
-                  <p className="text-xs sm:text-sm">
-                    <span className="text-gray-500">declared value: </span>${parcel.parcel.declaredValue}
-                  </p>
-                )}
-              </div>
-            </section>
+          <div className="rounded border bg-white p-3 sm:p-4 md:p-5">
+            <div className="flex flex-col md:flex-row gap-4">
+              <section className="flex flex-col gap-2 md:basis-1/3 min-w-0">
+                <h2 className="text-base sm:text-lg font-semibold">
+                  {parcel.route.origin.country} → {parcel.route.destination.country}
+                </h2>
 
-            {company && (
-              <section className="flex flex-col gap-2 md:basis-1/3 md:pl-4 min-w-0">
-                <h2 className="text-base sm:text-lg font-semibold">Company & shipping</h2>
+                <div className="flex flex-col sm:flex-row gap-4 sm:gap-10">
+                  <div>
+                    <p className="text-xs sm:text-sm text-gray-500">Pick up address</p>
+                    <p className="text-xs sm:text-sm">
+                      {parcel.route.pickupAddress.country}, {parcel.route.pickupAddress.city}
+                    </p>
+                    <p className="text-xs sm:text-sm">
+                      {parcel.route.pickupAddress.line1}, {parcel.route.pickupAddress.postalCode}
+                    </p>
+                  </div>
+
+                  <div>
+                    <p className="text-xs sm:text-sm text-gray-500">Delivery address</p>
+                    <p className="text-xs sm:text-sm">
+                      {parcel.route.deliveryAddress.country}, {parcel.route.deliveryAddress.city}
+                    </p>
+                    <p className="text-xs sm:text-sm">
+                      {parcel.route.deliveryAddress.line1}, {parcel.route.deliveryAddress.postalCode}
+                    </p>
+                  </div>
+                </div>
+
+                <p className="text-xs sm:text-sm text-gray-500">
+                  Tracking ID:{' '}
+                  <span className="font-semibold text-gray-500 truncate inline-block max-w-full align-bottom">
+                    {trackingId}
+                  </span>
+                </p>
+              </section>
+
+              <section className="flex flex-col gap-2 md:basis-1/3 md:border-x md:border-black/5 md:px-4 min-w-0">
+                <h2 className="text-base sm:text-lg font-semibold">Parcel details</h2>
                 <div className="space-y-1">
                   <p className="text-xs sm:text-sm">
-                    <span className="text-gray-500">company: </span>
-                    {company.name}
+                    <span className="text-gray-500">width: </span>
+                    {parcel.parcel.widthCm}cm, <span className="text-gray-500">length: </span>
+                    {parcel.parcel.lengthCm}cm
                   </p>
                   <p className="text-xs sm:text-sm">
-                    <span className="text-gray-500">shipping type: </span>
-                    {parcel.shippingType}
+                    <span className="text-gray-500">height: </span>
+                    {parcel.parcel.heightCm}cm, <span className="text-gray-500">weight: </span>
+                    {parcel.parcel.weightKg}kg
                   </p>
-                  <p className="text-xs sm:text-sm">
-                    <span className="text-gray-500">type multiplier: </span>
-                    {company.pricing.typeMultipliers[parcel.shippingType]}x
-                  </p>
+                  {parcel.parcel.kind && (
+                    <p className="text-xs sm:text-sm">
+                      <span className="text-gray-500">kind: </span>
+                      {parcel.parcel.kind.toLowerCase()}
+                    </p>
+                  )}
+                  {'declaredValue' in parcel.parcel && (
+                    <p className="text-xs sm:text-sm">
+                      <span className="text-gray-500">declared value: </span>${parcel.parcel.declaredValue}
+                    </p>
+                  )}
                 </div>
               </section>
-            )}
+
+              {company && (
+                <section className="flex flex-col gap-2 md:basis-1/3 md:pl-4 min-w-0">
+                  <h2 className="text-base sm:text-lg font-semibold">Company & shipping</h2>
+                  <div className="space-y-1">
+                    <p className="text-xs sm:text-sm">
+                      <span className="text-gray-500">company: </span>
+                      {company.name}
+                    </p>
+                    <p className="text-xs sm:text-sm">
+                      <span className="text-gray-500">shipping type: </span>
+                      {parcel.shippingType}
+                    </p>
+                    <p className="text-xs sm:text-sm">
+                      <span className="text-gray-500">type multiplier: </span>
+                      {company.pricing.typeMultipliers[parcel.shippingType]}x
+                    </p>
+                  </div>
+                </section>
+              )}
+            </div>
           </div>
-        </div>
 
-        <div className="rounded border bg-white p-3 sm:p-4 md:p-5 max-h-80 sm:max-h-96 md:max-h-[45vh] overflow-y-auto">
-          <h2 className="mb-3 sm:mb-4 text-lg sm:text-xl font-semibold">Timeline</h2>
+          <div className="rounded border bg-white p-3 sm:p-4 md:p-5 max-h-80 sm:max-h-96 md:max-h-[45vh] overflow-y-auto">
+            <h2 className="mb-3 sm:mb-4 text-lg sm:text-xl font-semibold">Timeline</h2>
 
-          {parcel.timeline.length === 0 ? (
-            <p className="text-sm text-gray-500">No events yet.</p>
-          ) : (
-            <div className="space-y-4 sm:space-y-6">
-              {parcel.timeline.map((t, idx) => {
-                const isFirst = idx === 0;
-                const isLast = idx === parcel.timeline.length - 1;
-                const color = statusColors[t.status];
-                const label = t.status.replace(/_/g, ' ');
-                const when = whenToLocal(t.at);
+            {parcel.timeline.length === 0 ? (
+              <p className="text-sm text-gray-500">No events yet.</p>
+            ) : (
+              <div className="space-y-4 sm:space-y-6">
+                {parcel.timeline.map((t, idx) => {
+                  const isFirst = idx === 0;
+                  const isLast = idx === parcel.timeline.length - 1;
+                  const color = statusColors[t.status];
+                  const label = t.status.replace(/_/g, ' ');
+                  const when = whenToLocal(t.at);
 
-                return (
-                  <div key={`${t.at}-${t.status}-${idx}`} className="grid grid-cols-[24px_1fr] gap-3">
-                    <div className="relative flex h-full w-6 items-center justify-center">
-                      {!isFirst && <span className="absolute left-1/2 top-0 h-1/2 w-px -translate-x-1/2 bg-gray-200" />}
-                      <span
-                        className={`relative z-10 h-3.5 w-3.5 rounded-full border-2 border-white ${color} shadow`}
-                      />
-                      {!isLast && (
-                        <span className="absolute bottom-0 left-1/2 h-1/2 w-px -translate-x-1/2 bg-gray-200" />
-                      )}
-                    </div>
-
-                    <div className="flex flex-col gap-1 rounded-lg border bg-gray-50 px-3 py-2">
-                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-2">
-                        <Badge className={color}>{label}</Badge>
-                        <time className="text-xs sm:text-sm text-gray-500">{when}</time>
+                  return (
+                    <div key={`${t.at}-${t.status}-${idx}`} className="grid grid-cols-[24px_1fr] gap-3">
+                      <div className="relative flex h-full w-6 items-center justify-center">
+                        {!isFirst && (
+                          <span className="absolute left-1/2 top-0 h-1/2 w-px -translate-x-1/2 bg-gray-200" />
+                        )}
+                        <span
+                          className={`relative z-10 h-3.5 w-3.5 rounded-full border-2 border-white ${color} shadow`}
+                        />
+                        {!isLast && (
+                          <span className="absolute bottom-0 left-1/2 h-1/2 w-px -translate-x-1/2 bg-gray-200" />
+                        )}
                       </div>
 
-                      {t.note && (
-                        <div className="mt-0.5 rounded border bg-white/70 px-3 py-2 text-xs sm:text-sm text-gray-700 break-words">
-                          {t.note}
+                      <div className="flex flex-col gap-1 rounded-lg border bg-gray-50 px-3 py-2">
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-2">
+                          <Badge className={color}>{label}</Badge>
+                          <time className="text-xs sm:text-sm text-gray-500">{when}</time>
                         </div>
-                      )}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </div>
 
-        <div className="pt-1 sm:pt-2">
-          <h2 className="text-xl sm:text-2xl font-semibold">
-            Total price <span className="font-bold text-green-600">${parcel.priceEstimate}</span>
-          </h2>
+                        {t.note && (
+                          <div className="mt-0.5 rounded border bg-white/70 px-3 py-2 text-xs sm:text-sm text-gray-700 break-words">
+                            {t.note}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+
+          <div className="pt-1 sm:pt-2">
+            <h2 className="text-xl sm:text-2xl font-semibold">
+              Total price <span className="font-bold text-green-600">${parcel.priceEstimate}</span>
+            </h2>
+          </div>
         </div>
       </div>
-    </div>
     </>
   );
 };
