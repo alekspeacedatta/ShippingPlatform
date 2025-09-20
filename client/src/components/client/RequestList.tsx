@@ -34,7 +34,7 @@ const RequestList = () => {
       <ClientHeader />
       <div className="flex items-start justify-center p-3 overflow-hidden">
         <div className="flex h-[76vh] md:h-[80vh] w-[80rem] max-w-full flex-col gap-3">
-          <div className=" w-full flex flex-col gap-3 md:flex-row md:items-center md:justify-between ">
+          <div className="w-full flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
             <div className="flex items-center gap-2">
               <p
                 className="cursor-pointer hover:font-semibold hover:underline underline-offset-4"
@@ -51,7 +51,7 @@ const RequestList = () => {
               </p>
             </div>
 
-            <div className="w-full flex flex-col gap-2 sm:flex-row sm:items-center sm:flex-wrap md:w-auto ">
+            <div className="w-full md:w-auto flex flex-col gap-2 sm:flex-row sm:items-center sm:flex-wrap">
               <div className="flex items-center gap-2">
                 <p className="text-sm font-semibold">Filter by status</p>
                 <span className="hidden sm:inline">-</span>
@@ -63,8 +63,8 @@ const RequestList = () => {
                   onChange={(e) => setFilteredState(e.target.value as RequestStatus | 'ALL')}
                   aria-label="Filter by status"
                   className={`
-          appearance-none w-full rounded-xl px-3 py-2 pr-9
-          font-semibold shadow-sm backdrop-blur transition-all duration-200
+          h-10 w-full appearance-none rounded-xl px-3 pr-9 text-sm font-semibold
+          shadow-sm backdrop-blur transition-all duration-200
           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500
           hover:shadow-md
           ${
@@ -102,12 +102,10 @@ const RequestList = () => {
                 aria-label={reversed ? 'Sort oldest to newest' : 'Sort newest to oldest'}
                 title={reversed ? 'Oldest → Newest' : 'Newest → Oldest'}
                 className={`
-        inline-flex items-center justify-center gap-2
-        rounded-xl px-3 py-2 shadow-sm backdrop-blur
-        transition-all duration-200
+        h-10 w-full sm:w-auto inline-flex items-center justify-center gap-2
+        rounded-xl px-3 text-sm shadow-sm backdrop-blur
+        transition-all duration-200 active:scale-[0.97]
         focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500
-        active:scale-[0.97]
-        w-full sm:w-auto
         ${
           reversed
             ? 'border border-indigo-600 bg-indigo-50 hover:bg-indigo-100'
@@ -117,24 +115,18 @@ const RequestList = () => {
               >
                 <ArrowUpDown
                   size={18}
-                  className={`
-          transition-colors duration-200
-          ${reversed ? 'text-indigo-600' : 'text-gray-500'}
-        `}
+                  className={`transition-colors duration-200 ${reversed ? 'text-indigo-600' : 'text-gray-500'}`}
                 />
-                <span className="flex items-baseline gap-1">
-                  <span className="text-sm font-medium">Sort</span>
-                  <span
-                    className={`text-xs whitespace-nowrap transition-colors duration-200 ${
-                      reversed ? 'text-indigo-700' : 'text-gray-500'
-                    }`}
-                  >
+                <span className="flex items-baseline gap-1 whitespace-nowrap">
+                  <span className="font-medium">Sort</span>
+                  <span className={`${reversed ? 'text-indigo-700' : 'text-gray-500'}`}>
                     {reversed ? 'oldest → newest' : 'newest → oldest'}
                   </span>
                 </span>
               </button>
             </div>
           </div>
+
           <div className="py-1.7 h-[90vh] overflow-y-auto">
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {filtered.length === 0 ? (
