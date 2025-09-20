@@ -34,7 +34,7 @@ const RequestList = () => {
       <ClientHeader />
       <div className="flex items-start justify-center p-3 overflow-hidden">
         <div className="flex h-[76vh] md:h-[80vh] w-[80rem] max-w-full flex-col gap-3">
-          <div className="flex items-center gap-2">
+          <div className=" absolute t-[108px] flex items-center gap-2">
             <p
               className="cursor-pointer hover:font-semibold hover:underline hover:underline-offset-4"
               onClick={() => navigate(-1)}
