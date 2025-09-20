@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useGetRequests } from '../../api/useParcel';
 import { Badge } from '../commons/Badge';
+import { ArrowUpDown, SortAsc, SortDesc } from "lucide-react";
 import { useCompanyStore } from '../../store/useCompanyStore';
 import type { ParcelRequest, RequestStatus } from '../../types/Types';
 import { REQUEST_STATUS, statusColors } from '../../types/Types';
@@ -46,7 +47,14 @@ const RequestsTable = () => {
             </option>
           ))}
         </Select>
-        <button onClick={() => setReversed(p => !p)}>{reversed ? 'oldest to newest' : 'newest to oldest'}</button>
+        <button
+          onClick={() => setReversed(p => !p)}
+          className="inline-flex items-center justify-center rounded-md border px-2.5 py-2 hover:bg-gray-50"
+          aria-label={reversed ? "Sort oldest → newest" : "Sort newest → oldest"}
+          title={reversed ? "Oldest → Newest" : "Newest → Oldest"}
+        >
+          {reversed ? <SortAsc size={18} /> : <SortDesc size={18} />}
+        </button>
       </div>
 
       <div className="py-1.7 h-[62vh] md:h-[73vh] overflow-y-auto">
