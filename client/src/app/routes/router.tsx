@@ -1,4 +1,3 @@
-// routes/router.tsx
 import { createHashRouter, Outlet, Navigate } from 'react-router-dom';
 import { lazy, Suspense, type JSX } from 'react';
 
@@ -20,9 +19,7 @@ const Track = lazy(() => import('../../pages/client/Track'));
 
 import ProtectedRoute from './ProtectedRoute';
 import PublicOnlyRoute from './PublicOnlyRoutes';
-// in routes/router.tsx
 
-// ...
 
 const wrap = (el: JSX.Element) => <Suspense fallback={<div className="p-6">Loading…</div>}>{el}</Suspense>;
 

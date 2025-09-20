@@ -17,7 +17,6 @@ const Stepper = ({ steps, current }: { steps: string[]; current: number }) => {
               <span
                 className={[
                   'grid place-items-center rounded-full border-2 transition-all duration-200',
-                  // circle sizes (tiny → larger)
                   'h-7 w-7 text-[12px] sm:h-9 sm:w-9 sm:text-sm md:h-10 md:w-10 md:text-base',
                   active
                     ? 'bg-light-100 border-indigo-500 ring-4 ring-indigo-100'

@@ -15,12 +15,15 @@ const RequestsTable = () => {
 
   const { data = [], isLoading, isError, error } = useGetRequests(companyId);
   const [filteredState, setFilteredState] = useState<RequestStatus | 'ALL'>('ALL');
+  const [ reversed, setReversed ] = useState(false);
 
   const requests = data as ParcelWithId[];
-  const filtered = useMemo(
-    () => (filteredState === 'ALL' ? requests : requests.filter((r) => r.status === filteredState)),
-    [requests, filteredState],
-  );
+  const filtered = useMemo(() => {
+      const base = filteredState === 'ALL' ? requests : requests.filter((r) => r.status === filteredState);
+      return reversed ? [...base].reverse() : base
+  },[requests, filteredState, reversed],);
+
+  
 
   if (!companyId) return <div className="p-4">No company selected.</div>;
   if (isLoading) return <div className="p-4">Loading requests…</div>;
@@ -43,6 +46,7 @@ const RequestsTable = () => {
             </option>
           ))}
         </Select>
+        <button onClick={() => setReversed(p => !p)}>{reversed ? 'oldest to newest' : 'newest to oldest'}</button>
       </div>
 
       <div className="py-1.7 h-[62vh] md:h-[73vh] overflow-y-auto">

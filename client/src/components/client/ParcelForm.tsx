@@ -108,7 +108,7 @@ export default function ParcelForm({
         <section className="mx-auto flex min-h-28 flex-col justify-center gap-4 rounded-xl bg-white p-4 sm:p-5">
           <h2 className="text-xl sm:text-2xl font-semibold">Details</h2>
 
-          {/* weight + kind */}
+          
           <section className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="flex flex-col gap-2 min-w-0">
               <label className="text-sm font-medium">Parcel Weight</label>
@@ -133,7 +133,7 @@ export default function ParcelForm({
             </div>
           </section>
 
-          {/* volumetric */}
+          
           <section className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="col-span-1 sm:col-span-2 flex flex-col gap-2 min-w-0">
               <label className="text-sm font-medium">Width (cm)</label>
@@ -192,7 +192,7 @@ export default function ParcelForm({
         <section className="mx-auto flex min-h-28 flex-col justify-center gap-4 rounded-xl border bg-white p-4 sm:p-5">
           <h2 className="text-xl sm:text-2xl font-semibold">Route</h2>
 
-          {/* origin + pickup */}
+          
           <section className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="flex flex-col gap-2">
               <label className="text-sm sm:text-base font-semibold">Origin</label>
@@ -267,7 +267,7 @@ export default function ParcelForm({
             </div>
           </section>
 
-          {/* destination + delivery */}
+          
           <section className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="flex flex-col gap-2">
               <label className="text-sm sm:text-base font-semibold">Destination</label>
