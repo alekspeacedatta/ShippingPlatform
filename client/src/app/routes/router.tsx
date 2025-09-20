@@ -52,7 +52,7 @@ export const router = createHashRouter([
       </PublicOnlyRoute>,
     ),
   },
-  
+
   {
     path: '/client',
     element: (

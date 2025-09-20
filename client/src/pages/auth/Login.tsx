@@ -91,5 +91,5 @@ const Login = () => {
       </aside>
     </div>
   );
-}
-export default Login
+};
+export default Login;

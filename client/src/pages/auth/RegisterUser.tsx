@@ -234,6 +234,6 @@ const RegisterUser = () => {
       </aside>
     </div>
   );
-}
+};
 
-export default RegisterUser
+export default RegisterUser;

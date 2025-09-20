@@ -18,7 +18,6 @@ export default function Track() {
 
   const { data, isFetching, isError, error } = useTrackParcel(searchId);
 
-
   const parcel = (data && ('parcel' in (data as any) ? (data as any).parcel : data)) as ParcelWithId | undefined;
   const company = (data && ('company' in (data as any) ? (data as any).company : undefined)) as Company | undefined;
 
@@ -27,7 +26,6 @@ export default function Track() {
     const v = typedId.trim();
     setSearchId(isObjectId(v) ? v : null);
   };
-
 
   const statusKey = (parcel?.status ?? 'PENDING_REVIEW') as RequestStatus;
 
@@ -45,7 +43,10 @@ export default function Track() {
             <span className="font-semibold text-indigo-600 underline underline-offset-4">Track</span>
           </div>
 
-          <form onSubmit={onSubmit} className="flex flex-col gap-3 rounded-2xl border bg-white p-4 md:flex-row md:items-center">
+          <form
+            onSubmit={onSubmit}
+            className="flex flex-col gap-3 rounded-2xl border bg-white p-4 md:flex-row md:items-center"
+          >
             <div className="flex-1">
               <label className="mb-1 block text-sm text-gray-600">Tracking ID</label>
               <Input

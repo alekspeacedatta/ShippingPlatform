@@ -4,6 +4,7 @@ import { Badge } from '../commons/Badge';
 import type { Company, ParcelRequest } from '../../types/Types';
 import { statusColors } from '../../types/Types';
 import { useState } from 'react';
+import ClientHeader from './ClientHeader';
 
 const RequestDetail = () => {
   const navigate = useNavigate();
@@ -21,6 +22,8 @@ const RequestDetail = () => {
   return (
     <div className="min-h-screen">
       <div className="mx-auto w-full max-w-5xl px-4 sm:px-6 lg:px-8 py-4 sm:py-6 md:py-10 flex flex-col gap-4 sm:gap-6">
+        <ClientHeader />
+
         <div className="flex flex-wrap items-center gap-2 text-sm">
           <button
             onClick={() => navigate(-1)}

@@ -4,6 +4,7 @@ import { useGetRequest, useUpdateParcelStatus } from '../../api/useParcel';
 import type { Company, ParcelRequest } from '../../types/Types';
 import { REQUEST_STATUS, statusColors, type RequestStatus } from '../../types/Types';
 import { Badge } from '../commons/Badge';
+import DashboardHeader from './DashboardHeader';
 
 const prettyStatus = (s?: string) => (s ? s.replace(/_/g, ' ') : '—');
 const RequestDetailPanel = () => {
@@ -46,6 +47,8 @@ const RequestDetailPanel = () => {
 
   return (
     <div className="min-h-screen">
+      <DashboardHeader />
+
       <div className="mx-auto w-full max-w-7xl px-4 py-4 sm:px-6 sm:py-6 md:py-10 lg:px-8 flex flex-col gap-4 md:gap-6">
         <div className="flex flex-wrap items-center gap-2 text-sm">
           <button onClick={() => navigate(-1)} className="hover:font-semibold hover:underline underline-offset-4">
@@ -57,14 +60,17 @@ const RequestDetailPanel = () => {
 
         <div className="flex flex-col gap-3">
           <h1 className="text-xl sm:text-2xl font-semibold">Your parcel details</h1>
+          
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-stretch sm:justify-between">
 
-          <div className="flex flex-wrap justify-between items-stretch gap-2">
-            <Badge className={badgeClass}>{prettyStatus(parcel.status)}</Badge>
-            <div className='flex items-center gap-2'>
-              <label className="inline-flex w-full sm:w-auto items-center gap-1">
+            <Badge className={`${badgeClass} w-fit`}>{prettyStatus(parcel.status)}</Badge>
+
+
+            <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center">
+              <label className="inline-flex w-full items-center gap-2 sm:w-auto">
                 <span className="sr-only sm:not-sr-only sm:text-sm sm:text-gray-500">Update status:</span>
                 <select
-                  className="w-full sm:w-auto min-w-[160px] rounded border bg-white px-3 py-2 text-sm disabled:opacity-60"
+                  className="h-10 w-full min-w-0 rounded border bg-white px-3 text-sm disabled:opacity-60 sm:w-48 md:w-56"
                   value={selectedStatus}
                   onChange={(e) => setSelectedStatus(e.target.value as RequestStatus)}
                   disabled={isPending}
@@ -87,7 +93,7 @@ const RequestDetailPanel = () => {
                 placeholder="Optional note"
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
-                className="w-full sm:w-[320px] rounded border bg-white px-3 py-2 text-sm break-words"
+                className="h-10 w-full min-w-0 rounded border bg-white px-3 text-sm disabled:opacity-60 sm:flex-1 md:w-80"
                 disabled={isPending}
               />
 
@@ -95,8 +101,7 @@ const RequestDetailPanel = () => {
                 type="button"
                 onClick={handleStatusUpdate}
                 disabled={!selectedStatus || isPending}
-                className="rounded bg-[#7c86ff] px-4 py-2 text-sm font-semibold text-white transition
-                      disabled:opacity-60 hover:bg-[#6a73d6ff]"
+                className="h-10 w-full rounded bg-[#7c86ff] px-4 text-sm font-semibold text-white transition hover:bg-[#6a73d6ff] disabled:opacity-60 sm:w-auto"
               >
                 {isPending ? 'Updating…' : 'Update Status'}
               </button>
