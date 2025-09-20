@@ -125,7 +125,7 @@ const RequestList = () => {
                   <div
                     key={req._id}
                     onClick={() => navigate(`/client/requests/${req._id}`)}
-                    className="flex w-full cursor-pointer items-center justify-between gap-3 rounded-lg border bg-white p-4 transform transition-transform duration-200 hover:-translate-y-2 hover:shadow-lg"
+                    className="flex w-full cursor-pointer items-center justify-between gap-3 rounded-xl border bg-white p-4 transform transition-transform duration-200 shadow-sm hover:shadow-md"
                   >
                     <section className="min-w-0 flex flex-col gap-1">
                       <p className="truncate text-sm font-semibold md:text-base lg:text-lg">
