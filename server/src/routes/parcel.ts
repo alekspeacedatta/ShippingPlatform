@@ -48,7 +48,7 @@ router.patch('/update-status', async (req: Request, res: Response) => {
       return res.status(400).json({ message: 'Invalid status value' });
     }
 
-    const timelineEntry: any = { status, at: new Date().toISOString() };
+    const timelineEntry: any = { status, at: new Date().toISOString(), note: '' };
     if (note && note.trim()) timelineEntry.note = note.trim();
 
     const updated = await ParcelModel.findByIdAndUpdate(
