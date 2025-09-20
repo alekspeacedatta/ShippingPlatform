@@ -7,7 +7,6 @@ import type { ParcelRequest, RequestStatus } from '../../types/Types';
 import { REQUEST_STATUS, statusColors } from '../../types/Types';
 import { useNavigate } from 'react-router-dom';
 
-
 const RequestsTable = () => {
   type ParcelWithId = ParcelRequest & { _id: string };
 
@@ -35,40 +34,43 @@ const RequestsTable = () => {
         <p className="font-semibold">filter requests by status</p>
         <span className="hidden font-semibold sm:inline">-</span>
         <div className="relative inline-flex">
-        <select
-          value={filteredState}
-          onChange={(e) => setFilteredState(e.target.value as RequestStatus | 'ALL')}
-          aria-label="Filter by status"
-          className={`
+          <select
+            value={filteredState}
+            onChange={(e) => setFilteredState(e.target.value as RequestStatus | 'ALL')}
+            aria-label="Filter by status"
+            className={`
             appearance-none w-full sm:w-64 rounded-xl px-3 py-2 pr-9
             font-semibold shadow-sm backdrop-blur transition-all duration-200
             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500
             hover:shadow-md
-            ${isFilterActive
-              ? 'border border-indigo-600 bg-indigo-50 text-indigo-700'
-              : 'border border-gray-200/80 bg-white/80 text-gray-700'}
+            ${
+              isFilterActive
+                ? 'border border-indigo-600 bg-indigo-50 text-indigo-700'
+                : 'border border-gray-200/80 bg-white/80 text-gray-700'
+            }
           `}
-        >
-          <option value="ALL">ALL</option>
-          {REQUEST_STATUS.map((s) => (
-            <option key={s} value={s}>
-              {s.replace(/_/g, ' ')}
-            </option>
-          ))}
-        </select>
+          >
+            <option value="ALL">ALL</option>
+            {REQUEST_STATUS.map((s) => (
+              <option key={s} value={s}>
+                {s.replace(/_/g, ' ')}
+              </option>
+            ))}
+          </select>
 
-        
-        <svg
-          className={`
+          <svg
+            className={`
             pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 h-4 w-4
             transition-colors duration-200
             ${isFilterActive ? 'text-indigo-600' : 'text-gray-400'}
           `}
-          viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"
-        >
-          <path d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.06l3.71-3.83a.75.75 0 1 1 1.08 1.04l-4.24 4.38a.75.75 0 0 1-1.08 0L5.21 8.27a.75.75 0 0 1 .02-1.06z"/>
-        </svg>
-      </div>
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            aria-hidden="true"
+          >
+            <path d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.06l3.71-3.83a.75.75 0 1 1 1.08 1.04l-4.24 4.38a.75.75 0 0 1-1.08 0L5.21 8.27a.75.75 0 0 1 .02-1.06z" />
+          </svg>
+        </div>
         <button
           onClick={() => setReversed((p) => !p)}
           aria-pressed={reversed}
