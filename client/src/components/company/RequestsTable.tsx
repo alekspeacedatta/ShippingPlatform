@@ -30,111 +30,86 @@ const RequestsTable = () => {
 
   return (
     <>
-      <div
-            className=" w-full flex flex-col gap-3 md:flex-row md:items-center md:justify-between "
-          >
-            <div className="flex items-center gap-2">
-              <p
-                className="cursor-pointer hover:font-semibold hover:underline underline-offset-4"
-                onClick={() => navigate(-1)}
-              >
-                Dashboard
-              </p>
-              <span>→</span>
-              <p
-                className="cursor-pointer font-semibold text-indigo-500 underline underline-offset-4 transition-all duration-200"
-                onClick={() => navigate(1)}
-              >
-                All Request
-              </p>
-            </div>
+      <div className=" w-full flex flex-col gap-3 md:flex-row md:items-center md:justify-end ">
+        <div className="flex items-center gap-2">
+          <p className="text-sm font-semibold">Filter by status</p>
+          <span className="hidden sm:inline font-semibold">-</span>
+        </div>
 
-            <div
-              className="w-full flex flex-col gap-2 sm:flex-row sm:items-center sm:flex-wrap md:w-auto "
-            >
-              <div className="flex items-center gap-2">
-                <p className="text-sm font-semibold">Filter by status</p>
-                <span className="hidden sm:inline">-</span>
-              </div>
-
-              <div className="relative inline-flex w-full sm:w-64">
-                <select
-                  value={filteredState}
-                  onChange={(e) => setFilteredState(e.target.value as RequestStatus | 'ALL')}
-                  aria-label="Filter by status"
-                  className={`
-          appearance-none w-full rounded-xl px-3 py-2 pr-9
-          font-semibold shadow-sm backdrop-blur transition-all duration-200
-          focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500
-          hover:shadow-md
-          ${
-            isFilterActive
-              ? 'border border-indigo-600 bg-indigo-50 text-indigo-700'
-              : 'border border-gray-200/80 bg-white/80 text-gray-700'
-          }
-        `}
-                >
-                  <option value="ALL">ALL</option>
-                  {REQUEST_STATUS.map((s) => (
-                    <option key={s} value={s}>
-                      {s.replace(/_/g, ' ')}
-                    </option>
-                  ))}
-                </select>
-
-                <svg
-                  className={`
-          pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 h-4 w-4
-          transition-colors duration-200
-          ${isFilterActive ? 'text-indigo-600' : 'text-gray-400'}
-        `}
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                  aria-hidden="true"
-                >
-                  <path d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.06l3.71-3.83a.75.75 0 1 1 1.08 1.04l-4.24 4.38a.75.75 0 0 1-1.08 0L5.21 8.27a.75.75 0 0 1 .02-1.06z" />
-                </svg>
-              </div>
-
-              <button
-                onClick={() => setReversed((p) => !p)}
-                aria-pressed={reversed}
-                aria-label={reversed ? 'Sort oldest to newest' : 'Sort newest to oldest'}
-                title={reversed ? 'Oldest → Newest' : 'Newest → Oldest'}
-                className={`
-        inline-flex items-center justify-center gap-2
-        rounded-xl px-3 py-2 shadow-sm backdrop-blur
-        transition-all duration-200
+        <div className="relative inline-flex w-full sm:w-64">
+          <select
+            value={filteredState}
+            onChange={(e) => setFilteredState(e.target.value as RequestStatus | 'ALL')}
+            aria-label="Filter by status"
+            className={`
+        appearance-none w-full rounded-xl px-3 py-2 pr-9
+        font-semibold shadow-sm backdrop-blur transition-all duration-200
         focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500
-        active:scale-[0.97]
-        w-full sm:w-auto
+        hover:shadow-md
         ${
-          reversed
-            ? 'border border-indigo-600 bg-indigo-50 hover:bg-indigo-100'
-            : 'border border-gray-200/80 bg-white/80 hover:bg-white hover:shadow-md'
+          isFilterActive
+            ? 'border border-indigo-600 bg-indigo-50 text-indigo-700'
+            : 'border border-gray-200/80 bg-white/80 text-gray-700'
         }
       `}
-              >
-                <ArrowUpDown
-                  size={18}
-                  className={`
-          transition-colors duration-200
-          ${reversed ? 'text-indigo-600' : 'text-gray-500'}
-        `}
-                />
-                <span className="flex items-baseline gap-1">
-                  <span className="text-sm font-medium">Sort</span>
-                  <span
-                    className={`text-xs whitespace-nowrap transition-colors duration-200 ${
-                      reversed ? 'text-indigo-700' : 'text-gray-500'
-                    }`}
-                  >
-                    {reversed ? 'oldest → newest' : 'newest → oldest'}
-                  </span>
-                </span>
-              </button>
-            </div>
-          </div>
+          >
+            <option value="ALL">ALL</option>
+            {REQUEST_STATUS.map((s) => (
+              <option key={s} value={s}>
+                {s.replace(/_/g, ' ')}
+              </option>
+            ))}
+          </select>
+
+          <svg
+            className={`
+        pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 h-4 w-4
+        transition-colors duration-200
+        ${isFilterActive ? 'text-indigo-600' : 'text-gray-400'}
+      `}
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            aria-hidden="true"
+          >
+            <path d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.06l3.71-3.83a.75.75 0 1 1 1.08 1.04l-4.24 4.38a.75.75 0 0 1-1.08 0L5.21 8.27a.75.75 0 0 1 .02-1.06z" />
+          </svg>
+        </div>
+
+        <button
+          onClick={() => setReversed((p) => !p)}
+          aria-pressed={reversed}
+          aria-label={reversed ? 'Sort oldest to newest' : 'Sort newest to oldest'}
+          title={reversed ? 'Oldest → Newest' : 'Newest → Oldest'}
+          className={`
+      inline-flex items-center justify-center gap-2
+      rounded-xl px-3 py-2 shadow-sm backdrop-blur
+      transition-all duration-200
+      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500
+      active:scale-[0.97]
+      w-full sm:w-auto
+      ${
+        reversed
+          ? 'border border-indigo-600 bg-indigo-50 hover:bg-indigo-100'
+          : 'border border-gray-200/80 bg-white/80 hover:bg-white hover:shadow-md'
+      }
+    `}
+        >
+          <ArrowUpDown
+            size={18}
+            className={`transition-colors duration-200 ${reversed ? 'text-indigo-600' : 'text-gray-500'}`}
+          />
+          <span className="flex items-baseline gap-1">
+            <span className="text-sm font-medium">Sort</span>
+            <span
+              className={`text-xs whitespace-nowrap transition-colors duration-200 ${
+                reversed ? 'text-indigo-700' : 'text-gray-500'
+              }`}
+            >
+              {reversed ? 'oldest → newest' : 'newest → oldest'}
+            </span>
+          </span>
+        </button>
+      </div>
 
       <div className="py-1.7 h-[62vh] md:h-[73vh] overflow-y-auto">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">

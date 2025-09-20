@@ -34,9 +34,7 @@ const RequestList = () => {
       <ClientHeader />
       <div className="flex items-start justify-center p-3 overflow-hidden">
         <div className="flex h-[76vh] md:h-[80vh] w-[80rem] max-w-full flex-col gap-3">
-          <div
-            className=" w-full flex flex-col gap-3 md:flex-row md:items-center md:justify-between "
-          >
+          <div className=" w-full flex flex-col gap-3 md:flex-row md:items-center md:justify-between ">
             <div className="flex items-center gap-2">
               <p
                 className="cursor-pointer hover:font-semibold hover:underline underline-offset-4"
@@ -53,9 +51,7 @@ const RequestList = () => {
               </p>
             </div>
 
-            <div
-              className="w-full flex flex-col gap-2 sm:flex-row sm:items-center sm:flex-wrap md:w-auto "
-            >
+            <div className="w-full flex flex-col gap-2 sm:flex-row sm:items-center sm:flex-wrap md:w-auto ">
               <div className="flex items-center gap-2">
                 <p className="text-sm font-semibold">Filter by status</p>
                 <span className="hidden sm:inline">-</span>
