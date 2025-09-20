@@ -46,8 +46,10 @@ const RequestDetailPanel = () => {
   if (!parcel) return <p className="p-4">Parcel does not exist.</p>;
 
   return (
-    <div className="min-h-screen">
+    <>
+    
       <DashboardHeader />
+    <div className="min-h-screen">
 
       <div className="mx-auto w-full max-w-7xl px-4 py-4 sm:px-6 sm:py-6 md:py-10 lg:px-8 flex flex-col gap-4 md:gap-6">
         <div className="flex flex-wrap items-center gap-2 text-sm">
@@ -60,7 +62,7 @@ const RequestDetailPanel = () => {
 
         <div className="flex flex-col gap-3">
           <h1 className="text-xl sm:text-2xl font-semibold">Your parcel details</h1>
-          
+
           <div className="flex flex-col gap-3 sm:flex-row sm:items-stretch sm:justify-between">
 
             <Badge className={`${badgeClass} w-fit`}>{prettyStatus(parcel.status)}</Badge>
@@ -147,7 +149,7 @@ const RequestDetailPanel = () => {
 
               <p className="text-xs sm:text-sm text-gray-500">
                 Tracking ID:{' '}
-                <span className="font-mono text-black truncate inline-block max-w-full align-bottom">{trackingId}</span>
+                <span className="font-semibold text-gray-500 truncate inline-block max-w-full align-bottom">{trackingId}</span>
               </p>
             </section>
 
@@ -252,6 +254,7 @@ const RequestDetailPanel = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 
