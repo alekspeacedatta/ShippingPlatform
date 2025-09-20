@@ -8,10 +8,10 @@ const Requests = () => {
   return (
     <>
       <DashboardHeader />
-      <div className="flex items-start justify-center p-3 overflow-hidden">
+      <div className="flex items-start justify-center overflow-hidden">
         <div className="flex w-[80rem] max-w-full flex-col gap-3">
           <div className="flex w-full flex-col items-start justify-between gap-3 md:flex-row md:items-center">
-            <div className="top-74  md:top-30 md:absolute flex items-center gap-2">
+            <div className="top-74  md:top-26 md:absolute flex items-center gap-2">
               <p
                 className="cursor-pointer hover:font-semibold hover:underline hover:underline-offset-4"
                 onClick={() => navigate('/company/dashboard')}
