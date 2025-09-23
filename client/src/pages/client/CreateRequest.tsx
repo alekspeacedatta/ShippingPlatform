@@ -242,7 +242,7 @@ const CreateRequest = () => {
     if (!trimmed) return;
     setSentMessages((prev) => [...prev, { sentMessage: message, date: new Date() } ]);
     chatMutate({ companyId: selectedCompany?._id!, userId: userId!, sentMessage: trimmed, date: new Date() });
-    setMessage('');
+    
   };
 
   
