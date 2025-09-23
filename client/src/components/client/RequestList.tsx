@@ -83,11 +83,7 @@ const RequestList = () => {
                 </select>
 
                 <svg
-                  className={`
-          pointer-events-none absolute right-2.5 top-[34%] -translate-y-1/2 h-4 w-4
-          transition-colors duration-200
-          ${isFilterActive ? 'text-indigo-600' : 'text-gray-400'}
-        `}
+                  className={` pointer-events-none absolute right-2.5 top-[34%] -translate-y-1/2 h-4 w-4 transition-colors duration-200 ${isFilterActive ? 'text-indigo-600' : 'text-gray-400'}`}
                   viewBox="0 0 20 20"
                   fill="currentColor"
                   aria-hidden="true"
@@ -101,10 +97,7 @@ const RequestList = () => {
                 aria-pressed={reversed}
                 aria-label={reversed ? 'Sort oldest to newest' : 'Sort newest to oldest'}
                 title={reversed ? 'Oldest → Newest' : 'Newest → Oldest'}
-                className={`
-        h-10 w-full sm:w-auto inline-flex items-center justify-center gap-2
-        rounded-xl px-3 text-sm shadow-sm backdrop-blur
-        transition-all duration-200 active:scale-[0.97]
+                className={` h-10 w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl px-3 text-sm shadow-sm backdrop-blurtransition-all duration-200 active:scale-[0.97]
         focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500
         ${
           reversed
