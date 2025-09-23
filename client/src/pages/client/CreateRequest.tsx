@@ -237,7 +237,7 @@ const CreateRequest = () => {
     setMessage('');
   };
 
-  // Auto-scroll chat bodies when content or visibility changes 
+  // Auto-scroll chat bodies when content or visibility changes
   useEffect(() => {
     document.querySelectorAll('#chat-scroll').forEach((el) => {
       try {
@@ -250,9 +250,8 @@ const CreateRequest = () => {
     <>
       <ClientHeader />
 
-      
       <div className="mx-auto w-full max-w-5xl px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
-        <div className="mx-auto w-full max-w-3xl md:max-w-5xl">
+        <div className="mx-auto w-full max-w-3xl flex flex-col gap-5 md:max-w-5xl">
           <div className="flex flex-wrap items-center gap-2 text-sm">
             <button
               className="hover:font-semibold hover:underline underline-offset-4"
@@ -409,10 +408,12 @@ const CreateRequest = () => {
                             <span className="text-gray-500">Shipping type:</span> {shippingType || '—'}
                           </p>
                           <p>
-                            <span className="text-gray-500">Type multiplier:</span> {(calc?.typeMultiplier ?? 1).toFixed(2)}x
+                            <span className="text-gray-500">Type multiplier:</span>{' '}
+                            {(calc?.typeMultiplier ?? 1).toFixed(2)}x
                           </p>
                           <p>
-                            <span className="text-gray-500">Distance factor:</span> {(calc?.distanceFactor ?? 1).toFixed(2)}x
+                            <span className="text-gray-500">Distance factor:</span>{' '}
+                            {(calc?.distanceFactor ?? 1).toFixed(2)}x
                           </p>
                         </div>
 
@@ -432,20 +433,24 @@ const CreateRequest = () => {
                             <span className="text-gray-500">Declared value:</span> ${declaredValue ?? '—'}
                           </p>
                           <p>
-                            <span className="text-gray-500">Volumetric weight:</span> {(calc?.volumetricWeight ?? 0).toFixed(2)} kg
+                            <span className="text-gray-500">Volumetric weight:</span>{' '}
+                            {(calc?.volumetricWeight ?? 0).toFixed(2)} kg
                           </p>
                           <p>
-                            <span className="text-gray-500">Chargeable weight:</span> {(calc?.chargableWeight ?? 0).toFixed(2)} kg
+                            <span className="text-gray-500">Chargeable weight:</span>{' '}
+                            {(calc?.chargableWeight ?? 0).toFixed(2)} kg
                           </p>
                         </div>
 
                         <div className="rounded-lg border bg-white p-4">
                           <h3 className="mb-2 font-semibold">Route</h3>
                           <p className="text-sm">
-                            <span className="text-gray-500">Origin:</span> {fromLocation.origin.country}, {fromLocation.origin.city}
+                            <span className="text-gray-500">Origin:</span> {fromLocation.origin.country},{' '}
+                            {fromLocation.origin.city}
                           </p>
                           <p className="text-sm">
-                            <span className="text-gray-500">Destination:</span> {toLocation.destination.country}, {toLocation.destination.city}
+                            <span className="text-gray-500">Destination:</span> {toLocation.destination.country},{' '}
+                            {toLocation.destination.city}
                           </p>
 
                           <div className="mt-3">
@@ -466,7 +471,9 @@ const CreateRequest = () => {
                             </p>
                             <p className="text-sm">
                               {toLocation.deliveryAddress.line1}
-                              {toLocation.deliveryAddress.postalcode ? `, ${toLocation.deliveryAddress.postalcode}` : ''}
+                              {toLocation.deliveryAddress.postalcode
+                                ? `, ${toLocation.deliveryAddress.postalcode}`
+                                : ''}
                             </p>
                           </div>
                         </div>
@@ -477,16 +484,19 @@ const CreateRequest = () => {
                             <span className="text-gray-500">Base:</span> ${Number(calc?.base ?? 0).toFixed(2)}
                           </p>
                           <p>
-                            <span className="text-gray-500">Fuel surcharge:</span> ${Number(calc?.fuelSurcharge ?? 0).toFixed(2)}
+                            <span className="text-gray-500">Fuel surcharge:</span> $
+                            {Number(calc?.fuelSurcharge ?? 0).toFixed(2)}
                           </p>
                           <p>
-                            <span className="text-gray-500">Remote surcharge:</span> ${Number(calc?.remoteSurcharge ?? 0).toFixed(2)}
+                            <span className="text-gray-500">Remote surcharge:</span> $
+                            {Number(calc?.remoteSurcharge ?? 0).toFixed(2)}
                           </p>
                           <p>
                             <span className="text-gray-500">Insurance:</span> ${Number(calc?.insurance ?? 0).toFixed(2)}
                           </p>
                           <p>
-                            <span className="text-gray-500">Surcharges total:</span> ${Number(calc?.surcharges ?? 0).toFixed(2)}
+                            <span className="text-gray-500">Surcharges total:</span> $
+                            {Number(calc?.surcharges ?? 0).toFixed(2)}
                           </p>
                         </div>
                       </div>
@@ -497,7 +507,6 @@ const CreateRequest = () => {
                     </div>
                   )}
 
-                  
                   <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-between">
                     <Button
                       type="button"
@@ -523,14 +532,19 @@ const CreateRequest = () => {
         </div>
       </div>
 
-      
       <div className="fixed bottom-5 right-5 z-50">
-        
         <div
-          className={`absolute bottom-14 right-14 w-[22rem] max-w-[90vw] h-[60vh] max-h-[70vh]
-                      overflow-hidden rounded-2xl border bg-white shadow-xl ring-1 ring-black/5
-                      transition-all duration-200
-                      ${chatOpen ? 'pointer-events-auto opacity-100 translate-y-0 scale-100' : 'pointer-events-none opacity-0 translate-y-1 scale-95'}`}
+          className={`
+            absolute bottom-14 right-14 w-[22rem] max-w-[90vw] h-[60vh] max-h-[70vh]
+            overflow-hidden rounded-2xl border bg-white shadow-xl ring-1 ring-black/5
+            transition-all duration-200
+            ${
+              chatOpen
+                ? 'pointer-events-auto opacity-100 translate-y-0 scale-100'
+                : 'pointer-events-none opacity-0 translate-y-1 scale-95'
+            }
+            flex flex-col            /* ⟵ add this */
+          `}
         >
           <div className="flex items-center justify-between rounded-t-2xl bg-gray-100 px-3 py-2">
             <span className="text-sm font-semibold">New Chat With Support</span>
@@ -557,7 +571,7 @@ const CreateRequest = () => {
             </div>
           </div>
 
-          <form className="p-2" onSubmit={handleChatSubmit}>
+          <form className="p-2 border-t" onSubmit={handleChatSubmit}>
             <div className="flex items-center justify-between gap-2 rounded-xl border p-2">
               <input
                 onChange={(e) => setMessage(e.target.value)}
@@ -576,7 +590,6 @@ const CreateRequest = () => {
           </form>
         </div>
 
-        
         <button
           onClick={() => setChatOpen((p) => !p)}
           className="flex h-14 w-14 items-center justify-center rounded-full bg-white shadow-lg ring-1 ring-black/5 transition hover:shadow-xl active:scale-[0.98]"
