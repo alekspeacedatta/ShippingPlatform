@@ -1,7 +1,7 @@
 import { BASE_URL } from "../types/Types";
 
 export class Chat {
-    static async setMessage (message: { companyId: string, userId: string, sentMessage: string, date: Date }) {
+    static async setMessage (message: { companyId: string, userId: string, message: string, date: Date }) {
         const res = await fetch(`${BASE_URL}/api/messages/set-message`, {
             method: "POST",
             headers: {
