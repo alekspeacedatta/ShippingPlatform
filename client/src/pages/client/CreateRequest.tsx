@@ -16,6 +16,7 @@ import CompanyPicker from '../../components/client/CompanyPicker';
 import type { CompanyCreate, ShippingType } from '../../types/Types';
 import { n } from '../../utils/utils';
 import { MessageCircle, X } from 'lucide-react';
+import { useGetMessages, useSetMessage } from '../../api/useChat';
 
 const steps = ['Parcel Details', 'Route', 'Shipping Type', 'Calculator', 'Summary & Submit'];
 
@@ -48,6 +49,8 @@ const help = (m?: string) => (m ? <p className="mt-1 text-xs sm:text-sm text-red
 const CreateRequest = () => {
   const navigate = useNavigate();
   const { data: companies = [], isLoading, isError, error } = useGetCompanies();
+  const { mutate: chatMutate } = useSetMessage();
+  
 
   const [step, setStep] = useState(0);
   const back = () => setStep((s) => Math.max(0, s - 1));
@@ -224,20 +227,24 @@ const CreateRequest = () => {
 
   const isSubmitStep = step === steps.length - 1;
 
-  // Mini chat
+  const { data: recievedMessages } = useGetMessages(selectedCompany?._id!)
   const [chatOpen, setChatOpen] = useState<boolean>(false);
   const [message, setMessage] = useState<string>('');
-  const [sentMessages, setSentMessages] = useState<{ sentMessage: string; date: Date }[]>([]);
+  const [sentMessages, setSentMessages] = useState<{ sentMessage: string, date: Date }[]>([]);
 
+  
+
+  
   const handleChatSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const trimmed = message.trim();
     if (!trimmed) return;
-    setSentMessages((prev) => [...prev, { sentMessage: trimmed, date: new Date() }]);
+    setSentMessages((prev) => [...prev, { sentMessage: trimmed, date: new Date() } ]);
+    chatMutate({ companyId: selectedCompany?._id!, userId: userId!, sentMessage: message, date: new Date });
     setMessage('');
   };
 
-  // Auto-scroll chat bodies when content or visibility changes
+  
   useEffect(() => {
     document.querySelectorAll('#chat-scroll').forEach((el) => {
       try {
@@ -560,6 +567,7 @@ const CreateRequest = () => {
 
           <div id="chat-scroll" className="flex-1 min-h-0 overflow-y-auto px-3 py-2">
             <div className="flex flex-col items-end justify-end gap-2">
+              <p>lolka - {recievedMessages[0]}</p>
               {sentMessages.map((m, i) => (
                 <div key={i} className="flex w-3/4 items-center justify-between gap-2 rounded-xl bg-indigo-50 p-2">
                   <p className="whitespace-pre-wrap break-words">{m.sentMessage}</p>

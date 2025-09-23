@@ -6,6 +6,7 @@ import authRoutes from './routes/auth';
 import userRoutes from './routes/user';
 import companyRoutes from './routes/company';
 import parcelRoutes from './routes/parcel';
+import messageRoutes from './routes/messages'
 
 const app = express();
 const ALLOWLIST = [
@@ -31,6 +32,7 @@ app.use('/api/client', userRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/company', companyRoutes);
 app.use('/api/parcel', parcelRoutes);
+app.use('/api/messages', messageRoutes);
 
 const PORT = Number(process.env.PORT) || 5000;
 connectDB().then(() => {
