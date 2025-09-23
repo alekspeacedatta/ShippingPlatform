@@ -513,7 +513,7 @@ const CreateRequest = () => {
           )}
         </div>
         <div className="max-w-xl flex flex-col  min-h-screen items-end gap-3 justify-center">
-          {(selectedCompany || chatOpen) && (
+          
             <div className={`flex h-[55vh] w-lg flex-col gap-2 rounded-2xl border bg-white overflow-hidden min-h-0 transform transition-all duration-150 ${chatOpen ? 'opacity-100' : 'opacity-0'}`}>
               <div className="rounded-t-2xl bg-gray-200 p-2">New Chat With Support</div>
                 <div id="chat-scroll" className="flex-1 min-h-0 overflow-y-auto px-3">
@@ -547,7 +547,7 @@ const CreateRequest = () => {
                   </div>
                 </form>
             </div>
-          )}
+          
           <div className="transform transition-all duration-150 hover:scale-90">
             <div 
               className="rounded-xl shadow-sm w-14 h-14 flex justify-center items-center cursor-pointer bg-white transform transition-all duration-200 hover:shadow-md"
