@@ -232,8 +232,8 @@ const CreateRequest = () => {
   return (
     <>
       <ClientHeader />
-      <div className="mx-auto w-full max-w-3xl md:max-w-5xl px-4 sm:px-6 lg:px-8 py-4 sm:py-6 flex flex justify-center gap-5">
-        <div className='mx-auto w-full max-w-3xl md:max-w-5xl px-4 sm:px-6 lg:px-8 py-4 sm:py-6 flex flex-col justify-between'>
+      <div className="mx-auto w-full max-w-3xl md:max-w-5xl px-4 sm:px-6 lg:px-8 py-4 sm:py-6 flex justify-center gap-5">
+        <div className='mx-auto w-full max-w-3xl md:max-w-5xl px-4 sm:px-6 lg:px-8 py-4 sm:py-6 flex flex-col justify-center'>
           <div className="flex flex-wrap items-center gap-2 text-sm">
             <button
               className="hover:font-semibold hover:underline underline-offset-4"
