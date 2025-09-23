@@ -1,7 +1,8 @@
 import mongoose from "mongoose";
 
 export const MessageSchema = new mongoose.Schema({
-    id: { type: String, required: true },
+    companyId: { type: String, required: true },
+    userId: { type: String, required: true },
     message: { type: String, required: true },
     date: { type: Date, required: true  }
 })

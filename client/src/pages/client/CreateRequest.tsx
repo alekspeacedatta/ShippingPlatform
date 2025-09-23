@@ -240,7 +240,7 @@ const CreateRequest = () => {
     e.preventDefault();
     const trimmed = message.trim();
     if (!trimmed) return;
-    setSentMessages((prev) => [...prev, { sentMessage: trimmed, date: new Date() } ]);
+    setSentMessages((prev) => [...prev, { sentMessage: message, date: new Date() } ]);
     chatMutate({ companyId: selectedCompany?._id!, userId: userId!, sentMessage: trimmed, date: new Date() });
     setMessage('');
   };
@@ -551,7 +551,7 @@ const CreateRequest = () => {
                 ? 'pointer-events-auto opacity-100 translate-y-0 scale-100'
                 : 'pointer-events-none opacity-0 translate-y-1 scale-95'
             }
-            flex flex-col            /* ⟵ add this */
+            flex flex-col       
           `}
         >
           <div className="flex items-center justify-between rounded-t-2xl bg-gray-100 px-3 py-2">
@@ -582,6 +582,7 @@ const CreateRequest = () => {
 
           <form className="p-2 border-t" onSubmit={handleChatSubmit}>
             <div className="flex items-center justify-between gap-2 rounded-xl border p-2">
+              <p>hahaha - {message}</p>
               <input
                 onChange={(e) => setMessage(e.target.value)}
                 value={message}
