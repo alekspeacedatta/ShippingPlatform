@@ -510,53 +510,52 @@ const CreateRequest = () => {
             )}
           </>
         )}
-      </div>
-      <div className="max-w-xl flex flex-col  min-h-screen items-end gap-3 justify-center">
-      {/* {chatOpen && ( */}
-        <div className={`flex h-[55vh] w-lg flex-col gap-2 rounded-2xl border bg-white overflow-hidden min-h-0 transform transition-all duration-150 ${chatOpen ? 'opacity-100' : 'opacity-0'}`}>
-          <div className="rounded-t-2xl bg-gray-200 p-2">New Chat With Support</div>
-            <div id="chat-scroll" className="flex-1 min-h-0 overflow-y-auto px-3">
-              <div className="flex flex-col items-end justify-end gap-2 py-2">
-                {sentMessages.map((m, i) => (
-                  <div key={i} className="flex w-1/2 items-center justify-between gap-2 rounded-xl bg-indigo-50 p-2">
-                    <p className="whitespace-pre-wrap break-words">{m.sentMessage}</p>
-                    <p className="text-xs font-semibold text-gray-500">
-                      {m.date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                    </p>
+        <div className="max-w-xl flex flex-col  min-h-screen items-end gap-3 justify-center">
+          {selectedCompany && (
+            <div className={`flex h-[55vh] w-lg flex-col gap-2 rounded-2xl border bg-white overflow-hidden min-h-0 transform transition-all duration-150 ${chatOpen ? 'opacity-100' : 'opacity-0'}`}>
+              <div className="rounded-t-2xl bg-gray-200 p-2">New Chat With Support</div>
+                <div id="chat-scroll" className="flex-1 min-h-0 overflow-y-auto px-3">
+                  <div className="flex flex-col items-end justify-end gap-2 py-2">
+                    {sentMessages.map((m, i) => (
+                      <div key={i} className="flex w-1/2 items-center justify-between gap-2 rounded-xl bg-indigo-50 p-2">
+                        <p className="whitespace-pre-wrap break-words">{m.sentMessage}</p>
+                        <p className="text-xs font-semibold text-gray-500">
+                          {m.date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        </p>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-            </div>
+                </div>
 
-            <form className="p-2" onSubmit={handleChatSubmit}>
-              <div className="flex items-center justify-between gap-2 rounded-xl border p-2">
-                <input
-                  onChange={(e) => setMessage(e.target.value)}
-                  value={message}
-                  placeholder="New message"
-                  className="flex-1 p-1 outline-none"
-                />
-                <button
-                  disabled={!message}
-                  className="rounded-full bg-indigo-400 px-4 py-2 text-white transition disabled:bg-indigo-200"
-                  type="submit"
-                >
-                  ↑
-                </button>
-              </div>
-            </form>
-        </div>
-      
-      <div className="transform transition-all duration-150 hover:scale-90">
-        <div 
-          className="rounded-xl shadow-sm w-14 h-14 flex justify-center items-center cursor-pointer bg-white transform transition-all duration-200 hover:shadow-md"
-          onClick={() => { setChatOpen((p : boolean) => !p) }}
-          >
-          <MessageCircle size={30} fontWeight={1000} />
-        </div>
-        
+                <form className="p-2" onSubmit={handleChatSubmit}>
+                  <div className="flex items-center justify-between gap-2 rounded-xl border p-2">
+                    <input
+                      onChange={(e) => setMessage(e.target.value)}
+                      value={message}
+                      placeholder="New message"
+                      className="flex-1 p-1 outline-none"
+                    />
+                    <button
+                      disabled={!message}
+                      className="rounded-full bg-indigo-400 px-4 py-2 text-white transition disabled:bg-indigo-200"
+                      type="submit"
+                    >
+                      ↑
+                    </button>
+                  </div>
+                </form>
+            </div>
+          )}
+          <div className="transform transition-all duration-150 hover:scale-90">
+            <div 
+              className="rounded-xl shadow-sm w-14 h-14 flex justify-center items-center cursor-pointer bg-white transform transition-all duration-200 hover:shadow-md"
+              onClick={() => { setChatOpen((p : boolean) => !p) }}
+              >
+              <MessageCircle size={30} fontWeight={1000} />
+            </div>
+          </div>
+        </div >
       </div>
-    </div>
     </>
   );
 };
