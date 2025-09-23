@@ -242,7 +242,7 @@ const CreateRequest = () => {
     if (!trimmed) return;
     setSentMessages((prev) => [...prev, { sentMessage: message, date: new Date() } ]);
     chatMutate({ companyId: selectedCompany?._id!, userId: userId!, message: trimmed, date: new Date() });
-    
+    setMessage('');
   };
 
   
@@ -581,7 +581,7 @@ const CreateRequest = () => {
           </div>
 
           <form className="p-2 border-t" onSubmit={handleChatSubmit}>
-            {!selectedCompany ? ( <p className='text-gray-500 font-semibold text-lg'>You Need to Select Company First</p> ) : (
+            {!selectedCompany ? ( <p className='text-gray-500 font-semibold text-lg text-center'>You Need to Select Company First</p> ) : (
               <div className="flex items-center justify-between gap-2 rounded-xl border p-2">
                 
                 <input
@@ -604,7 +604,7 @@ const CreateRequest = () => {
 
         <button
           onClick={() => setChatOpen((p) => !p)}
-          className="flex h-14 w-14 items-center justify-center rounded-full bg-white shadow-lg ring-1 ring-black/5 transition hover:shadow-xl active:scale-[0.98]"
+          className="flex h-14 w-14 items-center justify-center rounded-full bg-white shadow-lg ring-1 ring-black/5 transition hover:shadow-xl transform transition-all duration-200 active:scale-90"
           title="Support chat"
           aria-pressed={chatOpen}
           aria-label="Toggle support chat"
