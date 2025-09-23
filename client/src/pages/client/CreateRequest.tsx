@@ -524,59 +524,69 @@ const CreateRequest = () => {
       </div>
 
       
-      <div
-        className={`
-          absolute bottom-14 right-14 w-[22rem] max-w-[90vw]
-          h-[60vh] max-h-[70vh]
-          overflow-hidden rounded-2xl border bg-white shadow-xl ring-1 ring-black/5
-          transition-all duration-200
-          ${chatOpen
-            ? 'pointer-events-auto opacity-100 translate-y-0 scale-100'
-            : 'pointer-events-none opacity-0 translate-y-1 scale-95'}
-          flex flex-col   /* ⟵ add this */
-        `}
-      >
-        <div className="flex items-center justify-between rounded-t-2xl bg-gray-100 px-3 py-2">
-          <span className="text-sm font-semibold">New Chat With Support</span>
-          <button onClick={() => setChatOpen(false)} className="rounded p-1 text-gray-500 hover:bg-gray-200 hover:text-gray-700">
-            <X size={16} />
-          </button>
-        </div>
-
+      <div className="fixed bottom-5 right-5 z-50">
         
-        <div id="chat-scroll" className="flex-1 min-h-0 overflow-y-auto px-3 py-2">
-          <div className="flex flex-col items-end justify-end gap-2">
-            {sentMessages.map((m, i) => (
-              <div key={i} className="flex w-3/4 items-center justify-between gap-2 rounded-xl bg-indigo-50 p-2">
-                <p className="whitespace-pre-wrap break-words">{m.sentMessage}</p>
-                <p className="text-xs font-semibold text-gray-500">
-                  {m.date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        
-        <form className="p-2 border-t bg-white" onSubmit={handleChatSubmit}>
-          <div className="flex items-center justify-between gap-2 rounded-xl border p-2">
-            <input
-              onChange={(e) => setMessage(e.target.value)}
-              value={message}
-              placeholder="New message"
-              className="flex-1 p-1 outline-none"
-            />
+        <div
+          className={`absolute bottom-14 right-14 w-[22rem] max-w-[90vw] h-[60vh] max-h-[70vh]
+                      overflow-hidden rounded-2xl border bg-white shadow-xl ring-1 ring-black/5
+                      transition-all duration-200
+                      ${chatOpen ? 'pointer-events-auto opacity-100 translate-y-0 scale-100' : 'pointer-events-none opacity-0 translate-y-1 scale-95'}`}
+        >
+          <div className="flex items-center justify-between rounded-t-2xl bg-gray-100 px-3 py-2">
+            <span className="text-sm font-semibold">New Chat With Support</span>
             <button
-              disabled={!message.trim()}
-              className="rounded-full bg-indigo-500 px-4 py-2 text-white transition disabled:bg-indigo-200"
-              type="submit"
+              onClick={() => setChatOpen(false)}
+              className="rounded p-1 text-gray-500 hover:bg-gray-200 hover:text-gray-700"
+              aria-label="Close chat"
+              title="Close"
             >
-              ↑
+              <X size={16} />
             </button>
           </div>
-        </form>
-      </div>
 
+          <div id="chat-scroll" className="flex-1 min-h-0 overflow-y-auto px-3 py-2">
+            <div className="flex flex-col items-end justify-end gap-2">
+              {sentMessages.map((m, i) => (
+                <div key={i} className="flex w-3/4 items-center justify-between gap-2 rounded-xl bg-indigo-50 p-2">
+                  <p className="whitespace-pre-wrap break-words">{m.sentMessage}</p>
+                  <p className="text-xs font-semibold text-gray-500">
+                    {m.date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <form className="p-2" onSubmit={handleChatSubmit}>
+            <div className="flex items-center justify-between gap-2 rounded-xl border p-2">
+              <input
+                onChange={(e) => setMessage(e.target.value)}
+                value={message}
+                placeholder="New message"
+                className="flex-1 p-1 outline-none"
+              />
+              <button
+                disabled={!message.trim()}
+                className="rounded-full bg-indigo-500 px-4 py-2 text-white transition disabled:bg-indigo-200"
+                type="submit"
+              >
+                ↑
+              </button>
+            </div>
+          </form>
+        </div>
+
+        
+        <button
+          onClick={() => setChatOpen((p) => !p)}
+          className="flex h-14 w-14 items-center justify-center rounded-full bg-white shadow-lg ring-1 ring-black/5 transition hover:shadow-xl active:scale-[0.98]"
+          title="Support chat"
+          aria-pressed={chatOpen}
+          aria-label="Toggle support chat"
+        >
+          <MessageCircle size={26} />
+        </button>
+      </div>
     </>
   );
 };
