@@ -48,19 +48,18 @@ const help = (m?: string) => (m ? <p className="mt-1 text-xs sm:text-sm text-red
 const CreateRequest = () => {
   const navigate = useNavigate();
 
-  // Companies
   const { data: companies = [], isLoading, isError, error } = useGetCompanies();
 
-  // Steps
+  
   const [step, setStep] = useState(0);
   const back = () => setStep((s) => Math.max(0, s - 1));
   const isSubmitStep = step === steps.length - 1;
 
-  // Errors
+  
   const [errors, setErrors] = useState<FieldErrors>({});
   const clearError = (k: keyof FieldErrors) => setErrors((e) => ({ ...e, [k]: undefined }));
 
-  // Form state
+
   const [parcelErr, setParcelErr] = useState(false);
   const [selectedCompany, setSelectedCompany] = useState<CompanyCreate | null>(null);
   const [shippingType, setShippingType] = useState<ShippingType | string>('');
@@ -86,11 +85,11 @@ const CreateRequest = () => {
 
   const [calc, setCalc] = useState<CalcResult | null>(null);
 
-  // Auth + mutation
+  
   const userId = useAuthStore((s) => s.authInfo?.userId);
   const { mutate } = useCreateParcelRequest();
 
-  // Validation helpers
+  
   const pos = (v: number | null | undefined) => typeof v === 'number' && v > 0;
   const nonNeg = (v: number | null | undefined) => typeof v === 'number' && v >= 0;
   const nonEmpty = (s: string | null | undefined) => !!String(s ?? '').trim();
@@ -231,7 +230,7 @@ const CreateRequest = () => {
     );
   };
 
-  // Mini-chat state
+  
   const [chatOpen, setChatOpen] = useState<boolean>(false);
   const [message, setMessage] = useState<string>('');
   const [sentMessages, setSentMessages] = useState<{ sentMessage: string; date: Date }[]>([]);
@@ -243,14 +242,14 @@ const CreateRequest = () => {
     setMessage('');
   };
 
-  // Auto scroll both desktop and mobile chat bodies (no refs)
+  
   useEffect(() => {
     const nodes = document.querySelectorAll('#chat-scroll');
     nodes.forEach((el) => {
       try {
         el.scrollTo({ top: (el as HTMLElement).scrollHeight, behavior: 'smooth' });
       } catch {
-        /* ignore */
+        
       }
     });
   }, [sentMessages, chatOpen]);
@@ -266,7 +265,7 @@ const CreateRequest = () => {
           <main className="flex-1">
             <div className="mx-auto w-full max-w-3xl md:max-w-5xl">
               
-              <div className="flex flex-wrap items-center gap-2 text-sm mb-4">
+              <div className="mb-4 flex flex-wrap items-center gap-2 text-sm">
                 <button
                   className="hover:font-semibold hover:underline underline-offset-4"
                   onClick={() => navigate('/client/dashboard')}
@@ -326,7 +325,7 @@ const CreateRequest = () => {
                     ) : (
                       <div className="flex min-h-max flex-col items-center justify-center gap-4 rounded-xl border bg-white p-8 sm:p-12">
                         <h1 className="text-lg sm:text-xl font-semibold text-red-500">Failed to create request</h1>
-                        <div className="mt-4 flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+                        <div className="mt-4 flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
                           <Button type="button" onClick={() => setStep(0)} className="w-full sm:w-auto">
                             start over
                           </Button>
@@ -423,7 +422,7 @@ const CreateRequest = () => {
                         <div className="flex h-[55vh] min-h-28 flex-col gap-4 overflow-y-auto rounded-xl border bg-white p-4">
                           <h2 className="text-lg sm:text-xl font-semibold">Summary & Submit</h2>
 
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                             <div className="rounded-lg border bg-white p-4">
                               <h3 className="mb-2 font-semibold">Company & Shipping</h3>
                               <p>
@@ -534,12 +533,12 @@ const CreateRequest = () => {
                       )}
 
                       
-                      <div className="mt-6 flex flex-col sm:flex-row gap-3 sm:justify-between">
+                      <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-between">
                         <Button
                           type="button"
                           onClick={back}
                           disabled={step === 0}
-                          className="w-full sm:w-auto rounded bg-gray-200 px-4 py-2 disabled:opacity-50"
+                          className="w-full rounded bg-gray-200 px-4 py-2 disabled:opacity-50 sm:w-auto"
                         >
                           back
                         </Button>
@@ -559,19 +558,8 @@ const CreateRequest = () => {
           </main>
 
           
-          <aside className="hidden md:block w-[360px] shrink-0">
+          <aside className="hidden w-[360px] shrink-0 md:block">
             <div className="sticky top-24">
-              
-              <div className="mb-3 flex items-center justify-end">
-                <button
-                  onClick={() => setChatOpen((p: boolean) => !p)}
-                  className="rounded-xl shadow-sm w-12 h-12 flex items-center justify-center bg-white border transition-all hover:shadow-md"
-                  title="Support chat"
-                >
-                  <MessageCircle size={22} />
-                </button>
-              </div>
-
               
               <div
                 className={`overflow-hidden rounded-2xl border bg-white transition-all duration-200 ${
@@ -619,8 +607,10 @@ const CreateRequest = () => {
       
       <button
         onClick={() => setChatOpen((p: boolean) => !p)}
-        className="fixed bottom-5 right-5 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-white shadow-lg ring-1 ring-black/5 md:hidden"
+        className="fixed bottom-5 right-5 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-white shadow-lg ring-1 ring-black/5 transition hover:shadow-xl"
         title="Support chat"
+        aria-pressed={chatOpen}
+        aria-label="Toggle support chat"
       >
         <MessageCircle size={26} />
       </button>
@@ -672,4 +662,5 @@ const CreateRequest = () => {
     </>
   );
 };
+
 export default CreateRequest;
