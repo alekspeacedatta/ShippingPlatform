@@ -581,22 +581,24 @@ const CreateRequest = () => {
           </div>
 
           <form className="p-2 border-t" onSubmit={handleChatSubmit}>
-            <div className="flex items-center justify-between gap-2 rounded-xl border p-2">
-              <p>hahaha - {message}</p>
-              <input
-                onChange={(e) => setMessage(e.target.value)}
-                value={message}
-                placeholder="New message"
-                className="flex-1 p-1 outline-none"
-              />
-              <button
-                disabled={!message.trim()}
-                className="rounded-full bg-indigo-500 px-4 py-2 text-white transition disabled:bg-indigo-200"
-                type="submit"
-              >
-                ↑
-              </button>
-            </div>
+            {!selectedCompany ? ( <p className='text-gray-500 font-semibold text-lg'>You Need to Select Company First</p> ) : (
+              <div className="flex items-center justify-between gap-2 rounded-xl border p-2">
+                
+                <input
+                  onChange={(e) => setMessage(e.target.value)}
+                  value={message}
+                  placeholder="New message"
+                  className="flex-1 p-1 outline-none"
+                />
+                <button
+                  disabled={!message.trim()}
+                  className="rounded-full bg-indigo-500 px-4 py-2 text-white transition disabled:bg-indigo-200"
+                  type="submit"
+                >
+                  ↑
+                </button>
+              </div>
+            )}
           </form>
         </div>
 
