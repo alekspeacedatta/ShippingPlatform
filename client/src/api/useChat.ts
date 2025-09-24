@@ -15,7 +15,7 @@ export const useSetMessage = () => {
 }
 export const useGetMessages = (id: string) => {
     return useQuery({
-        queryKey: ['messages'],
+        queryKey: ['CompanyMessages'],
         enabled: !!id,
         refetchInterval: 5 * 6 * 1000,
         queryFn: () => Chat.getMessages(id)

@@ -23,7 +23,7 @@ router.get('/get-message', async ( req: Request, res: Response ) => {
         const id = String(req.query.id || '');
         if(!id) return res.status(400).json({ message: ' id doesnot found so can not get recieved messages ' });
 
-        const foundMessages = await MessageModel.find({ userId: id });
+        const foundMessages = await MessageModel.find({ $or: [{ companyId: id }, { userId: id }] }).sort({ date: 1 }).lean();
         if(!foundMessages) return res.status(400).json({ message: 'no message yet' })
 
         res.status(200).json(foundMessages)
