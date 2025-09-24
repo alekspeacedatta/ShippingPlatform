@@ -183,7 +183,7 @@ const Dashboard = () => {
                 <p className="text-gray-500 text-lg font-semibold">There are no received messages</p>
               )}              
             </div>
-            <div className='flex flex-col items-end justify-end gap-2'>
+            <div className='flex flex-col items-end justify-end gap-2 mt-3.750'>
               {sentMessages.map((m, i) => (
                   <div key={i} className="flex w-3/4 items-center justify-between gap-2 rounded-xl bg-indigo-50 p-2">
                     <p className="whitespace-pre-wrap break-words">{m.sentMessage}</p>
