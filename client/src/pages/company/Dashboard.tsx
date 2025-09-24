@@ -181,16 +181,17 @@ const Dashboard = () => {
                 ))
               ) : (
                 <p className="text-gray-500 text-lg font-semibold">There are no received messages</p>
-              )}
-              
+              )}              
+            </div>
+            <div className='flex flex-col items-start justify-end gap-2'>
               {sentMessages.map((m, i) => (
-                <div key={i} className="flex w-3/4 items-center justify-between gap-2 rounded-xl bg-indigo-50 p-2">
-                  <p className="whitespace-pre-wrap break-words">{m.sentMessage}</p>
-                  <p className="text-xs font-semibold text-gray-500">
-                    {m.date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                  </p>
-                </div>
-              ))}
+                  <div key={i} className="flex w-3/4 items-center justify-between gap-2 rounded-xl bg-indigo-50 p-2">
+                    <p className="whitespace-pre-wrap break-words">{m.sentMessage}</p>
+                    <p className="text-xs font-semibold text-gray-500">
+                      {m.date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </p>
+                  </div>
+                ))}
             </div>
           </div>
 
