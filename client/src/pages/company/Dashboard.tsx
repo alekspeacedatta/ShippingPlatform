@@ -15,7 +15,7 @@ const Dashboard = () => {
   const [message, setMessage] = useState<string>('');
   const [sentMessages, setSentMessages] = useState<{ sentMessage: string, date: Date }[]>([]);
   const { mutate: chatMutate } = useSetMessage();
-  const { data: recievedMessages } = useGetMessages(companyId!)
+  const { data: recievedMessages = [] } = useGetMessages(companyId!)
 
 
   const handleChatSubmit = (e: React.FormEvent) => {
