@@ -168,8 +168,8 @@ const Dashboard = () => {
             </button>
           </div>
 
-          <div id="chat-scroll" className="flex-1 min-h-0 overflow-y-auto px-3 py-2">
-            <div className="flex flex-col items-end justify-end gap-2">
+          <div id="chat-scroll" className="flex-1 min-h-0 overflow-y-auto px-3 py-2 gap-2">
+            <div className="flex flex-col items-start justify-end gap-2">
               {recievedMessages.length ? (
                 recievedMessages.map((m: any, i: number) => (
                   <div key={m._id ?? i} className="flex w-3/4 items-center justify-between gap-2 rounded-xl bg-gray-200 p-2">
@@ -183,7 +183,7 @@ const Dashboard = () => {
                 <p className="text-gray-500 text-lg font-semibold">There are no received messages</p>
               )}              
             </div>
-            <div className='flex flex-col items-start justify-end gap-2'>
+            <div className='flex flex-col items-end justify-end gap-2'>
               {sentMessages.map((m, i) => (
                   <div key={i} className="flex w-3/4 items-center justify-between gap-2 rounded-xl bg-indigo-50 p-2">
                     <p className="whitespace-pre-wrap break-words">{m.sentMessage}</p>
