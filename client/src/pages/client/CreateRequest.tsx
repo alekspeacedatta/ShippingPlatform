@@ -585,7 +585,7 @@ const CreateRequest = () => {
               )}
             </div>
             <div className="flex flex-col items-end justify-end gap-2 mt-3.750">
-              {sentMessagess.map((m : { _id: string, sentMessage: string, date: Date }) => (
+              {sentMessagess.map((m : any) => (
                 <div key={m._id} className="flex w-3/4 items-center justify-between gap-2 rounded-xl bg-indigo-50 p-2">
                   <p className="whitespace-pre-wrap break-words">{m.sentMessage}</p>
                   <p className="text-xs font-semibold text-gray-500">
