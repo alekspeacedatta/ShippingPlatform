@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useCompanyDataUpdate, useGetCompany } from '../../api/useCompany';
 import { Input } from '../../components/commons/Input';
 import { useCompanyStore } from '../../store/useCompanyStore';
-import type { Company } from '../../types/Types';
+import type { Company, ShippingType } from '../../types/Types';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../../components/commons/Button';
 import { useAuthStore } from '../../store/useAuthStore';
@@ -15,6 +15,7 @@ type CompanyForm = {
   contactEmail: string;
   phone: string;
   logoUrl: string;
+  supportedTypes: ShippingType[];
   currentPassword?: string;
   newPassword?: string;
   confirmPassword?: string;
@@ -22,6 +23,9 @@ type CompanyForm = {
 
 type Banner = { type: 'success' | 'error'; text: string } | null;
 type FieldErrors = Partial<Record<keyof CompanyForm, string>>;
+
+
+const ALL_TYPES: ShippingType[] = ['AIR', 'SEA', 'ROAD', 'RAILWAY'];
 
 const Settings = () => {
   const navigate = useNavigate();
@@ -41,13 +45,17 @@ const Settings = () => {
     contactEmail: '',
     phone: '',
     logoUrl: '',
+    supportedTypes: [],
     currentPassword: '',
     newPassword: '',
     confirmPassword: '',
   });
 
   const [initialData, setInitialData] = useState<
-    Pick<CompanyForm, 'userId' | 'companyId' | 'name' | 'contactEmail' | 'phone' | 'logoUrl'>
+    Pick<
+      CompanyForm,
+      'userId' | 'companyId' | 'name' | 'contactEmail' | 'phone' | 'logoUrl' | 'supportedTypes'
+    >
   >({
     userId: '',
     companyId: '',
@@ -55,6 +63,7 @@ const Settings = () => {
     contactEmail: '',
     phone: '',
     logoUrl: '',
+    supportedTypes: [],
   });
 
   useEffect(() => {
@@ -67,6 +76,7 @@ const Settings = () => {
         contactEmail: c.contactEmail ?? '',
         phone: c.phone ?? '',
         logoUrl: c.logoUrl ?? '',
+        supportedTypes: Array.isArray((c as any).supportedTypes) ? (c as any).supportedTypes as ShippingType[] : [],
       };
       setCompanyData((prev) => ({ ...prev, ...next }));
       setInitialData(next);
@@ -78,14 +88,38 @@ const Settings = () => {
   );
 
   const isDirty = useMemo(() => {
-    const keys: (keyof typeof initialData)[] = ['userId', 'companyId', 'name', 'contactEmail', 'phone', 'logoUrl'];
-    return keys.some((k) => companyData[k] !== initialData[k]) || wantsPasswordChange;
+    const keys: (keyof typeof initialData)[] = [
+      'userId',
+      'companyId',
+      'name',
+      'contactEmail',
+      'phone',
+      'logoUrl',
+      'supportedTypes',
+    ];
+    return (
+      keys.some((k) =>
+        Array.isArray(initialData[k])
+          ? JSON.stringify(companyData[k]) !== JSON.stringify(initialData[k])
+          : companyData[k] !== initialData[k],
+      ) || wantsPasswordChange
+    );
   }, [companyData, initialData, wantsPasswordChange]);
 
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>Error: {error.message}</p>;
 
   const clearFieldError = (field: keyof CompanyForm) => setErrors((e) => ({ ...e, [field]: undefined }));
+
+  const toggleType = (t: ShippingType) => {
+    setCompanyData((p) => {
+      const has = p.supportedTypes.includes(t);
+      const next = has ? p.supportedTypes.filter((x) => x !== t) : [...p.supportedTypes, t];
+      return { ...p, supportedTypes: next };
+    });
+    clearFieldError('supportedTypes');
+    setBanner(null);
+  };
 
   const handleDataUpdate = (e: React.FormEvent) => {
     e.preventDefault();
@@ -94,26 +128,14 @@ const Settings = () => {
 
     if (!isDirty) return;
 
-    if (wantsPasswordChange) {
-      if (!companyData.currentPassword) setErrors((e) => ({ ...e, currentPassword: 'Required.' }));
-      if (!companyData.newPassword) setErrors((e) => ({ ...e, newPassword: 'Required.' }));
-      if (!companyData.confirmPassword) setErrors((e) => ({ ...e, confirmPassword: 'Required.' }));
-      if (
-        companyData.newPassword &&
-        companyData.confirmPassword &&
-        companyData.newPassword !== companyData.confirmPassword
-      ) {
-        setErrors((e) => ({
-          ...e,
-          newPassword: 'Passwords do not match.',
-          confirmPassword: 'Passwords do not match.',
-        }));
-      }
-      if (companyData.newPassword && companyData.newPassword.length < 6) {
-        setErrors((e) => ({ ...e, newPassword: 'Must be at least 6 characters.' }));
-      }
 
-      const computedPwdErrors = {
+    if (!companyData.supportedTypes || companyData.supportedTypes.length === 0) {
+      setErrors((e) => ({ ...e, supportedTypes: 'Select at least one shipping type.' }));
+      return;
+    }
+
+    if (wantsPasswordChange) {
+      const computedPwdErrors: FieldErrors = {
         currentPassword: (!companyData.currentPassword && 'Required.') || undefined,
         newPassword:
           (!companyData.newPassword && 'Required.') ||
@@ -132,7 +154,7 @@ const Settings = () => {
           companyData.newPassword !== companyData.confirmPassword
             ? 'Passwords do not match.'
             : undefined),
-      } as FieldErrors;
+      };
 
       if (computedPwdErrors.currentPassword || computedPwdErrors.newPassword || computedPwdErrors.confirmPassword) {
         setErrors((e) => ({ ...e, ...computedPwdErrors }));
@@ -157,6 +179,7 @@ const Settings = () => {
             contactEmail: companyData.contactEmail,
             phone: companyData.phone,
             logoUrl: companyData.logoUrl,
+            supportedTypes: [...companyData.supportedTypes],
           };
           setInitialData(nextInitial);
 
@@ -198,7 +221,7 @@ const Settings = () => {
 
       <main className="min-h-[90vh]">
         <div className="mx-auto w-full max-w-4xl px-4 sm:px-6 lg:px-8 py-4 sm:py-6 md:py-10 flex flex-col gap-4 sm:gap-6">
-          {/* Breadcrumb */}
+          
           <div className="flex flex-wrap items-center gap-2 text-sm">
             <button
               onClick={() => navigate('/company/dashboard')}
@@ -210,7 +233,7 @@ const Settings = () => {
             <span className="font-semibold text-indigo-500 underline underline-offset-4">Settings</span>
           </div>
 
-          {/* Title + Banner */}
+          
           <div className="space-y-3">
             <h1 className="text-xl sm:text-2xl font-bold">Edit company information</h1>
 
@@ -229,9 +252,9 @@ const Settings = () => {
             )}
           </div>
 
-          {/* Form */}
+          
           <form onSubmit={handleDataUpdate} className="flex flex-col gap-6 rounded border bg-white p-4 sm:p-5">
-            {/* Company fields */}
+            
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <section className="flex flex-col min-w-0">
                 <label className="text-sm font-medium">Company Email</label>
@@ -294,7 +317,33 @@ const Settings = () => {
               </section>
             </div>
 
-            {/* Password fields */}
+            
+            <div className="flex flex-col gap-2">
+              <label className="text-sm font-medium">Supported shipping types</label>
+
+              <div className="flex flex-wrap gap-2">
+                {ALL_TYPES.map((t) => {
+                  const active = companyData.supportedTypes.includes(t);
+                  return (
+                    <button
+                      key={t}
+                      type="button"
+                      onClick={() => toggleType(t)}
+                      className={`rounded-full px-3 py-1 text-sm font-medium transition
+                        ${active ? 'bg-indigo-600 text-white shadow' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}
+                      `}
+                      aria-pressed={active}
+                    >
+                      {t}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {help(errors.supportedTypes)}
+            </div>
+                
+            
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
               <section className="flex flex-col min-w-0">
                 <label className="text-sm font-medium">Current password</label>

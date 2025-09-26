@@ -1,4 +1,4 @@
-import { BASE_URL, type Pricing } from '../types/Types';
+import { BASE_URL, type Pricing, type ShippingType } from '../types/Types';
 
 export class CompanyService {
   static async getCompanies() {
@@ -34,6 +34,7 @@ export class CompanyService {
     contactEmail?: string;
     phone?: string;
     logoUrl?: string;
+    supportedTypes?: ShippingType[]; 
     currentPassword?: string;
     newPassword?: string;
   }) {
