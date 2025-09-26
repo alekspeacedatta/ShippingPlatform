@@ -28,7 +28,6 @@ function DeskNavItem({ to, label }: { to: string; label: string }) {
     </div>
   );
 }
-
 const ClientHeader = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
