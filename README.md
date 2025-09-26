@@ -70,7 +70,7 @@ Other
 
  • GitHub Actions (CI/CD)
 
- • Deployed on GitHub Pages (client) + Railway (server)
+ • Deployed on GitHub Pages (client) + Render (server)
 
 
 
