@@ -229,7 +229,6 @@ const CreateRequest = () => {
 
   const isSubmitStep = step === steps.length - 1;
 
-  
   const { data: recievedMessages = []} = useGetMessages(selectedCompany?._id!);
   const [chatOpen, setChatOpen] = useState<boolean>(false);
   const [message, setMessage] = useState<string>('');
