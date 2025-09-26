@@ -319,13 +319,14 @@ const Settings = () => {
                     <button
                       type="button"
                       key={t}
+                      
                       onClick={() => {
                         toggleType(t);
                         clearFieldError('supportedTypes' as any);
                         setBanner(null);
                       }}
                       className={[
-                        'group flex items-center justify-between rounded-xl border px-4 py-3 text-left',
+                        'group flex items-center justify-between rounded-xl border-2 border-[#d0d4ff] px-4 py-3 text-left',
                         'transition-all duration-150 hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500',
                         active ? 'border-indigo-[#7c86ff] bg-indigo-50' : 'border-gray-200/80 bg-white hover:bg-gray-50',
                       ].join(' ')}
