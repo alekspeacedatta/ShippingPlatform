@@ -230,6 +230,7 @@ const CreateRequest = () => {
   const isSubmitStep = step === steps.length - 1;
 
   const { data: recievedMessages = []} = useGetMessages(selectedCompany?._id!);
+  const { data: sentMessagess = []} = useGetMessages(userId!);
   const [chatOpen, setChatOpen] = useState<boolean>(false);
   const [message, setMessage] = useState<string>('');
   const [sentMessages, setSentMessages] = useState<{ sentMessage: string; date: Date }[]>([]);
@@ -584,8 +585,8 @@ const CreateRequest = () => {
               )}
             </div>
             <div className="flex flex-col items-end justify-end gap-2 mt-3.750">
-              {sentMessages.map((m, i) => (
-                <div key={i} className="flex w-3/4 items-center justify-between gap-2 rounded-xl bg-indigo-50 p-2">
+              {sentMessagess.map((m : { _id: string, sentMessage: string, date: Date }) => (
+                <div key={m._id} className="flex w-3/4 items-center justify-between gap-2 rounded-xl bg-indigo-50 p-2">
                   <p className="whitespace-pre-wrap break-words">{m.sentMessage}</p>
                   <p className="text-xs font-semibold text-gray-500">
                     {m.date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
