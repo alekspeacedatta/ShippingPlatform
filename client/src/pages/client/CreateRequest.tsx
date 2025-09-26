@@ -49,6 +49,8 @@ const help = (m?: string) => (m ? <p className="mt-1 text-xs sm:text-sm text-red
 const CreateRequest = () => {
   const navigate = useNavigate();
   const { data: companies = [], isLoading, isError, error } = useGetCompanies();
+
+  
   const { mutate: chatMutate } = useSetMessage();
 
   const [step, setStep] = useState(0);
@@ -83,6 +85,7 @@ const CreateRequest = () => {
 
   const userId = useAuthStore((s) => s.authInfo?.userId);
   const { mutate } = useCreateParcelRequest();
+
 
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -226,8 +229,8 @@ const CreateRequest = () => {
 
   const isSubmitStep = step === steps.length - 1;
 
-  // @ts-expect-error
-  const { data: recievedMessages } = useGetMessages(selectedCompany?._id!);
+  
+  const { data: recievedMessages = []} = useGetMessages(selectedCompany?._id!);
   const [chatOpen, setChatOpen] = useState<boolean>(false);
   const [message, setMessage] = useState<string>('');
   const [sentMessages, setSentMessages] = useState<{ sentMessage: string; date: Date }[]>([]);
@@ -564,7 +567,24 @@ const CreateRequest = () => {
           </div>
 
           <div id="chat-scroll" className="flex-1 min-h-0 overflow-y-auto px-3 py-2">
-            <div className="flex flex-col items-end justify-end gap-2">
+             <div className="flex flex-col items-start justify-end gap-2">
+              {recievedMessages.length ? (
+                recievedMessages.map((m: any, i: number) => (
+                  <div
+                    key={m._id ?? i}
+                    className="flex w-3/4 items-center justify-between gap-2 rounded-xl bg-gray-200 p-2"
+                  >
+                    <p className="whitespace-pre-wrap break-words">{m.sentMessage ?? m.message}</p>
+                    <p className="text-xs font-semibold text-gray-500">
+                      {new Date(m.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </p>
+                  </div>
+                ))
+              ) : (
+                <p className="text-gray-500 text-lg font-semibold">There are no received messages</p>
+              )}
+            </div>
+            <div className="flex flex-col items-end justify-end gap-2 mt-3.750">
               {sentMessages.map((m, i) => (
                 <div key={i} className="flex w-3/4 items-center justify-between gap-2 rounded-xl bg-indigo-50 p-2">
                   <p className="whitespace-pre-wrap break-words">{m.sentMessage}</p>
