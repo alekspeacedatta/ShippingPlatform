@@ -72,7 +72,7 @@ const RegisterCompany = () => {
         >
           <form className="flex flex-col gap-4" onSubmit={handelCompanyRegister}>
             <h1 className="mb-1 text-2xl sm:text-3xl font-semibold">Company Registration</h1>
-            {isError && <p className="text-sm sm:text-base text-red-700">{error.message}</p>}
+            {isError && <p className="text-sm sm:text-base text-red-700">{(error as Error).message}</p>}
 
             <section className="max-h-[65vh] overflow-y-auto pr-1 sm:pr-2">
               <section className="flex flex-col gap-3 rounded-md">
@@ -126,7 +126,16 @@ const RegisterCompany = () => {
 
                   <div className="sm:col-span-2 flex flex-col gap-2">
                     <label className="text-sm font-medium">Regions</label>
-                    <div className="h-40 md:h-56 overflow-y-auto rounded-md border-2 border-indigo-200 bg-white p-2 flex flex-wrap gap-1">
+
+                    {/* SCROLL-CONTAINED CHIP LIST */}
+                    <div
+                      className="
+                        max-h-56 md:max-h-72 overflow-y-auto overscroll-contain
+                        rounded-md border-2 border-indigo-200 bg-white p-2
+                        flex flex-wrap gap-1
+                      "
+                    >
+                      {/* All */}
                       <label className="flex cursor-pointer select-none items-center">
                         <input
                           onChange={toggleRegions}
@@ -134,14 +143,24 @@ const RegisterCompany = () => {
                           value="ALL"
                           checked={regions.length === ISO2_COUNTRY_CODES.length}
                           className="peer sr-only"
+                          aria-label="Select all regions"
                         />
                         <span className="rounded-[28px] border-2 border-[#aab0ff] px-3 py-2 text-[12px] sm:text-[14px] text-[#777] peer-checked:bg-[#aab0ff] peer-checked:text-white">
                           All
                         </span>
                       </label>
+
+                      {/* Individual regions */}
                       {ISO2_COUNTRY_CODES.map((reg) => (
                         <label key={reg} className="flex cursor-pointer select-none items-center">
-                          <input onChange={toggleRegions} type="checkbox" value={reg} className="peer sr-only" />
+                          <input
+                            onChange={toggleRegions}
+                            type="checkbox"
+                            value={reg}
+                            checked={regions.includes(reg)}
+                            className="peer sr-only"
+                            aria-label={`Region ${reg}`}
+                          />
                           <span className="rounded-[28px] border-2 border-[#aab0ff] px-3 py-2 text-[12px] sm:text-[14px] text-[#777] peer-checked:bg-[#aab0ff] peer-checked:text-white">
                             {reg}
                           </span>
@@ -155,7 +174,14 @@ const RegisterCompany = () => {
                     <div className="flex flex-wrap gap-2 rounded-md border-2 border-indigo-200 bg-white p-2">
                       {(['RAILWAY', 'ROAD', 'AIR', 'SEA'] as const).map((t) => (
                         <label key={t} className="flex cursor-pointer select-none items-center">
-                          <input type="checkbox" value={t} onChange={toggleShippingType} className="peer sr-only" />
+                          <input
+                            type="checkbox"
+                            value={t}
+                            onChange={toggleShippingType}
+                            checked={shippingType.includes(t)}
+                            className="peer sr-only"
+                            aria-label={`Shipping ${t}`}
+                          />
                           <span className="rounded-[28px] border-2 border-[#aab0ff] px-3 py-2 text-[12px] sm:text-[14px] text-[#777] peer-checked:bg-[#aab0ff] peer-checked:text-white">
                             {t.charAt(0) + t.slice(1).toLowerCase()}
                           </span>
@@ -237,7 +263,9 @@ const RegisterCompany = () => {
                           pricing: { ...companyInfo.pricing, basePrice: Number(e.target.value) },
                         })
                       }
-                      type="float"
+                      type="number"
+                      step="any"
+                      inputMode="decimal"
                       placeholder="enter your base price"
                     />
                   </div>
@@ -251,7 +279,9 @@ const RegisterCompany = () => {
                           pricing: { ...companyInfo.pricing, pricePerKg: Number(e.target.value) },
                         })
                       }
-                      type="float"
+                      type="number"
+                      step="any"
+                      inputMode="decimal"
                       placeholder="enter your per-kg price"
                     />
                   </div>
@@ -265,7 +295,9 @@ const RegisterCompany = () => {
                           pricing: { ...companyInfo.pricing, fuelPct: Number(e.target.value) },
                         })
                       }
-                      type="float"
+                      type="number"
+                      step="any"
+                      inputMode="decimal"
                       placeholder="0.10 = 10%"
                     />
                   </div>
@@ -279,7 +311,9 @@ const RegisterCompany = () => {
                           pricing: { ...companyInfo.pricing, insurancePct: Number(e.target.value) },
                         })
                       }
-                      type="float"
+                      type="number"
+                      step="any"
+                      inputMode="decimal"
                       placeholder="0.01 = 1%"
                     />
                   </div>
@@ -293,7 +327,9 @@ const RegisterCompany = () => {
                           pricing: { ...companyInfo.pricing, remoteAreaPct: Number(e.target.value) },
                         })
                       }
-                      type="float"
+                      type="number"
+                      step="any"
+                      inputMode="decimal"
                       placeholder="enter your remote area %"
                     />
                   </div>
@@ -314,7 +350,9 @@ const RegisterCompany = () => {
                             },
                           })
                         }
-                        type="float"
+                        type="number"
+                        step="any"
+                        inputMode="decimal"
                         placeholder="1.2x"
                       />
                     </div>
@@ -330,7 +368,9 @@ const RegisterCompany = () => {
                             },
                           })
                         }
-                        type="float"
+                        type="number"
+                        step="any"
+                        inputMode="decimal"
                         placeholder="1.3x"
                       />
                     </div>
@@ -349,7 +389,9 @@ const RegisterCompany = () => {
                             },
                           })
                         }
-                        type="float"
+                        type="number"
+                        step="any"
+                        inputMode="decimal"
                         placeholder="1.1x"
                       />
                     </div>
@@ -365,7 +407,9 @@ const RegisterCompany = () => {
                             },
                           })
                         }
-                        type="float"
+                        type="number"
+                        step="any"
+                        inputMode="decimal"
                         placeholder="1.5x"
                       />
                     </div>

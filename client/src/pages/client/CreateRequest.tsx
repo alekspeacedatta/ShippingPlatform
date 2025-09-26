@@ -50,7 +50,6 @@ const CreateRequest = () => {
   const navigate = useNavigate();
   const { data: companies = [], isLoading, isError, error } = useGetCompanies();
 
-  
   const { mutate: chatMutate } = useSetMessage();
 
   const [step, setStep] = useState(0);
@@ -85,7 +84,6 @@ const CreateRequest = () => {
 
   const userId = useAuthStore((s) => s.authInfo?.userId);
   const { mutate } = useCreateParcelRequest();
-
 
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -229,8 +227,8 @@ const CreateRequest = () => {
 
   const isSubmitStep = step === steps.length - 1;
 
-  const { data: recievedMessages = []} = useGetMessages(selectedCompany?._id!);
-  const { data: sentMessagess = []} = useGetMessages(userId!);
+  const { data: recievedMessages = [] } = useGetMessages(selectedCompany?._id!);
+  const { data: sentMessagess = [] } = useGetMessages(userId!);
   const [chatOpen, setChatOpen] = useState<boolean>(false);
   const [message, setMessage] = useState<string>('');
   const [sentMessages, setSentMessages] = useState<{ sentMessage: string; date: Date }[]>([]);
@@ -567,13 +565,10 @@ const CreateRequest = () => {
           </div>
 
           <div id="chat-scroll" className="flex-1 min-h-0 overflow-y-auto px-3 py-2">
-             <div className="flex flex-col items-start justify-end gap-2">
+            <div className="flex flex-col items-start justify-end gap-2">
               {recievedMessages.length ? (
-                recievedMessages.map((m: { _id: string, message: string, date: Date }) => (
-                  <div
-                    key={m._id}
-                    className="flex w-3/4 items-center justify-between gap-2 rounded-xl bg-gray-200 p-2"
-                  >
+                recievedMessages.map((m: { _id: string; message: string; date: Date }) => (
+                  <div key={m._id} className="flex w-3/4 items-center justify-between gap-2 rounded-xl bg-gray-200 p-2">
                     <p className="whitespace-pre-wrap break-words">{m.message}</p>
                     <p className="text-xs font-semibold text-gray-500">
                       {new Date(m.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
@@ -585,7 +580,7 @@ const CreateRequest = () => {
               )}
             </div>
             <div className="flex flex-col items-end justify-end gap-2 mt-3.750">
-              {sentMessagess.map((m : { _id: string, message: string, date: Date }) => (
+              {sentMessagess.map((m: { _id: string; message: string; date: Date }) => (
                 <div key={m._id} className="flex w-3/4 items-center justify-between gap-2 rounded-xl bg-indigo-50 p-2">
                   <p className="whitespace-pre-wrap break-words">{m.message}</p>
                   <p className="text-xs font-semibold text-gray-500">
