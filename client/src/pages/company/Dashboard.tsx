@@ -30,7 +30,7 @@ const Dashboard = () => {
     <>
       <DashboardHeader />
 
-      <main className="min-h-screen bg-[radial-gradient(80%_60%_at_50%_0%,#eef2ff_0%,#ffffff_40%,#ffffff_100%)] dark:bg-[radial-gradient(80%_60%_at_50%_0%,#0b1220_0%,#0a0f1a_40%,#0a0f1a_100%)]">
+      <main className="p-[8px] min-h-screen bg-[radial-gradient(80%_60%_at_50%_0%,#eef2ff_0%,#ffffff_40%,#ffffff_100%)] dark:bg-[radial-gradient(80%_60%_at_50%_0%,#0b1220_0%,#0a0f1a_40%,#0a0f1a_100%)]">
         <div className="mx-auto max-w-6xl px-4 py-10">
           <section className="grid grid-cols-1 gap-6 md:grid-cols-3">
             <div
