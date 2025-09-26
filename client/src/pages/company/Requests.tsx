@@ -8,7 +8,7 @@ const Requests = () => {
   return (
     <>
       <DashboardHeader />
-      <div className="flex items-start justify-center overflow-hidden">
+      <div className="p-[8px] flex items-start justify-center overflow-hidden">
         <div className="flex w-[80rem] max-w-full flex-col gap-3">
           <div className="flex w-full flex-col items-start justify-between gap-3 md:flex-row md:items-center">
             <div className="top-74  md:top-26 md:absolute flex items-center gap-2">
