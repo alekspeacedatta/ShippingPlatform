@@ -10,4 +10,5 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     </QueryClientProvider>
   );
 };
+
 export default AppProvider;

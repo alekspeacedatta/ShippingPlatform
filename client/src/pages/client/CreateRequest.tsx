@@ -555,7 +555,7 @@ const CreateRequest = () => {
           `}
         >
           <div className="flex items-center justify-between rounded-t-2xl bg-gray-100 px-3 py-2">
-            <span className="text-sm font-semibold">New Chat With Support</span>
+            <span className="text-sm font-semibold">{selectedCompany ? selectedCompany.name : 'New Chat with company support '}</span>
             <button
               onClick={() => setChatOpen(false)}
               className="rounded p-1 text-gray-500 hover:bg-gray-200 hover:text-gray-700"
