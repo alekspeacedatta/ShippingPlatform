@@ -50,7 +50,6 @@ const CreateRequest = () => {
   const navigate = useNavigate();
   const { data: companies = [], isLoading, isError, error } = useGetCompanies();
   const { mutate: chatMutate } = useSetMessage();
-  
 
   const [step, setStep] = useState(0);
   const back = () => setStep((s) => Math.max(0, s - 1));
@@ -228,24 +227,20 @@ const CreateRequest = () => {
   const isSubmitStep = step === steps.length - 1;
 
   // @ts-expect-error
-  const { data: recievedMessages } = useGetMessages(selectedCompany?._id!)
+  const { data: recievedMessages } = useGetMessages(selectedCompany?._id!);
   const [chatOpen, setChatOpen] = useState<boolean>(false);
   const [message, setMessage] = useState<string>('');
-  const [sentMessages, setSentMessages] = useState<{ sentMessage: string, date: Date }[]>([]);
+  const [sentMessages, setSentMessages] = useState<{ sentMessage: string; date: Date }[]>([]);
 
-  
-
-  
   const handleChatSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const trimmed = message.trim();
     if (!trimmed) return;
-    setSentMessages((prev) => [...prev, { sentMessage: message, date: new Date() } ]);
+    setSentMessages((prev) => [...prev, { sentMessage: message, date: new Date() }]);
     chatMutate({ companyId: selectedCompany?._id!, userId: userId!, message: trimmed, date: new Date() });
     setMessage('');
   };
 
-  
   useEffect(() => {
     document.querySelectorAll('#chat-scroll').forEach((el) => {
       try {
@@ -555,7 +550,9 @@ const CreateRequest = () => {
           `}
         >
           <div className="flex items-center justify-between rounded-t-2xl bg-gray-100 px-3 py-2">
-            <span className="text-sm font-semibold">{selectedCompany ? selectedCompany.name : 'New Chat with company support '}</span>
+            <span className="text-sm font-semibold">
+              {selectedCompany ? selectedCompany.name : 'New Chat with company support '}
+            </span>
             <button
               onClick={() => setChatOpen(false)}
               className="rounded p-1 text-gray-500 hover:bg-gray-200 hover:text-gray-700"
@@ -568,7 +565,6 @@ const CreateRequest = () => {
 
           <div id="chat-scroll" className="flex-1 min-h-0 overflow-y-auto px-3 py-2">
             <div className="flex flex-col items-end justify-end gap-2">
-              
               {sentMessages.map((m, i) => (
                 <div key={i} className="flex w-3/4 items-center justify-between gap-2 rounded-xl bg-indigo-50 p-2">
                   <p className="whitespace-pre-wrap break-words">{m.sentMessage}</p>
@@ -581,9 +577,10 @@ const CreateRequest = () => {
           </div>
 
           <form className="p-2 border-t" onSubmit={handleChatSubmit}>
-            {!selectedCompany ? ( <p className='text-gray-500 font-semibold text-lg text-center'>You Need to Select Company First</p> ) : (
+            {!selectedCompany ? (
+              <p className="text-gray-500 font-semibold text-lg text-center">You Need to Select Company First</p>
+            ) : (
               <div className="flex items-center justify-between gap-2 rounded-xl border p-2">
-                
                 <input
                   onChange={(e) => setMessage(e.target.value)}
                   value={message}

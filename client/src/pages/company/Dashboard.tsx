@@ -9,20 +9,19 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const go = (route: string) => navigate(route);
 
-  const companyId = useCompanyStore(state => state.companyInfo?.companyId);
+  const companyId = useCompanyStore((state) => state.companyInfo?.companyId);
 
   const [chatOpen, setChatOpen] = useState<boolean>(false);
   const [message, setMessage] = useState<string>('');
-  const [sentMessages, setSentMessages] = useState<{ sentMessage: string, date: Date }[]>([]);
+  const [sentMessages, setSentMessages] = useState<{ sentMessage: string; date: Date }[]>([]);
   const { mutate: chatMutate } = useSetMessage();
-  const { data: recievedMessages = [] } = useGetMessages(companyId!)
-
+  const { data: recievedMessages = [] } = useGetMessages(companyId!);
 
   const handleChatSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const trimmed = message.trim();
     if (!trimmed) return;
-    setSentMessages((prev) => [...prev, { sentMessage: trimmed, date: new Date() } ]);
+    setSentMessages((prev) => [...prev, { sentMessage: trimmed, date: new Date() }]);
     chatMutate({ companyId: companyId!, message: trimmed, date: new Date() });
 
     setMessage('');
@@ -172,7 +171,10 @@ const Dashboard = () => {
             <div className="flex flex-col items-start justify-end gap-2">
               {recievedMessages.length ? (
                 recievedMessages.map((m: any, i: number) => (
-                  <div key={m._id ?? i} className="flex w-3/4 items-center justify-between gap-2 rounded-xl bg-gray-200 p-2">
+                  <div
+                    key={m._id ?? i}
+                    className="flex w-3/4 items-center justify-between gap-2 rounded-xl bg-gray-200 p-2"
+                  >
                     <p className="whitespace-pre-wrap break-words">{m.sentMessage ?? m.message}</p>
                     <p className="text-xs font-semibold text-gray-500">
                       {new Date(m.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
@@ -181,39 +183,36 @@ const Dashboard = () => {
                 ))
               ) : (
                 <p className="text-gray-500 text-lg font-semibold">There are no received messages</p>
-              )}              
+              )}
             </div>
-            <div className='flex flex-col items-end justify-end gap-2 mt-3.750'>
+            <div className="flex flex-col items-end justify-end gap-2 mt-3.750">
               {sentMessages.map((m, i) => (
-                  <div key={i} className="flex w-3/4 items-center justify-between gap-2 rounded-xl bg-indigo-50 p-2">
-                    <p className="whitespace-pre-wrap break-words">{m.sentMessage}</p>
-                    <p className="text-xs font-semibold text-gray-500">
-                      {m.date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                    </p>
-                  </div>
-                ))}
+                <div key={i} className="flex w-3/4 items-center justify-between gap-2 rounded-xl bg-indigo-50 p-2">
+                  <p className="whitespace-pre-wrap break-words">{m.sentMessage}</p>
+                  <p className="text-xs font-semibold text-gray-500">
+                    {m.date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  </p>
+                </div>
+              ))}
             </div>
           </div>
 
           <form className="p-2 border-t" onSubmit={handleChatSubmit}>
-            
-              <div className="flex items-center justify-between gap-2 rounded-xl border p-2">
-                
-                <input
-                  onChange={(e) => setMessage(e.target.value)}
-                  value={message}
-                  placeholder="New message"
-                  className="flex-1 p-1 outline-none"
-                />
-                <button
-                  disabled={!message.trim()}
-                  className="rounded-full bg-indigo-500 px-4 py-2 text-white transition disabled:bg-indigo-200"
-                  type="submit"
-                >
-                  ↑
-                </button>
-              </div>
-            
+            <div className="flex items-center justify-between gap-2 rounded-xl border p-2">
+              <input
+                onChange={(e) => setMessage(e.target.value)}
+                value={message}
+                placeholder="New message"
+                className="flex-1 p-1 outline-none"
+              />
+              <button
+                disabled={!message.trim()}
+                className="rounded-full bg-indigo-500 px-4 py-2 text-white transition disabled:bg-indigo-200"
+                type="submit"
+              >
+                ↑
+              </button>
+            </div>
           </form>
         </div>
 

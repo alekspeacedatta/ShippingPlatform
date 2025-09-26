@@ -34,7 +34,7 @@ export class CompanyService {
     contactEmail?: string;
     phone?: string;
     logoUrl?: string;
-    supportedTypes?: ShippingType[]; 
+    supportedTypes?: ShippingType[];
     currentPassword?: string;
     newPassword?: string;
   }) {

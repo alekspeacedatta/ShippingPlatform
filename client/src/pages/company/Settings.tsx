@@ -24,7 +24,6 @@ type CompanyForm = {
 type Banner = { type: 'success' | 'error'; text: string } | null;
 type FieldErrors = Partial<Record<keyof CompanyForm, string>>;
 
-
 const ALL_TYPES: ShippingType[] = ['AIR', 'SEA', 'ROAD', 'RAILWAY'];
 
 const Settings = () => {
@@ -52,10 +51,7 @@ const Settings = () => {
   });
 
   const [initialData, setInitialData] = useState<
-    Pick<
-      CompanyForm,
-      'userId' | 'companyId' | 'name' | 'contactEmail' | 'phone' | 'logoUrl' | 'supportedTypes'
-    >
+    Pick<CompanyForm, 'userId' | 'companyId' | 'name' | 'contactEmail' | 'phone' | 'logoUrl' | 'supportedTypes'>
   >({
     userId: '',
     companyId: '',
@@ -76,7 +72,7 @@ const Settings = () => {
         contactEmail: c.contactEmail ?? '',
         phone: c.phone ?? '',
         logoUrl: c.logoUrl ?? '',
-        supportedTypes: Array.isArray((c as any).supportedTypes) ? (c as any).supportedTypes as ShippingType[] : [],
+        supportedTypes: Array.isArray((c as any).supportedTypes) ? ((c as any).supportedTypes as ShippingType[]) : [],
       };
       setCompanyData((prev) => ({ ...prev, ...next }));
       setInitialData(next);
@@ -111,23 +107,23 @@ const Settings = () => {
 
   const clearFieldError = (field: keyof CompanyForm) => setErrors((e) => ({ ...e, [field]: undefined }));
 
-  const toggleType = (t: ShippingType) => {
-    setCompanyData((p) => {
-      const has = p.supportedTypes.includes(t);
-      const next = has ? p.supportedTypes.filter((x) => x !== t) : [...p.supportedTypes, t];
-      return { ...p, supportedTypes: next };
-    });
-    clearFieldError('supportedTypes');
-    setBanner(null);
+  const prettyMultiplier = (type: ShippingType, pricing: Company['pricing']) => {
+    const m = pricing?.typeMultipliers?.[type] ?? 1;
+    return `${m}x`;
   };
 
+  const toggleType = (t: ShippingType) =>
+    setCompanyData((p) => {
+      const has = p.supportedTypes?.includes(t);
+      const next = has ? p.supportedTypes.filter((x) => x !== t) : [...(p.supportedTypes ?? []), t];
+      return { ...p, supportedTypes: next };
+    });
   const handleDataUpdate = (e: React.FormEvent) => {
     e.preventDefault();
     setBanner(null);
     setErrors({});
 
     if (!isDirty) return;
-
 
     if (!companyData.supportedTypes || companyData.supportedTypes.length === 0) {
       setErrors((e) => ({ ...e, supportedTypes: 'Select at least one shipping type.' }));
@@ -221,7 +217,6 @@ const Settings = () => {
 
       <main className="min-h-[90vh]">
         <div className="mx-auto w-full max-w-4xl px-4 sm:px-6 lg:px-8 py-4 sm:py-6 md:py-10 flex flex-col gap-4 sm:gap-6">
-          
           <div className="flex flex-wrap items-center gap-2 text-sm">
             <button
               onClick={() => navigate('/company/dashboard')}
@@ -233,7 +228,6 @@ const Settings = () => {
             <span className="font-semibold text-indigo-500 underline underline-offset-4">Settings</span>
           </div>
 
-          
           <div className="space-y-3">
             <h1 className="text-xl sm:text-2xl font-bold">Edit company information</h1>
 
@@ -252,9 +246,7 @@ const Settings = () => {
             )}
           </div>
 
-          
           <form onSubmit={handleDataUpdate} className="flex flex-col gap-6 rounded border bg-white p-4 sm:p-5">
-            
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <section className="flex flex-col min-w-0">
                 <label className="text-sm font-medium">Company Email</label>
@@ -317,33 +309,63 @@ const Settings = () => {
               </section>
             </div>
 
-            
-            <div className="flex flex-col gap-2">
-              <label className="text-sm font-medium">Supported shipping types</label>
+            <section className="mt-2">
+              <label className="mb-2 block text-sm font-medium">Supported shipping types</label>
 
-              <div className="flex flex-wrap gap-2">
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 {ALL_TYPES.map((t) => {
-                  const active = companyData.supportedTypes.includes(t);
+                  const active = companyData.supportedTypes?.includes(t);
                   return (
                     <button
-                      key={t}
                       type="button"
-                      onClick={() => toggleType(t)}
-                      className={`rounded-full px-3 py-1 text-sm font-medium transition
-                        ${active ? 'bg-indigo-600 text-white shadow' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}
-                      `}
+                      key={t}
+                      onClick={() => {
+                        toggleType(t);
+                        clearFieldError('supportedTypes' as any);
+                        setBanner(null);
+                      }}
+                      className={[
+                        'group flex items-center justify-between rounded-xl border px-4 py-3 text-left',
+                        'transition-all duration-150 hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500',
+                        active ? 'border-indigo-[#7c86ff] bg-indigo-50' : 'border-gray-200/80 bg-white hover:bg-gray-50',
+                      ].join(' ')}
                       aria-pressed={active}
                     >
-                      {t}
+                      <div className="flex items-center gap-3">
+                        <span
+                          className={[
+                            'grid h-5 w-5 place-items-center rounded-full border transition-colors',
+                            active ? 'border-indigo-600 bg-indigo-600/10' : 'border-gray-300 bg-white',
+                          ].join(' ')}
+                          aria-hidden="true"
+                        >
+                          <span
+                            className={[
+                              'h-2.5 w-2.5 rounded-full transition-opacity',
+                              active ? 'bg-indigo-600 opacity-100' : 'opacity-0',
+                            ].join(' ')}
+                          />
+                        </span>
+
+                        <span className="text-sm font-semibold">{t}</span>
+                      </div>
+
+                      <span className="text-xs text-gray-600">
+                        type multiplier:{' '}
+                        <span className={active ? 'font-semibold text-indigo-700' : 'font-medium'}>
+                          {prettyMultiplier(t, (data as Company)?.pricing ?? ({} as Company['pricing']))}
+                        </span>
+                      </span>
                     </button>
                   );
                 })}
               </div>
 
-              {help(errors.supportedTypes)}
-            </div>
-                
-            
+              {'supportedTypes' in errors && (
+                <p className="mt-1 text-xs text-red-600">{(errors as any).supportedTypes}</p>
+              )}
+            </section>
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
               <section className="flex flex-col min-w-0">
                 <label className="text-sm font-medium">Current password</label>
