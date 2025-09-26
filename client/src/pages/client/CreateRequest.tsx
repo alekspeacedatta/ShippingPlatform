@@ -589,7 +589,7 @@ const CreateRequest = () => {
                 <div key={m._id} className="flex w-3/4 items-center justify-between gap-2 rounded-xl bg-indigo-50 p-2">
                   <p className="whitespace-pre-wrap break-words">{m.sentMessage}</p>
                   <p className="text-xs font-semibold text-gray-500">
-                    {m.date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    {new Date(m.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   </p>
                 </div>
               ))}
