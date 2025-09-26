@@ -64,17 +64,20 @@ const RegisterCompany = () => {
   };
 
   return (
-    <div className="min-h-screen overflow-hidden grid grid-cols-1 md:grid-cols-2 bg-gray-50">
-      <div className="flex items-center justify-center px-4 py-8 sm:px-6 md:px-8">
+    // FIX 1: Lock page to viewport height and prevent outer growth
+    <div className="h-screen overflow-hidden grid grid-cols-1 md:grid-cols-2 bg-gray-50">
+      {/* FIX 2: Make the left column a scroll container if needed */}
+      <div className="flex h-screen items-center justify-center px-4 py-8 sm:px-6 md:px-8 overflow-auto overscroll-contain">
         <section
           ref={formRef}
           className="w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-2xl rounded-3xl bg-white p-5 sm:p-7 shadow-2xl ring-1 ring-black/5"
         >
           <form className="flex flex-col gap-4" onSubmit={handelCompanyRegister}>
             <h1 className="mb-1 text-2xl sm:text-3xl font-semibold">Company Registration</h1>
-            {isError && <p className="text-sm sm:text-base text-red-700">{(error as Error).message}</p>}
+            {isError && <p className="text-sm sm:text-base text-red-700">{error.message}</p>}
 
-            <section className="max-h-[65vh] overflow-y-auto pr-1 sm:pr-2">
+            {/* Optional: keep inner scroll area contained */}
+            <section className="max-h-[65vh] overflow-y-auto overscroll-contain pr-1 sm:pr-2">
               <section className="flex flex-col gap-3 rounded-md">
                 <h2 className="text-lg sm:text-xl">Main info</h2>
 
@@ -126,16 +129,8 @@ const RegisterCompany = () => {
 
                   <div className="sm:col-span-2 flex flex-col gap-2">
                     <label className="text-sm font-medium">Regions</label>
-
-                    {/* SCROLL-CONTAINED CHIP LIST */}
-                    <div
-                      className="
-                        max-h-56 md:max-h-72 overflow-y-auto overscroll-contain
-                        rounded-md border-2 border-indigo-200 bg-white p-2
-                        flex flex-wrap gap-1
-                      "
-                    >
-                      {/* All */}
+                    {/* FIX 3: Keep the chip list strictly contained & no horizontal overflow */}
+                    <div className="max-h-56 md:max-h-72 w-full overflow-y-auto overflow-x-hidden overscroll-contain rounded-md border-2 border-indigo-200 bg-white p-2 flex flex-wrap gap-1">
                       <label className="flex cursor-pointer select-none items-center">
                         <input
                           onChange={toggleRegions}
@@ -143,24 +138,14 @@ const RegisterCompany = () => {
                           value="ALL"
                           checked={regions.length === ISO2_COUNTRY_CODES.length}
                           className="peer sr-only"
-                          aria-label="Select all regions"
                         />
                         <span className="rounded-[28px] border-2 border-[#aab0ff] px-3 py-2 text-[12px] sm:text-[14px] text-[#777] peer-checked:bg-[#aab0ff] peer-checked:text-white">
                           All
                         </span>
                       </label>
-
-                      {/* Individual regions */}
                       {ISO2_COUNTRY_CODES.map((reg) => (
                         <label key={reg} className="flex cursor-pointer select-none items-center">
-                          <input
-                            onChange={toggleRegions}
-                            type="checkbox"
-                            value={reg}
-                            checked={regions.includes(reg)}
-                            className="peer sr-only"
-                            aria-label={`Region ${reg}`}
-                          />
+                          <input onChange={toggleRegions} type="checkbox" value={reg} className="peer sr-only" />
                           <span className="rounded-[28px] border-2 border-[#aab0ff] px-3 py-2 text-[12px] sm:text-[14px] text-[#777] peer-checked:bg-[#aab0ff] peer-checked:text-white">
                             {reg}
                           </span>
@@ -174,14 +159,7 @@ const RegisterCompany = () => {
                     <div className="flex flex-wrap gap-2 rounded-md border-2 border-indigo-200 bg-white p-2">
                       {(['RAILWAY', 'ROAD', 'AIR', 'SEA'] as const).map((t) => (
                         <label key={t} className="flex cursor-pointer select-none items-center">
-                          <input
-                            type="checkbox"
-                            value={t}
-                            onChange={toggleShippingType}
-                            checked={shippingType.includes(t)}
-                            className="peer sr-only"
-                            aria-label={`Shipping ${t}`}
-                          />
+                          <input type="checkbox" value={t} onChange={toggleShippingType} className="peer sr-only" />
                           <span className="rounded-[28px] border-2 border-[#aab0ff] px-3 py-2 text-[12px] sm:text-[14px] text-[#777] peer-checked:bg-[#aab0ff] peer-checked:text-white">
                             {t.charAt(0) + t.slice(1).toLowerCase()}
                           </span>
@@ -263,9 +241,7 @@ const RegisterCompany = () => {
                           pricing: { ...companyInfo.pricing, basePrice: Number(e.target.value) },
                         })
                       }
-                      type="number"
-                      step="any"
-                      inputMode="decimal"
+                      type="float"
                       placeholder="enter your base price"
                     />
                   </div>
@@ -279,9 +255,7 @@ const RegisterCompany = () => {
                           pricing: { ...companyInfo.pricing, pricePerKg: Number(e.target.value) },
                         })
                       }
-                      type="number"
-                      step="any"
-                      inputMode="decimal"
+                      type="float"
                       placeholder="enter your per-kg price"
                     />
                   </div>
@@ -295,9 +269,7 @@ const RegisterCompany = () => {
                           pricing: { ...companyInfo.pricing, fuelPct: Number(e.target.value) },
                         })
                       }
-                      type="number"
-                      step="any"
-                      inputMode="decimal"
+                      type="float"
                       placeholder="0.10 = 10%"
                     />
                   </div>
@@ -311,9 +283,7 @@ const RegisterCompany = () => {
                           pricing: { ...companyInfo.pricing, insurancePct: Number(e.target.value) },
                         })
                       }
-                      type="number"
-                      step="any"
-                      inputMode="decimal"
+                      type="float"
                       placeholder="0.01 = 1%"
                     />
                   </div>
@@ -327,9 +297,7 @@ const RegisterCompany = () => {
                           pricing: { ...companyInfo.pricing, remoteAreaPct: Number(e.target.value) },
                         })
                       }
-                      type="number"
-                      step="any"
-                      inputMode="decimal"
+                      type="float"
                       placeholder="enter your remote area %"
                     />
                   </div>
@@ -350,9 +318,7 @@ const RegisterCompany = () => {
                             },
                           })
                         }
-                        type="number"
-                        step="any"
-                        inputMode="decimal"
+                        type="float"
                         placeholder="1.2x"
                       />
                     </div>
@@ -368,9 +334,7 @@ const RegisterCompany = () => {
                             },
                           })
                         }
-                        type="number"
-                        step="any"
-                        inputMode="decimal"
+                        type="float"
                         placeholder="1.3x"
                       />
                     </div>
@@ -389,9 +353,7 @@ const RegisterCompany = () => {
                             },
                           })
                         }
-                        type="number"
-                        step="any"
-                        inputMode="decimal"
+                        type="float"
                         placeholder="1.1x"
                       />
                     </div>
@@ -407,9 +369,7 @@ const RegisterCompany = () => {
                             },
                           })
                         }
-                        type="number"
-                        step="any"
-                        inputMode="decimal"
+                        type="float"
                         placeholder="1.5x"
                       />
                     </div>
