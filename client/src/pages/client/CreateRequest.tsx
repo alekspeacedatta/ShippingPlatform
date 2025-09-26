@@ -240,7 +240,7 @@ const CreateRequest = () => {
     const trimmed = message.trim();
     if (!trimmed) return;
     setSentMessages((prev) => [...prev, { sentMessage: message, date: new Date() }]);
-    chatMutate({ companyId: selectedCompany?._id!, message: trimmed, date: new Date() });
+    chatMutate({ companyId: selectedCompany?._id!, userId: userId, message: trimmed, date: new Date() });
     setMessage('');
   };
 
