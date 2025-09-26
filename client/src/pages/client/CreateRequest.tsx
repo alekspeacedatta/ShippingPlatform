@@ -569,12 +569,12 @@ const CreateRequest = () => {
           <div id="chat-scroll" className="flex-1 min-h-0 overflow-y-auto px-3 py-2">
              <div className="flex flex-col items-start justify-end gap-2">
               {recievedMessages.length ? (
-                recievedMessages.map((m: any, i: number) => (
+                recievedMessages.map((m: { _id: string, message: string, date: Date }) => (
                   <div
-                    key={m._id ?? i}
+                    key={m._id}
                     className="flex w-3/4 items-center justify-between gap-2 rounded-xl bg-gray-200 p-2"
                   >
-                    <p className="whitespace-pre-wrap break-words">{m.sentMessage ?? m.message}</p>
+                    <p className="whitespace-pre-wrap break-words">{m.message}</p>
                     <p className="text-xs font-semibold text-gray-500">
                       {new Date(m.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </p>
@@ -585,7 +585,7 @@ const CreateRequest = () => {
               )}
             </div>
             <div className="flex flex-col items-end justify-end gap-2 mt-3.750">
-              {sentMessagess.map((m : any) => (
+              {sentMessagess.map((m : { _id: string, sentMessage: string, date: Date }) => (
                 <div key={m._id} className="flex w-3/4 items-center justify-between gap-2 rounded-xl bg-indigo-50 p-2">
                   <p className="whitespace-pre-wrap break-words">{m.sentMessage}</p>
                   <p className="text-xs font-semibold text-gray-500">
