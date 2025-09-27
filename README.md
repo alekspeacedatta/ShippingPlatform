@@ -24,19 +24,20 @@ client can see all companies and see the best prices
 other pages...
 
 <img width="330" alt="Screenshot 2025-09-19 155811" src="https://github.com/user-attachments/assets/f25fefb9-7f79-4687-ad27-a0cf32aad50f" />
-<img width="330" alt="Screenshot 2025-09-19 155831" src="https://github.com/user-attachments/assets/f43ac812-df86-4d1d-aaf9-14181830d44a" />
-<img width="330" alt="Screenshot 2025-09-19 160537" src="https://github.com/user-attachments/assets/f9824bc0-f723-43b0-bda5-8e028a754421" />
+<img width="330" alt="Screenshot 2025-09-27 155917" src="https://github.com/user-attachments/assets/98517547-1c10-46ca-b487-22dd0aa1fe6a" />
+<img width="330" alt="Screenshot 2025-09-27 160036" src="https://github.com/user-attachments/assets/90959ae2-854e-42ba-90f2-9d100cb00a7b" />
+<img width="330" alt="Screenshot 2025-09-27 160141" src="https://github.com/user-attachments/assets/307a7e4c-3f1b-4fcf-8256-e2c0fe2c20f4" />
+
 
 
 Company Pages
 
-<img width="330" alt="Screenshot 2025-09-19 160121" src="https://github.com/user-attachments/assets/ec9ffa71-c3dd-4ea1-a0b7-743bb1a2cce1" />
-<img width="330" alt="Screenshot 2025-09-19 160247" src="https://github.com/user-attachments/assets/890e118a-f358-4cce-b285-e2a2391d9e0a" />
-<img width="330" alt="Screenshot 2025-09-19 160301" src="https://github.com/user-attachments/assets/f9ce01a1-4c17-4da5-a553-06ce7147c0d7" />
-<img width="330" alt="Screenshot 2025-09-19 160110" src="https://github.com/user-attachments/assets/965aedcc-87bf-4bf6-ae19-da725a5c5705" />
-<img width="330" alt="Screenshot 2025-09-19 160059" src="https://github.com/user-attachments/assets/1a9e86d5-69c9-47d2-b6a1-010c215920b9" />
 
-
+<img width="330" alt="Screenshot 2025-09-27 160310" src="https://github.com/user-attachments/assets/2c9951d7-aecd-428d-8587-7f175fa4dd98" />
+<img width="330" alt="Screenshot 2025-09-27 160405" src="https://github.com/user-attachments/assets/9e070d77-1088-467b-9c33-3411b6d6d871" />
+<img width="330" alt="Screenshot 2025-09-27 160449" src="https://github.com/user-attachments/assets/67e36df8-9ec9-4b28-b8f6-fe3751705502" />
+<img width="330" alt="Screenshot 2025-09-27 160536" src="https://github.com/user-attachments/assets/a6da1a08-bb10-4865-830b-4c5b0636e797" />
+<img width="330" alt="Screenshot 2025-09-27 160523" src="https://github.com/user-attachments/assets/dd838425-c861-4475-b1c1-b01548a13444" />
 
 
 TECH STACK
