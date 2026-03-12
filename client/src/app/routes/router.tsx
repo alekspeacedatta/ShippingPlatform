@@ -20,66 +20,78 @@ const Track = lazy(() => import('../../pages/client/Track'));
 import ProtectedRoute from './ProtectedRoute';
 import PublicOnlyRoute from './PublicOnlyRoutes';
 
-const wrap = (el: JSX.Element) => <Suspense fallback={<div className="p-6">Loading…</div>}>{el}</Suspense>;
+const wrap = (el: JSX.Element) => (
+  <Suspense fallback={<div className="p-6">Loading…</div>}>
+    {el}
+  </Suspense>
+);
 
-export const router = createHashRouter([
-  { path: '/', element: <Navigate to="/login" replace /> },
-  {
-    path: '/login',
-    element: wrap(
-      <PublicOnlyRoute>
-        <Login />
-      </PublicOnlyRoute>,
-    ),
-  },
-  {
-    path: '/register/user',
-    element: wrap(
-      <PublicOnlyRoute>
-        <RegisterUser />
-      </PublicOnlyRoute>,
-    ),
-  },
-  {
-    path: '/register/company',
-    element: wrap(
-      <PublicOnlyRoute>
-        <RegisterCompany />
-      </PublicOnlyRoute>,
-    ),
-  },
+export const router = createHashRouter(
+  [
+    { path: '/', element: <Navigate to="/login" replace /> },
 
-  {
-    path: '/client',
-    element: (
-      <ProtectedRoute allowed={['USER']}>
-        <Outlet />
-      </ProtectedRoute>
-    ),
-    children: [
-      { path: 'dashboard', element: wrap(<ClientDashboard />) },
-      { path: 'create-request', element: wrap(<CreateRequest />) },
-      { path: 'requests', element: wrap(<RequestList />) },
-      { path: 'requests/:parcelId', element: wrap(<RequestDetail />) },
-      { path: 'track', element: wrap(<Track />) },
-    ],
-  },
+    {
+      path: '/login',
+      element: wrap(
+        <PublicOnlyRoute>
+          <Login />
+        </PublicOnlyRoute>
+      ),
+    },
 
-  {
-    path: '/company',
-    element: (
-      <ProtectedRoute allowed={['COMPANY_ADMIN']}>
-        <Outlet />
-      </ProtectedRoute>
-    ),
-    children: [
-      { path: 'dashboard', element: wrap(<CompanyDashboard />) },
-      { path: 'requests', element: wrap(<Requests />) },
-      { path: 'requests/:parcelId', element: wrap(<RequestDetailPanel />) },
-      { path: 'pricing', element: wrap(<Pricing />) },
-      { path: 'settings', element: wrap(<Settings />) },
-    ],
-  },
+    {
+      path: '/register/user',
+      element: wrap(
+        <PublicOnlyRoute>
+          <RegisterUser />
+        </PublicOnlyRoute>
+      ),
+    },
 
-  { path: '*', element: <Navigate to="/login" replace /> },
-]);
+    {
+      path: '/register/company',
+      element: wrap(
+        <PublicOnlyRoute>
+          <RegisterCompany />
+        </PublicOnlyRoute>
+      ),
+    },
+
+    {
+      path: '/client',
+      element: (
+        <ProtectedRoute allowed={['USER']}>
+          <Outlet />
+        </ProtectedRoute>
+      ),
+      children: [
+        { path: 'dashboard', element: wrap(<ClientDashboard />) },
+        { path: 'create-request', element: wrap(<CreateRequest />) },
+        { path: 'requests', element: wrap(<RequestList />) },
+        { path: 'requests/:parcelId', element: wrap(<RequestDetail />) },
+        { path: 'track', element: wrap(<Track />) },
+      ],
+    },
+
+    {
+      path: '/company',
+      element: (
+        <ProtectedRoute allowed={['COMPANY_ADMIN']}>
+          <Outlet />
+        </ProtectedRoute>
+      ),
+      children: [
+        { path: 'dashboard', element: wrap(<CompanyDashboard />) },
+        { path: 'requests', element: wrap(<Requests />) },
+        { path: 'requests/:parcelId', element: wrap(<RequestDetailPanel />) },
+        { path: 'pricing', element: wrap(<Pricing />) },
+        { path: 'settings', element: wrap(<Settings />) },
+      ],
+    },
+
+    { path: '*', element: <Navigate to="/login" replace /> },
+  ],
+  {
+    basename: '/ShippingPlatform/',
+  }
+);
