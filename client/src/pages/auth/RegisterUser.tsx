@@ -43,7 +43,7 @@ const RegisterUser = () => {
           ref={formRef}
           className="w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl rounded-3xl bg-white p-6 sm:p-7 shadow-2xl ring-1 ring-black/5"
         >
-          <form className="flex flex-col gap-4" onSubmit={handleRegister}>
+          <form className="flex flex-col gap-4 overflow-y-scroll h-[70vh]" onSubmit={handleRegister}>
             <h2 className="text-2xl sm:text-3xl font-semibold">Register</h2>
 
             {isError && (

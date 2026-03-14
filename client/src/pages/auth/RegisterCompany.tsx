@@ -67,12 +67,12 @@ const RegisterCompany = () => {
     // FIX 1: Lock page to viewport height and prevent outer growth
     <div className="h-screen overflow-hidden grid grid-cols-1 md:grid-cols-2 bg-gray-50">
       {/* FIX 2: Make the left column a scroll container if needed */}
-      <div className="flex h-screen items-center justify-center px-4 py-8 sm:px-6 md:px-8 overflow-auto overscroll-contain">
+      <div className="flex h-screen items-center justify-center px-4 py-8 sm:px-6 md:px-8 overflow-hiddne overscroll-contain">
         <section
           ref={formRef}
           className="w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-2xl rounded-3xl bg-white p-5 sm:p-7 shadow-2xl ring-1 ring-black/5"
         >
-          <form className="flex flex-col gap-4" onSubmit={handelCompanyRegister}>
+          <form className="flex flex-col gap-4  " onSubmit={handelCompanyRegister}>
             <h1 className="mb-1 text-2xl sm:text-3xl font-semibold">Company Registration</h1>
             {isError && <p className="text-sm sm:text-base text-red-700">{error.message}</p>}
 
