@@ -1,6 +1,9 @@
 International cargo Shipping Platform which allows you send parcel requests as a customer or register your own company and get requests from customers
 In this project are two roles: CLIENT and COMPANY_ADMIN 
 
+Company Account Login:
+email: amazon@mail.com
+password: amazon
 
 Authentication Pages: 
 
